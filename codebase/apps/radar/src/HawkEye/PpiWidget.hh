@@ -109,6 +109,18 @@ class DLL_EXPORT PpiWidget : public PolarWidget
 			 size_t nFields); 
 
 
+  void updateBeamColors(const RadxRay *ray,
+                        const float start_angle,
+                        const float stop_angle,
+                        const std::vector< double > &beam_data,
+			size_t nFields,
+                        const string fieldName);
+
+  void updateColorsOnFields(PpiBeam *beam, string fieldName,
+			    const std::vector< double > &beam_data,
+			    size_t nFields);
+
+
   // are we in archive mode? and if so are we at the start of a sweep?
 
   void setArchiveMode(bool state) { _isArchiveMode = state; }

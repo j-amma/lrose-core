@@ -117,7 +117,33 @@ void FieldRenderer::unselectField()
   //_backgroundRenderTimer->start();
   
 }
-  
+
+/*
+// TODO: Need DisplayFieldController, to get the the colorMap
+//       we have DisplayField &_field, get colorMap from there
+
+// TODO: Need beam data for this field 
+//       send this???
+void FieldRenderer::colorMapChanged(float *beam_data,
+&_backgroundBrush) {
+
+  // inside FieldRenderer, loop is ...                                                               
+  // for each beam                                                                                   
+  //                 
+  const ColorMap &colorMap = _field.getColorMap();                                                                                
+  vector<Beam *>::iterator it;
+  for (it = _beams.begin(); it < _beams.end(); ++it) {
+  // fill colors becomes a sparse array                                                              
+  //  size_t displayFieldIdx = displayFieldController->getFieldIndex(*it); // _lookup(*it);          
+  //  if (displayFieldIdx > nFields)                                                                 
+  //    throw "Error: fieldIdx is outside dimensions (movingDownTheLine)";                           
+    Beam *beam = *it;
+  beam->updateFillColorsSparse(beam_data, colorMap, 
+			       &_backgroundBrush, displayFieldIdx);
+  }
+}
+*/
+
 ////////////////////////////////////////////////////////////////////
 // Activate background rendering - turn on until time resets
 
@@ -156,14 +182,15 @@ void FieldRenderer::setBackgroundRenderingOn()
 void FieldRenderer::run()
 {
   LOG(DEBUG) << "Start of run() for field: " 
-         << _field.getLabel();
-  LOG(DEBUG) << " there are " << _beams.size() << " beams to render";
+         << _field.getLabel() << " there are " << _beams.size() << " beams to render";
 
 
   if (_beams.size() == 0) {
+    LOG(DEBUG) << "_beams.size() == 0, returning";
     return;
   }
   if (_image == NULL) {
+    LOG(DEBUG) << "_image == NULL, returning";
     return;
   }
   
@@ -192,5 +219,5 @@ void FieldRenderer::run()
   //  Beam::deleteIfUnused(*beam);
   //}
   //_beams.clear();
-  
+  LOG(DEBUG) << "exit";
 }

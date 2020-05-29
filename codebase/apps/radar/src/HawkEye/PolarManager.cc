@@ -1257,9 +1257,10 @@ void PolarManager::_addNewFields(QStringList  newFieldNames)
 
      // new DisplayField(pfld.label, pfld.raw_name, pfld.units,
       //		       pfld.shortcut, map, ifield, false);
+    int buttonRow = _displayFieldController->getNFields() + 1;
     DisplayField *field =
-      new DisplayField(name, name, "m/x",
-		       "9", map, 9, false);
+      new DisplayField(name, name, "m/s",
+		       "9", map, buttonRow, false);
     //if (noColorMap)
     field->setNoColorMap();
 
@@ -1289,6 +1290,142 @@ void PolarManager::_addNewFields(QStringList  newFieldNames)
   }
   LOG(DEBUG) << "exit";
 }
+
+// like handleRay
+// here's what's available ...
+//string fieldName, ColorMap newColorMap,
+// QColor gridColor,
+//	QColor emphasisColor,
+//	QColor annotationColor,
+//	QColor backgroundColor) {
+//
+  //
+
+// We need to resize the arrays that are retained and look up the field Index by field name,
+// because we are only redrawing the new fields and these stores have a field index
+// dependence:  DisplayFieldModel::_fields, FieldRenderers::_fieldRenderers, Beams::_brushes and buttonRow
+// Beams are dynamic and we will just create and delete them with the full dimension
+// add new fields to existing ray structures
+// NOTE: preconditions ... displayFieldController must contain new Fields
+//void PolarManager::_handleRayUpdate(RadxPlatform &platform, RadxRay *ray, vector<string> &newFieldNames)
+//{
+/*
+void PolarManager::_updateField(RadxPlatform &platform, RadxRay *ray, vector<string> &newFieldNames)
+{
+
+  // not sure this is needed ???
+  LOG(DEBUG) << "enter";
+  if (_ppi) {
+    _ppi->colorMapChanged(fieldId);
+  }
+  
+  if (_rhi) {
+    _rhi->colorMapChanged(fieldId);
+  }
+  //
+  //----
+
+
+  // create 2D field data vector
+  size_t nNewFields = newFieldNames.size();
+  vector< vector<double> > fieldData;
+  fieldData.resize(nNewFields);
+  LOG(DEBUG) << " there are " << nNewFields << " new Fields";
+  LOG(DEBUG) << " ray azimuth = " << ray->getAzimuthDeg();
+  size_t ifield = 0; 
+
+  //for (int ifield=0; ifield < newFieldNames.size(); ++ifield) {
+  string fieldName = newFieldNames.at(ifield); // .toLocal8Bit().constData();
+  // vector<double> &data = fieldData[ifield];
+  //  data.resize(_nGates);
+    RadxField *rfld = ray->getField(fieldName);
+
+    // at this point, we know the data values for the field AND the color map                                                                        
+    ColorMap *fieldColorMap = _displayFieldController->getColorMap(fieldName); 
+    bool haveColorMap = fieldColorMap != NULL;
+
+    if (rfld == NULL) {
+      // fill with missing
+      for (int igate = 0; igate < _nGates; igate++) {
+        data[igate] = -9999.0;
+      }
+    } else {
+      rfld->convertToFl32();
+      const Radx::fl32 *fdata = rfld->getDataFl32();
+      // print first 15 data values
+      //LOG(DEBUG) << "ray->nGates = " << ray->getNGates();
+      //LOG(DEBUG) << "first 30 gates ...";
+      //for (int ii = 0; ii< 15; ii++)
+      //LOG(DEBUG) << fdata[ii];
+      // end print first 15 data values
+      const Radx::fl32 missingVal = rfld->getMissingFl32();
+      // we can only look at the data available, so only go to nGates
+      for (int igate = 0; igate < _nGates; igate++, fdata++) {  // was _nGates
+        Radx::fl32 val = *fdata;
+        if (fabs(val - missingVal) < 0.0001) {
+          data[igate] = -9999.0;
+        } else {
+          data[igate] = val;
+        
+        } // end else not missing value
+      } // end for each gate
+
+    } // end else vector not NULL
+  } // end for each field
+
+  // Store the ray location (which also sets _startAz and _endAz), then
+  // draw beam on the PPI or RHI, as appropriate
+
+  if (ray->getSweepMode() == Radx::SWEEP_MODE_RHI ||
+      ray->getSweepMode() == Radx::SWEEP_MODE_SUNSCAN_RHI ||
+      ray->getSweepMode() == Radx::SWEEP_MODE_ELEVATION_SURVEILLANCE) {
+
+    _rhiMode = true;
+
+    // If this is the first RHI beam we've encountered, automatically open
+    // the RHI window.  After this, opening and closing the window will be
+    // left to the user.
+
+    if (!_rhiWindowDisplayed) {
+      _rhiWindow->show();
+      _rhiWindow->resize();
+      _rhiWindowDisplayed = true;
+    }
+
+    // Add the beam to the display
+    LOG(DEBUG) << "RHI not being updated";
+  } else {
+
+    _rhiMode = false;
+
+    // Store the ray location using the azimuth angle and the PPI location
+    // table
+
+    double az = ray->getAzimuthDeg();
+    _storeRayLoc(ray, az, platform.getRadarBeamWidthDegH(), _ppiRayLoc);
+
+    // Save the angle information for the next iteration
+
+    _prevAz = az;
+    _prevEl = -9999.0;
+
+    // Add the beam to the display
+    // ray contains data for ALL fields; fieldData contains only data for the new beams
+    // nFields = total number of fields (old + new)
+    size_t nFields = _displayFieldController->getNFields();
+    vector<string> newFieldNames;
+    //newFieldNames.push(fieldName);
+    _ppi->updateBeamII(ray, _startAz, _endAz, fieldData, nFields, newFieldNames);
+
+  }
+
+
+//--
+
+
+  LOG(DEBUG) << "exit";
+}
+*/
    
 
 /////////////////////////////
@@ -1316,7 +1453,8 @@ void PolarManager::_volumeDataChanged(QStringList newFieldNames)
   
 
   _addNewFields(newFieldNames);
-  _updateFieldPanel();
+  if (newFieldNames.size() > 0)
+    _updateFieldPanel(newFieldNames[0].toStdString());
   _fieldPanel->update();
 
   // _applyDataEdits();
@@ -1388,6 +1526,18 @@ void PolarManager::_plotArchiveData()
 void PolarManager::_updateArchiveData(QStringList newFieldNames)
 {
 
+  vector<string> newFieldNamesConverted;
+  for (int i=0; i < newFieldNames.size(); ++i) {
+    string name = newFieldNames.at(i).toLocal8Bit().constData();
+    newFieldNamesConverted.push_back(name);
+  }
+  _updateArchiveData(newFieldNamesConverted);
+ 
+}
+
+void PolarManager::_updateArchiveData(vector<string> &newFieldNamesConverted) 
+{
+
   if(_params.debug) {
     cerr << "Updating archive data" << endl;
     cerr << "  volume start time: " << _plotStartTime.asString() << endl;
@@ -1429,11 +1579,13 @@ void PolarManager::_updateArchiveData(QStringList newFieldNames)
   // clear the canvas
   //_clear();
 
+  /*
   vector<string> newFieldNamesConverted;
   for (int i=0; i < newFieldNames.size(); ++i) {
     string name = newFieldNames.at(i).toLocal8Bit().constData();
     newFieldNamesConverted.push_back(name);
   }
+  */
 
   // handle the rays
 
@@ -1448,6 +1600,48 @@ void PolarManager::_updateArchiveData(QStringList newFieldNames)
   }
   
 }
+
+void PolarManager::_updateColorMap(string fieldName) 
+{
+
+  if(_params.debug) {
+    cerr << "Updating color map" << endl;
+  }
+
+  // handle the rays
+  _vol.loadRaysFromFields();  // this line makes the select field update properly  
+
+  const vector<RadxRay *> &rays = _vol.getRays();
+  if (rays.size() < 1) {
+    cerr << "ERROR - _updateArchiveData" << endl;
+    cerr << "  No rays found" << endl;
+    return;
+  }
+
+  // TODO: make sure we are getting the newFields from the _vol
+  // remember, the reader only reads in the fields specified in the params <======
+  //LOG(DEBUG) << "===========  HERE are the fields ";
+  vector<RadxField *> _vol_fields = rays[0]->getFields();
+  vector<RadxField *>::iterator it;
+  //for (it=_vol_fields.begin(); it!=_vol_fields.end(); ++it) {
+  //  LOG(DEBUG) << (*it)->getName();
+  //}
+  
+  // TODO: reload the sweeps into the sweepManager?
+  //  I added this ...
+  _sweepManager.set(_vol);
+
+  // handle the rays
+
+  const SweepManager::GuiSweep &gsweep = _sweepManager.getSelectedSweep();
+  for (size_t ii = gsweep.radx->getStartRayIndex();
+       ii <= gsweep.radx->getEndRayIndex(); ii++) {
+    RadxRay *ray = rays[ii];
+    _handleColorMapChangeOnRay(_platform, ray, fieldName); 
+  }
+  
+}
+
 
 //////////////////////////////////////////////////
 // set up read
@@ -1763,6 +1957,101 @@ void PolarManager::_handleRayUpdate(RadxPlatform &platform, RadxRay *ray, vector
   
 }
 
+void PolarManager::_handleColorMapChangeOnRay(RadxPlatform &platform, RadxRay *ray, fieldName)
+{
+
+  LOG(DEBUG) << "enter";
+  // create  field data vector
+  size_t nNewFields = 1;
+  vector<double> data;
+  //fieldData.resize(nNewFields);
+  LOG(DEBUG) << " there are " << nNewFields << " new Fields";
+  LOG(DEBUG) << " ray azimuth = " << ray->getAzimuthDeg();
+  // fill data vector
+  size_t ifield = 0; 
+  data.resize(_nGates);
+  RadxField *rfld = ray->getField(fieldName);
+
+  // at this point, we know the data values for the field AND the color map                                                                        
+  ColorMap *fieldColorMap = _displayFieldController->getColorMap(fieldName); 
+  bool haveColorMap = fieldColorMap != NULL;
+  if (!haveColorMap) {
+    // just change bounds on existing map        
+    throw "No color map found"; 
+  } // end do not have color map
+
+  if (rfld == NULL) {
+    // fill with missing
+    for (int igate = 0; igate < _nGates; igate++) {
+      data[igate] = -9999.0;
+    }
+  } else {
+    rfld->convertToFl32();
+    const Radx::fl32 *fdata = rfld->getDataFl32();
+    const Radx::fl32 missingVal = rfld->getMissingFl32();
+    // we can only look at the data available, so only go to nGates
+    for (int igate = 0; igate < _nGates; igate++, fdata++) {  // was _nGates
+      Radx::fl32 val = *fdata;
+      if (fabs(val - missingVal) < 0.0001) {
+	data[igate] = -9999.0;
+      } else {
+	data[igate] = val;
+      } // end else not missing value
+    } // end for each gate
+  } // end else vector not NULL
+
+  // Store the ray location (which also sets _startAz and _endAz), then
+  // draw beam on the PPI or RHI, as appropriate
+
+  if (ray->getSweepMode() == Radx::SWEEP_MODE_RHI ||
+      ray->getSweepMode() == Radx::SWEEP_MODE_SUNSCAN_RHI ||
+      ray->getSweepMode() == Radx::SWEEP_MODE_ELEVATION_SURVEILLANCE) {
+
+    _rhiMode = true;
+
+    // If this is the first RHI beam we've encountered, automatically open
+    // the RHI window.  After this, opening and closing the window will be
+    // left to the user.
+
+    if (!_rhiWindowDisplayed) {
+      _rhiWindow->show();
+      _rhiWindow->resize();
+      _rhiWindowDisplayed = true;
+    }
+
+    // Add the beam to the display
+    LOG(DEBUG) << "RHI not being updated";
+    /* TODO: update the rhi code ...
+    _rhi->addBeam(ray, fieldData, displayFieldController); // _fields);
+    _rhiWindow->setAzimuth(ray->getAzimuthDeg());
+    _rhiWindow->setElevation(ray->getElevationDeg());
+    */
+  } else {
+
+    _rhiMode = false;
+
+    // Store the ray location using the azimuth angle and the PPI location
+    // table
+
+    double az = ray->getAzimuthDeg();
+    _storeRayLoc(ray, az, platform.getRadarBeamWidthDegH(), _ppiRayLoc);
+
+    // Save the angle information for the next iteration
+
+    _prevAz = az;
+    _prevEl = -9999.0;
+
+    // Add the beam to the display
+    // ray contains data for ALL fields; fieldData contains only data for the new beams
+    // nFields = total number of fields (old + new)
+    size_t nFields = _displayFieldController->getNFields();
+    _ppi->updateBeamColors(ray, _startAz, _endAz, fieldData, nFields, fieldName);
+
+  }
+  LOG(DEBUG) << "exit";
+  
+}
+
 
 ///////////////////////////////////////////////////////////
 // store ray location
@@ -2020,8 +2309,12 @@ void PolarManager::colorMapRedefineReceived(string fieldName, ColorMap newColorM
   // connect the new color map with the field                                                       
   try {
     _displayFieldController->setColorMap(fieldName, &newColorMap);
+    _updateFieldPanel(fieldName);
     size_t fieldId = _displayFieldController->getFieldIndex(fieldName);
-    _changeField(fieldId, false);
+    vector<string> fieldNames;
+    fieldNames.push_back(fieldName);
+    //_updateArchiveData(fieldNames);  // ?? or  _updateField(fieldId);
+    _updateColorMap(fieldName);
   } catch (std::invalid_argument ex) {
     LOG(ERROR) << fieldName;
     LOG(ERROR) << ex.what(); // "ERROR - field not found; no color map change";
@@ -2029,6 +2322,8 @@ void PolarManager::colorMapRedefineReceived(string fieldName, ColorMap newColorM
   }
   _ppi->backgroundColor(backgroundColor);
   _ppi->gridRingsColor(gridColor);
+
+  // ??   _ppi->selectVar(fieldId);
 
   /*
   // find the fieldName in the list of FieldDisplays                                                

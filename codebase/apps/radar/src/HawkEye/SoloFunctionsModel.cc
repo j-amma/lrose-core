@@ -339,6 +339,7 @@ string SoloFunctionsModel::ZeroMiddleThird(string fieldName,  RadxVol *vol,
   //  RadxField *field1 = newRay->addField(newFieldName, "m/s", nGates, missingValue, newData, scale, offset, isLocal);
 
   string tempFieldName = field1->getName();
+  tempFieldName.append("#");
 
   /*
   // to avoid this warning ...                                                                        
@@ -469,6 +470,7 @@ string SoloFunctionsModel::ZeroInsideBoundary(string fieldName,  RadxVol *vol,
   RadxField *field1 = ray->addField(newFieldName, "m/s", nGates, missingValue, newData, isLocal);
 
   string tempFieldName = field1->getName();
+  tempFieldName.append("#");
 
   /*
   // to avoid this warning ...                                                                        

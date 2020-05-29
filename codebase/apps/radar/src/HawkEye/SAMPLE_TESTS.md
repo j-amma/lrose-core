@@ -33,6 +33,7 @@ apply_georeference_corrections = TRUE;
 -----
 
 testing bad flags 
+try with/without boundary ...
 
 BAD_DATA = -9e+33
 CLIP_GATE = 904 
@@ -103,3 +104,7 @@ BFM2 = OR_BAD_FLAGS_ABOVE(REF, 8.0, BFM, BAD_DATA, CLIP_GATE)
     BAD_FLAG_MASK = AND_BAD_FLAGS_ABOVE(DZ, 35., BAD_DATA_VALUE, CLIP,  BAD_FLAG_MASK)
     VE2 = ASSERT-BAD-FLAGS(VE, BAD_DATA_VALUE, CLIP, BAD_FLAG_MASK)
     DZ2 = ASSERT-BAD-FLAGS(DZ, BAD_DATA_VALUE, CLIP, BAD-FLAG-MASK)
+
+------
+
+BF = ZERO_INSIDE_BOUNDARY(VEL)

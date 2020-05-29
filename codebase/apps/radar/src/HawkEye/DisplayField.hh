@@ -81,6 +81,8 @@ public:
   void print(ostream &out);
   void setColorMapRange(double min, double max);
 
+  enum DisplayFieldState {VISIBLE, DELETED, HIDDEN};
+
 private:
 
   string _label;
@@ -94,7 +96,7 @@ private:
   bool _haveColorMap;
   double _selectValue;
   QLabel *_dialog;
-
+  DisplayFieldState _state;
 };
 
 #endif

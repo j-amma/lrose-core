@@ -51,7 +51,8 @@ DisplayField::DisplayField(const string &label,
         _buttonRow(buttonRow),
         _isFilt(isFilt),
         _selectValue(0),
-        _dialog(NULL)
+        _dialog(NULL),
+        _state(HIDDEN)
 {
   LOG(DEBUG) << "creating field with ... ";
   LOG(DEBUG) << "label = " << _label;
@@ -116,6 +117,19 @@ void DisplayField::print(ostream &out)
   out << "  buttonRow: " << _buttonRow << endl;
   out << "  isFilt: " << _isFilt << endl;
   out << "  selectValue: " << _selectValue << endl;
+  out << "  state: ";
+  switch(_state) {
+  case HIDDEN:
+    out << "HIDDEN" << endl;
+    break;
+  case VISIBLE:
+    out << "VISIBLE" << endl;
+    break;
+  case DELETED:
+    out << "DELETED" << endl;
+    break;
+  }
+
   out << "===============================" << endl;
 
 }

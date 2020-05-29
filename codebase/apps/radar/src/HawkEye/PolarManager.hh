@@ -151,6 +151,7 @@ public slots:
   void updateVolume(QStringList newFieldNames);
   void _volumeDataChanged(QStringList newFieldNames);
   void _addNewFields(QStringList newFieldNames);
+  //void _updateField(size_t fieldId);
 
 signals:
 
@@ -307,8 +308,13 @@ private:
   void _handleArchiveData(QTimerEvent * event);
   int _getArchiveData();
   void _plotArchiveData();
+  void _updateArchiveData(vector<string> &fieldNames);
   void _updateArchiveData(QStringList newFieldNames);
   void _setupVolRead(RadxFile &file);
+  void _handleColorMapChangeOnRay(RadxPlatform &platform, RadxRay *ray, 
+				  string fieldName);
+  void _updateColorMap(string fieldName);
+
   //  int _applyDataEdits(RadxVol _editedVol);  // & or * ??
   void _applyDataEdits(); // const RadxVol &editedVol);
   void _addNewFields(vector<DisplayField *> newFields);

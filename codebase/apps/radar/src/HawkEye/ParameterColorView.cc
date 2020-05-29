@@ -75,7 +75,7 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
     //QAction *cancelButton = new QAction("&Cancel", this);
     cancelButton->setIcon(QIcon(":/images/cancel_x.png"));
     QPushButton *saveButton = new QPushButton(tr("Save"));
-    QPushButton *replotButton = new QPushButton(tr("Replot"));
+    QPushButton *replotButton = new QPushButton(tr("Apply"));
     replotButton->setIcon(QIcon(":/images/apply.png"));
     // Note: Command buttons in dialogs are by default auto-default buttons.
     // A default button is a push button that is activated when the user 
@@ -86,6 +86,7 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
     // will be activated and the colorDialog chooser pops-up.
     cancelButton->setAutoDefault(false);
     saveButton->setAutoDefault(false);
+    replotButton->setAutoDefault(false);
 
     centerColorLabel = new QLabel;
     centerColorLabel->setText(tr("Center"));
@@ -186,8 +187,8 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
 	    this, SLOT(fieldSelected(QListWidgetItem *, QListWidgetItem *))); 
     connect(cancelButton, &QAbstractButton::clicked, this, &ParameterColorView::cancelColorScale);
     //connect(cancelButton, &QAction::triggered, this, &ParameterColorView::cancelColorScale);
-    connect(saveButton, &QAbstractButton::clicked, this, &ParameterColorView::saveColorScale);
-    connect(replotButton, &QAbstractButton::clicked, this, &ParameterColorView::replotColorScale);
+    connect(saveButton, &QAbstractButton::clicked, this, &ParameterColorView::replotColorScale); // saveColorScale);
+    //    connect(replotButton, &QAbstractButton::clicked, this, &ParameterColorView::replotColorScale);
    
     connect(gridColorButton, &QAbstractButton::clicked, this, &ParameterColorView::setGridColor);
     connect(boundaryColorButton, &QAbstractButton::clicked, this, &ParameterColorView::setBoundaryColor);
@@ -298,6 +299,7 @@ void ParameterColorView::colorMapProvided(string fieldName, ColorMap *colorMap) 
 
   cmapLabel->clear();
   cmapLabel->setPixmap(*pixmap); //
+  cmapLabel->show();
   //QSize size;
   //size.setWidth(1); 
   // this doesn't allow scaling of image ... (pixmap->scaled(w/2,h*2)); // (*pixmap);

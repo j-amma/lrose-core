@@ -608,6 +608,110 @@ void PpiWidget::movingDownTheLine(PpiBeam *beam, vector<string> fieldNames,
   LOG(DEBUG) << "exit";
 }
 
+
+void PpiWidget::updateBeamColors(const RadxRay *ray,
+				 const float start_angle,
+				 const float stop_angle,
+				 const std::vector< double > &beam_data,
+				 size_t nFields,
+				 fieldName)
+{
+
+  LOG(DEBUG) << "enter";
+  
+  LOG(DEBUG) << "beam_data size = " << beam_data.size();
+  LOG(DEBUG) << "start_angle = " << start_angle;
+  LOG(DEBUG) << "stop_angle = " << stop_angle;
+
+  // The start and stop angle MUST specify a clockwise fill for the sector.
+  // Thus if start_angle > stop_angle, we know that we have crossed the 0
+  // boundary, and must break it up into 2 beams.
+
+  // Create the new beam(s), to keep track of the display information.
+  // Beam start and stop angles are adjusted here so that they always 
+  // increase clockwise. Likewise, if a beam crosses the 0 degree boundary,
+  // it is split into two beams, each of them again obeying the clockwise
+  // rule. Prescribing these rules makes the beam culling logic a lot simpler.
+
+  // Normalize the start and stop angles.  I'm not convinced that this works
+  // for negative angles, but leave it for now.
+
+  double n_start_angle = start_angle - ((int)(start_angle/360.0))*360.0;
+  double n_stop_angle = stop_angle - ((int)(stop_angle/360.0))*360.0;
+  
+  // --------
+
+  // find an existing beam closest to the azimuth
+  vector<PpiBeam *>::iterator it;
+  for (it = _ppiBeams.begin(); it != _ppiBeams.end(); it++) {
+    if ((*it)->...)
+  }
+    //  if (n_start_angle <= n_stop_angle) {
+
+    // This beam does not cross the 0 degree angle.  Just add the beam to
+    // the beam list.
+  PpiBeam* b = closestBeam; //  new PpiBeam(_params, ray, nFields, 
+                            // n_start_angle, n_stop_angle);
+    updateColorsOnFields(b, fieldName, beam_data, nFields);
+
+}
+
+
+// nFields = total number of Fields (old + new)
+// fill brushes and queue this beam with the renderers
+void PpiWidget::updateColorsOnFields(PpiBeam *beam, string fieldName,
+				  const  std::vector< double > &beam_data,
+				  size_t nFields) {
+  //---------
+  //size_t nFields = beam_data.size();
+    // Set up the brushes for all of the fields in this beam.  This can be
+    // done independently of a Painter object.
+    // TODO: Just send the number of fields
+  // fill colors becomes a sparse array
+  size_t displayFieldIdx = displayFieldController->getFieldIndex(fieldName);
+  if (displayFieldIdx > nFields)
+    throw "Error: fieldIdx is outside dimensions (movingDownTheLine)";
+  beam->updateFillColorsSparse(beam_data, displayFieldController, nFields, &_backgroundBrush, displayFieldIdx);
+  // just add beam to the new fields 
+  _fieldRendererController->addBeam(displayFieldIdx, beam);
+  
+
+  LOG(DEBUG) << "exit";
+}
+
+
+/*
+// A field has a new color map; update the fill colors for the field in each beam.
+// nFields = total number of Fields (old + new)
+// fill brushes and queue this beam with the renderers
+// Q: Who holds the beams? FieldRenderer
+void PpiWidget::colorMapChanged(string fieldName) {
+
+  //----
+  //for each beam, b
+  // get beam_data
+  b->fillColors(beam_data, displayFieldController, fieldIdx, &_backgroundBrush);
+  // Add the new beams to the render lists for each of the fields                                                             
+  _fieldRendererController->addBeam(b); // selectedField, beam);
+  //-----
+  // call FieldRendererController to update the ColorMap for this field
+  // TODO: send beam data? because it is vetted? 
+  //_fieldRendererController->colorMapChanged(fieldName, beam_data, &_backgroundBrush); // or displayFieldIdx);
+  // inside FieldRenderer, loop is ...
+  // for each beam
+  //    
+
+  // fill colors becomes a sparse array
+  //  size_t displayFieldIdx = displayFieldController->getFieldIndex(*it); // _lookup(*it);
+  //  if (displayFieldIdx > nFields)
+  //    throw "Error: fieldIdx is outside dimensions (movingDownTheLine)"; 
+  // beam->updateFillColorsSparse(beam_data[newFieldIndex], displayFieldController, nFields, &_backgroundBrush, displayFieldIdx);
+    // just add beam to the new fields 
+
+  LOG(DEBUG) << "exit";
+}
+*/
+
 // TODO: does this become addFieldsToEachBeam? YES
 // Update this beam with the new fields
 // UpdateBeam only works on new beams, which are to be added to the end

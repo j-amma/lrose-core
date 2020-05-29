@@ -283,7 +283,7 @@ protected:
   
   void _createStatusPanel();
   void _createFieldPanel();
-  void _updateFieldPanel();
+  void _updateFieldPanel(string newFieldName);
   void _createClickReportDialog();
   void _updateStatusPanel(const RadxRay *ray);
   double _getInstHtKm(const RadxRay *ray);

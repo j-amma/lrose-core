@@ -145,14 +145,14 @@ void PpiBeam::paint(QImage *image,
     }
 
     curr_brush = _brushes[field][igate];
-    /*
-    if ((field == 8) && (igate < 10)) {
+    
+    if ((field == 1) && (igate < 10)) {
       QColor qcolor = curr_brush->color();
       int r,g,b,a;
       qcolor.getRgb(&r, &g, &b, &a);
       LOG(DEBUG) << "rgb = " << r << "," << g << "," << b;
     }
-    */
+    
 
     if (curr_brush != prev_brush) {
 

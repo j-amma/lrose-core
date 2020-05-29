@@ -268,6 +268,22 @@ void PolarWidget::addNewFields(vector<DisplayField *> &newFields)
 }
 
 
+/*
+// TODO: this should be a slot?
+// TODO: sort out new fields in PolarManager
+// Who needs to know about the new fields?
+// Beams, FieldRenderers, DisplayFieldController 
+void PolarWidget::updateField(size_t fieldIdx) 
+{
+  LOG(DEBUG) << "enter";
+
+  _fieldRendererController->updateImage(fieldIdx, width(), height());
+      //    fieldRenderer->createImage(width(), height());
+
+  LOG(DEBUG) << "exit";
+}
+*/
+
 /*************************************************************************
  * turn on archive-style rendering - all fields
  */

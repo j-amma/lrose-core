@@ -59,7 +59,7 @@ QColor FieldColorController::_stringToQColor(string colorName) {
   }
 }
 
-// in response to Replot from View
+// in response to "Save" from View
 void FieldColorController::modelChanged() // string fieldName) // , ColorMap newColorMap) 
 {
   LOG(DEBUG) << "enter"; 

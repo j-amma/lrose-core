@@ -188,7 +188,21 @@ void Beam::updateFillColorsSparse(const std::vector<double>& field_data,
     if (data < -9990) {
       _brushes[fieldIdx][igate] = background_brush;
     } else {
+
       _brushes[fieldIdx][igate] = map->dataBrush(data);
+
+      // --
+      const QBrush *curr_brush = _brushes[fieldIdx][igate];
+
+      if ( (igate < 10)) {
+	QColor qcolor = curr_brush->color();
+	int r,g,b,a;
+	qcolor.getRgb(&r, &g, &b, &a);
+	LOG(DEBUG) << "rgb = " << r << "," << g << "," << b;
+      }
+      // --
+
+
     }
   } // igate
 }

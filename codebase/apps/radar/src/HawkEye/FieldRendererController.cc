@@ -234,6 +234,16 @@ bool FieldRendererController::isBackgroundRendered(size_t index) {
   return fieldRenderer->isBackgroundRendered();
 }
 
+/*
+void FieldRendererController::colorMapChanged(size_t ifield)
+{
+    FieldRenderer *fieldRenderer = _fieldRenderers[ifield];
+
+    fieldRenderer->colorMapChanged();
+}
+*/
+
+
 void FieldRendererController::refreshImages(int width, int height, QSize image_size,
 					    QRgb background_brush_color_rgb,
 					    QTransform zoomTransform,
