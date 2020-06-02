@@ -109,18 +109,18 @@ void PpiWidget::clear()
 {
   LOG(DEBUG) << "enter";
   // Clear out the beam array
-  
-  for (size_t i = 0; i < _ppiBeams.size(); i++) {
-    Beam::deleteIfUnused(_ppiBeams[i]);
-  }
-  LOG(DEBUG) << "_ppiBeams.clear()";
-  _ppiBeams.clear();
+  LOG(DEBUG) << "NOT CLEARING BEAMS";
+  //  for (size_t i = 0; i < _ppiBeams.size(); i++) {
+  //    Beam::deleteIfUnused(_ppiBeams[i]);
+  //  }
+  //LOG(DEBUG) << "_ppiBeams.clear()";
+  //  _ppiBeams.clear();
   
   //_ppiBeamController->clear();
 
   // Now rerender the images
   
-  _refreshImages();
+  //_refreshImages();
 
   LOG(DEBUG) << "exit";
 }
@@ -609,72 +609,68 @@ void PpiWidget::movingDownTheLine(PpiBeam *beam, vector<string> fieldNames,
 }
 
 
-void PpiWidget::updateBeamColors(const RadxRay *ray,
-				 const float start_angle,
-				 const float stop_angle,
-				 const std::vector< double > &beam_data,
+void PpiWidget::updateBeamColors(//const RadxRay *ray,
+				 //const float start_angle,
+				 //const float stop_angle,
+				 //const std::vector< double > &beam_data,
 				 size_t nFields,
-				 fieldName)
+				 const string fieldName,
+				 size_t nGates)
 {
 
   LOG(DEBUG) << "enter";
-  
-  LOG(DEBUG) << "beam_data size = " << beam_data.size();
-  LOG(DEBUG) << "start_angle = " << start_angle;
-  LOG(DEBUG) << "stop_angle = " << stop_angle;
 
-  // The start and stop angle MUST specify a clockwise fill for the sector.
-  // Thus if start_angle > stop_angle, we know that we have crossed the 0
-  // boundary, and must break it up into 2 beams.
+  LOG(DEBUG) << "_ppiBeams.size() = " << _ppiBeams.size();  
 
-  // Create the new beam(s), to keep track of the display information.
-  // Beam start and stop angles are adjusted here so that they always 
-  // increase clockwise. Likewise, if a beam crosses the 0 degree boundary,
-  // it is split into two beams, each of them again obeying the clockwise
-  // rule. Prescribing these rules makes the beam culling logic a lot simpler.
+  size_t displayFieldIdx = displayFieldController->getFieldIndex(fieldName);
+  if (displayFieldIdx > nFields)
+    throw "Error: fieldIdx is outside dimensions (updateColorsOnFields)";
+  const ColorMap *map = displayFieldController->getColorMap(displayFieldIdx);
 
-  // Normalize the start and stop angles.  I'm not convinced that this works
-  // for negative angles, but leave it for now.
 
-  double n_start_angle = start_angle - ((int)(start_angle/360.0))*360.0;
-  double n_stop_angle = stop_angle - ((int)(stop_angle/360.0))*360.0;
-  
-  // --------
-
-  // find an existing beam closest to the azimuth
+  // WAIT A MINUTE! Hold everything.  A beam holds a pointer to the associated ray.
   vector<PpiBeam *>::iterator it;
-  for (it = _ppiBeams.begin(); it != _ppiBeams.end(); it++) {
-    if ((*it)->...)
-  }
-    //  if (n_start_angle <= n_stop_angle) {
+  for (it = _ppiBeams.begin(); it != _ppiBeams.end(); ++it) {
+    PpiBeam* b = *it;
+    const RadxRay *ray = b->getRay();
+    const RadxField *rfld = ray->getField(fieldName);             
+    if (rfld == NULL)          
+      throw "field data not found for ray";
+    //rfld->convertToFl32();
+    const Radx::fl32 *fdata = rfld->getDataFl32(); 
 
-    // This beam does not cross the 0 degree angle.  Just add the beam to
-    // the beam list.
-  PpiBeam* b = closestBeam; //  new PpiBeam(_params, ray, nFields, 
-                            // n_start_angle, n_stop_angle);
-    updateColorsOnFields(b, fieldName, beam_data, nFields);
+    // Q: What if the number of data values != the dimension of the brushes
+    //    const std::vector<double> &beam_data = ray->getFieldFl32();
+    updateColorsOnFields(b, fieldName, nFields, fdata, nGates, map, displayFieldIdx);
+  }
 
 }
 
 
 // nFields = total number of Fields (old + new)
 // fill brushes and queue this beam with the renderers
-void PpiWidget::updateColorsOnFields(PpiBeam *beam, string fieldName,
-				  const  std::vector< double > &beam_data,
-				  size_t nFields) {
+  void PpiWidget::updateColorsOnFields(PpiBeam *beam,
+				       string fieldName, size_t nFields,
+				       const Radx::fl32 *beam_data,
+				       size_t nGates,
+				       const ColorMap *map,
+				       size_t displayFieldIdx) {
   //---------
   //size_t nFields = beam_data.size();
     // Set up the brushes for all of the fields in this beam.  This can be
     // done independently of a Painter object.
     // TODO: Just send the number of fields
   // fill colors becomes a sparse array
-  size_t displayFieldIdx = displayFieldController->getFieldIndex(fieldName);
-  if (displayFieldIdx > nFields)
-    throw "Error: fieldIdx is outside dimensions (movingDownTheLine)";
-  beam->updateFillColorsSparse(beam_data, displayFieldController, nFields, &_backgroundBrush, displayFieldIdx);
+    //  size_t displayFieldIdx = displayFieldController->getFieldIndex(fieldName);
+    //if (displayFieldIdx > nFields)
+    //  throw "Error: fieldIdx is outside dimensions (updateColorsOnFields)";
+    //const ColorMap *map = displayFieldController->getColorMap(displayFieldIdx);
+  beam->updateFillColors(beam_data, nGates, // displayFieldController, 
+			 displayFieldIdx,
+			 nFields,
+			 map, &_backgroundBrush);
   // just add beam to the new fields 
   _fieldRendererController->addBeam(displayFieldIdx, beam);
-  
 
   LOG(DEBUG) << "exit";
 }
@@ -729,7 +725,7 @@ void PpiWidget::updateBeam(const RadxRay *ray,
 			//                        const std::vector< DisplayField* > &fields)
 			//displayFieldController)
 {
-
+  /*
   LOG(DEBUG) << "enter";
 
   LOG(DEBUG) << "beam_data size = " << beam_data.size() << " by " << beam_data[0].size();
@@ -844,17 +840,6 @@ void PpiWidget::updateBeam(const RadxRay *ray,
     // TODO: Just send the number of fields
     beam->updateFillColors(beam_data, displayFieldController, nFields, &_backgroundBrush);
 
-    /* I don't think we need this, the fieldRenderers already have the beam
-    // TODO: render the new fields ...
-    // Add the new beams to the render lists for each of the fields
-    // TODO: _fieldRendererController->addBeam(...)
-    // for this beam(s) ...
-    // for each fieldRenderer
-    //     if field is selected OR field is backgroundRender
-    //         add beam to the renderer for this field?
-    //     else
-    //         set field in this beam to not being rendered
-    */
     // for each newFieldName
     // queue beam for rendering this field
 
@@ -865,17 +850,6 @@ void PpiWidget::updateBeam(const RadxRay *ray,
     _fieldRendererController->addBeam(beam); // selectedFieldIndex, beam);
     //_fieldRendererController->addBeamToBackgroundRenderedFields(beam);
 
-    /*
-    for (size_t field = 0; field < _fieldRenderers.size(); ++field) {
-      if (field == _selectedField ||
-          _fieldRenderers[field]->isBackgroundRendered()) {
-        _fieldRenderers[field]->addBeam(beam);
-      } else {
-        beam->setBeingRendered(field, false);
-      }
-    }
-    // TODO: end ... render the new fields. 
-    */
   } // endfor - beam 
 
   // Start the threads to render the new beams
@@ -883,6 +857,7 @@ void PpiWidget::updateBeam(const RadxRay *ray,
   // _performRendering();
 
   LOG(DEBUG) << "exit";
+  */
 }
 
 

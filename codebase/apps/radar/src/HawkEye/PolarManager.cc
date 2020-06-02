@@ -1607,7 +1607,7 @@ void PolarManager::_updateColorMap(string fieldName)
   if(_params.debug) {
     cerr << "Updating color map" << endl;
   }
-
+  /*
   // handle the rays
   _vol.loadRaysFromFields();  // this line makes the select field update properly  
 
@@ -1634,11 +1634,12 @@ void PolarManager::_updateColorMap(string fieldName)
   // handle the rays
 
   const SweepManager::GuiSweep &gsweep = _sweepManager.getSelectedSweep();
-  for (size_t ii = gsweep.radx->getStartRayIndex();
-       ii <= gsweep.radx->getEndRayIndex(); ii++) {
-    RadxRay *ray = rays[ii];
-    _handleColorMapChangeOnRay(_platform, ray, fieldName); 
-  }
+  //  for (size_t ii = gsweep.radx->getStartRayIndex();
+  //       ii <= gsweep.radx->getEndRayIndex(); ii++) {
+  //    RadxRay *ray = rays[ii];
+  */
+    _handleColorMapChangeOnRay(_platform, fieldName); 
+    //}
   
 }
 
@@ -1957,10 +1958,13 @@ void PolarManager::_handleRayUpdate(RadxPlatform &platform, RadxRay *ray, vector
   
 }
 
-void PolarManager::_handleColorMapChangeOnRay(RadxPlatform &platform, RadxRay *ray, fieldName)
+void PolarManager::_handleColorMapChangeOnRay(RadxPlatform &platform, 
+					      string fieldName)
 {
 
   LOG(DEBUG) << "enter";
+
+  /*
   // create  field data vector
   size_t nNewFields = 1;
   vector<double> data;
@@ -2021,11 +2025,6 @@ void PolarManager::_handleColorMapChangeOnRay(RadxPlatform &platform, RadxRay *r
 
     // Add the beam to the display
     LOG(DEBUG) << "RHI not being updated";
-    /* TODO: update the rhi code ...
-    _rhi->addBeam(ray, fieldData, displayFieldController); // _fields);
-    _rhiWindow->setAzimuth(ray->getAzimuthDeg());
-    _rhiWindow->setElevation(ray->getElevationDeg());
-    */
   } else {
 
     _rhiMode = false;
@@ -2044,10 +2043,12 @@ void PolarManager::_handleColorMapChangeOnRay(RadxPlatform &platform, RadxRay *r
     // Add the beam to the display
     // ray contains data for ALL fields; fieldData contains only data for the new beams
     // nFields = total number of fields (old + new)
+    */
     size_t nFields = _displayFieldController->getNFields();
-    _ppi->updateBeamColors(ray, _startAz, _endAz, fieldData, nFields, fieldName);
+    if (_nGates < 0) throw "Error, cannot convert _nGates < 0 to type size_t";
+    _ppi->updateBeamColors(nFields, fieldName, (size_t) _nGates); //ray, _startAz, _endAz, data, nFields, fieldName);
 
-  }
+    //}
   LOG(DEBUG) << "exit";
   
 }
@@ -2310,9 +2311,9 @@ void PolarManager::colorMapRedefineReceived(string fieldName, ColorMap newColorM
   try {
     _displayFieldController->setColorMap(fieldName, &newColorMap);
     _updateFieldPanel(fieldName);
-    size_t fieldId = _displayFieldController->getFieldIndex(fieldName);
-    vector<string> fieldNames;
-    fieldNames.push_back(fieldName);
+    //size_t fieldId = _displayFieldController->getFieldIndex(fieldName);
+    //vector<string> fieldNames;
+    //fieldNames.push_back(fieldName);
     //_updateArchiveData(fieldNames);  // ?? or  _updateField(fieldId);
     _updateColorMap(fieldName);
   } catch (std::invalid_argument ex) {

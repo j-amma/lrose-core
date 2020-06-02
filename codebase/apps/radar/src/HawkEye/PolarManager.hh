@@ -311,7 +311,7 @@ private:
   void _updateArchiveData(vector<string> &fieldNames);
   void _updateArchiveData(QStringList newFieldNames);
   void _setupVolRead(RadxFile &file);
-  void _handleColorMapChangeOnRay(RadxPlatform &platform, RadxRay *ray, 
+  void _handleColorMapChangeOnRay(RadxPlatform &platform, // RadxRay *ray, 
 				  string fieldName);
   void _updateColorMap(string fieldName);
 

@@ -209,27 +209,15 @@ void Beam::updateFillColorsSparse(const std::vector<double>& field_data,
 
 // dimensions of beam_data:
 // [number_new_fields][nGates]
-void Beam::updateFillColors(const std::vector<std::vector<double> >& beam_data,
-		      DisplayFieldController *displayFieldController,
-		      size_t number_new_fields,
-		      const QBrush *background_brush)
+void Beam::updateFillColors(const Radx::fl32 *beam_data,
+			    size_t nData,
+			    //DisplayFieldController *displayFieldController,
+			    size_t displayFieldIdx,
+			    size_t nFields,
+			    const ColorMap *map,
+			    const QBrush *background_brush)
 {
   LOG(DEBUG) << "enter";
-  if ((number_new_fields < 0) || (number_new_fields > beam_data.size())) {
-      LOG(DEBUG) << "number_new_fields is out of bounds" << number_new_fields << "; beam_data.size() "
-		 << beam_data.size();
-      //      throw std::invalid_argument("beam_data"); 
-  }
-   
-  // the number of fields has been updated already
-  size_t start_of_new_fields = _nFields - number_new_fields;
-
-  /* already done by addFields
-  _brushes.resize(_nFields);
-  for (int field = start_of_new_fields; field < _nFields; ++field) {
-    _brushes[field].resize(_nGates);
-  }
-  */
 
   // we are managing two separate indexes;
   // 1) for the new fields that starts at 0 ... number_new_fields
@@ -237,26 +225,26 @@ void Beam::updateFillColors(const std::vector<std::vector<double> >& beam_data,
   //     and goes to _nFields 
   // TODO: just call fillColors instead of repeating code?
   //  for (size_t fieldIdx = start_index; fieldIdx < _nFields; fieldIdx++) {
-  size_t fieldIdx;
-  for (size_t newFieldIdx = 0; newFieldIdx < number_new_fields; newFieldIdx++) {
+  //  size_t fieldIdx;
+  //for (size_t newFieldIdx = 0; newFieldIdx < number_new_fields; newFieldIdx++) {
     //size_t absolute_index = new_field_start_index + fieldIdx;
     //    const ColorMap &map = fields[field]->getColorMap();
-    fieldIdx = start_of_new_fields + newFieldIdx;
-    const ColorMap *map = displayFieldController->getColorMap(fieldIdx);
+  // fieldIdx = start_of_new_fields + newFieldIdx;
+  if (nData != _nGates)
+    throw "Error! nBeamData != nGates";
 
-    const double *field_data = &(beam_data[newFieldIdx][0]);
+  //const ColorMap *map = displayFieldController->getColorMap(displayFieldIdx);
+
+    //const double *field_data = &(beam_data[newFieldIdx][0]);
     for (size_t igate = 0; igate < _nGates; ++igate) {
-      double data = field_data[igate];
-      //if (igate < 20) { 
-      //LOG(DEBUG) << "data[" << igate << "]="<< data;
-      //}
+      double data = beam_data[igate];
       if (data < -9990) {
-	_brushes[fieldIdx][igate] = background_brush;
+	_brushes[displayFieldIdx][igate] = background_brush;
       } else {
-	_brushes[fieldIdx][igate] = map->dataBrush(data);
+	_brushes[displayFieldIdx][igate] = map->dataBrush(data);
       }
     } // igate
-  }
+ 
 }
 
 

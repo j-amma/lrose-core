@@ -134,11 +134,13 @@ public:
 			  size_t nFields,
 			  const QBrush *background_brush);
 
-  virtual void updateFillColors(const std::vector<std::vector<double> >& beamData,
-			  //const std::vector<DisplayField*>& fields,
-			  DisplayFieldController *displayFieldController,
-			  size_t number_new_fields,
-			  const QBrush *background_brush);
+  virtual void updateFillColors(const Radx::fl32 *beamData,
+				size_t nData,
+				//DisplayFieldController *displayFieldController,
+				size_t displayFieldIdx,
+				size_t nFields,
+				const ColorMap *map,
+				const QBrush *background_brush);
 
   virtual void updateFillColorsSparse(const std::vector<double>& field_data,
 			  DisplayFieldController *displayFieldController,
