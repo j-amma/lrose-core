@@ -99,12 +99,12 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
     //minColorLineEdit->setAutoDefault(false);
 
     QString maxInputMask("####.#");
-    minColorLineEdit->setInputMask(maxInputMask);
+    //minColorLineEdit->setInputMask(maxInputMask);
 
     maxColorLabel = new QLabel;
     maxColorLabel->setText(tr("Max"));
     maxColorLineEdit = new QLineEdit();
-    maxColorLineEdit->setInputMask(maxInputMask);
+    //maxColorLineEdit->setInputMask(maxInputMask);
     //maxColorLineEdit->setAutoDefault(false);
 
     stepColorLabel = new QLabel;
@@ -187,8 +187,8 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
 	    this, SLOT(fieldSelected(QListWidgetItem *, QListWidgetItem *))); 
     connect(cancelButton, &QAbstractButton::clicked, this, &ParameterColorView::cancelColorScale);
     //connect(cancelButton, &QAction::triggered, this, &ParameterColorView::cancelColorScale);
-    connect(saveButton, &QAbstractButton::clicked, this, &ParameterColorView::replotColorScale); // saveColorScale);
-    //    connect(replotButton, &QAbstractButton::clicked, this, &ParameterColorView::replotColorScale);
+    //connect(saveButton, &QAbstractButton::clicked, this, &ParameterColorView::replotColorScale); // saveColorScale);
+    connect(replotButton, &QAbstractButton::clicked, this, &ParameterColorView::replotColorScale);
    
     connect(gridColorButton, &QAbstractButton::clicked, this, &ParameterColorView::setGridColor);
     connect(boundaryColorButton, &QAbstractButton::clicked, this, &ParameterColorView::setBoundaryColor);
@@ -228,7 +228,7 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
     layout->addWidget(backgroundColorLabel, base+5, 1);
     layout->addWidget(emphasisColorButton, base+6, 2);
     layout->addWidget(emphasisColorLabel, base+6, 1);
-    layout->addWidget(saveButton, base+7, 2);
+    // layout->addWidget(saveButton, base+7, 2);
     layout->addWidget(cancelButton, base+7, 1);
     //layout->addAction(cancelButton, base+7, 1);
     layout->addWidget(replotButton, base+7, 0);
