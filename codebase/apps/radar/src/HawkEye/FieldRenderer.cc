@@ -218,6 +218,6 @@ void FieldRenderer::run()
   //{
   //  Beam::deleteIfUnused(*beam);
   //}
-  //_beams.clear();
+  _beams.clear();
   LOG(DEBUG) << "exit";
 }

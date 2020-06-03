@@ -124,6 +124,9 @@ class DLL_EXPORT PpiWidget : public PolarWidget
 			    size_t displayFieldIdx);
 
 
+  void drawColorScaleLegend();
+
+
   // are we in archive mode? and if so are we at the start of a sweep?
 
   void setArchiveMode(bool state) { _isArchiveMode = state; }

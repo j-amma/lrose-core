@@ -1140,8 +1140,11 @@ void PpiWidget::_setGridSpacing()
  * _drawOverlays()
  */
 
+
 void PpiWidget::_drawOverlays(QPainter &painter)
 {
+
+  LOG(DEBUG) << "enter";
 
   // Don't try to draw rings if we haven't been configured yet or if the
   // rings or grids aren't enabled.
@@ -1276,49 +1279,6 @@ void PpiWidget::_drawOverlays(QPainter &painter)
     painter.drawLine(startX, _mouseReleaseY, endX, _mouseReleaseY);
     painter.drawLine(_mouseReleaseX, startY, _mouseReleaseX, endY);
 
-    /****** testing ******
-    // do smart brush ...
-  QImage qImage;
-  qImage = *(_fieldRenderers[_selectedField]->getImage());
-  // qImage.load("/h/eol/brenda/octopus.jpg");
-  // get the Image from somewhere ...   
-  // qImage.invertPixels();
-  qImage.convertToFormat(QImage::Format_RGB32);
-
-  // get the color of the selected pixel
-  QRgb colorToMatch = qImage.pixel(_mouseReleaseX, _mouseReleaseY);
-  // walk to all adjacent pixels of the same color and make them white
-
-  vector<QPoint> pixelsToConsider;
-  vector<QPoint> neighbors = {QPoint(-1, 1), QPoint(0, 1), QPoint(1, 1),
-                              QPoint(-1, 0),               QPoint(1, 0),
-                              QPoint(-1,-1), QPoint(0,-1), QPoint(1,-1)};
-
-  pixelsToConsider.push_back(QPoint(_mouseReleaseX, _mouseReleaseY));
-  while (!pixelsToConsider.empty()) {
-    QPoint currentPix = pixelsToConsider.back();
-    pixelsToConsider.pop_back();
-    if (qImage.pixel(currentPix) ==  colorToMatch) {
-      // set currentPix to white
-      qImage.setPixelColor(currentPix, QColor("white"));
-      // cout << "setting pixel " << currentPix.x() << ", " << currentPix.y() << " to white" << endl;
-      // add the eight adjacent neighbors
-      for (vector<QPoint>::iterator noffset = neighbors.begin(); 
-           noffset != neighbors.end(); ++noffset) {
-        QPoint neighbor;
-        neighbor = currentPix + *noffset; // QPoint(-1,1);
-        if (qImage.valid(neighbor)) {
-          pixelsToConsider.push_back(neighbor);
-        }
-      } // end for neighbors iterator
-    }
-  }
-
-  pixelsToConsider.clear();
-  QPainter painter(this);
-  painter.drawImage(0, 0, qImage);
-    ****** end testing *****/
-
   }
 
   // reset painter state
@@ -1404,6 +1364,19 @@ void PpiWidget::_drawOverlays(QPainter &painter)
     painter.restore();
 
   } // if (_archiveMode) {
+
+  LOG(DEBUG) << "exit";
+
+}
+
+void PpiWidget::drawColorScaleLegend() {
+
+  QPainter painter(this);
+  // draw the color scale
+
+  DisplayField *field = displayFieldController->getSelectedField();
+  _zoomWorld.drawColorScale(field->getColorMap(), painter,
+                            _params.label_font_size);
 
 }
 

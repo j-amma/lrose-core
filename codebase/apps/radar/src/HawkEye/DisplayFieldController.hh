@@ -39,6 +39,7 @@ public:
   ColorMap *getColorMap(string fieldName);
   ColorMap *getColorMap(size_t fieldIndex);
   void setColorMap(string fieldName, ColorMap *newColorMap);
+  void saveColorMap(string fieldName, ColorMap *newColorMap);
     void colorMapChanged(string newColorMapName);
     bool backgroundChanged(string fieldName);
 

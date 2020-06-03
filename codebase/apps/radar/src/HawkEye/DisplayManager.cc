@@ -673,7 +673,8 @@ void DisplayManager::colorMapRedefineReceived(string fieldName, ColorMap newColo
   
   // connect the new color map with the field
   // find the fieldName in the list of FieldDisplays
-  _displayFieldController->setColorMap(fieldName, &newColorMap);
+  // This should save/perpetuate the color map in the DisplayField object
+  _displayFieldController->saveColorMap(fieldName, &newColorMap);
   size_t fieldIndex = _displayFieldController->getFieldIndex(fieldName);
   _changeField(fieldIndex, true); 
 

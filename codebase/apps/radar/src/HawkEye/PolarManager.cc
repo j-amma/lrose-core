@@ -2309,7 +2309,8 @@ void PolarManager::colorMapRedefineReceived(string fieldName, ColorMap newColorM
   LOG(DEBUG) << "enter";
   // connect the new color map with the field                                                       
   try {
-    _displayFieldController->setColorMap(fieldName, &newColorMap);
+    //  This should save/perpetuate the color map in the DisplayField object
+    _displayFieldController->saveColorMap(fieldName, &newColorMap);
     _updateFieldPanel(fieldName);
     //size_t fieldId = _displayFieldController->getFieldIndex(fieldName);
     //vector<string> fieldNames;
@@ -2323,6 +2324,8 @@ void PolarManager::colorMapRedefineReceived(string fieldName, ColorMap newColorM
   }
   _ppi->backgroundColor(backgroundColor);
   _ppi->gridRingsColor(gridColor);
+  _ppi->colorScaleLegend(); // TODO: may not need this??
+  //_ppi->drawOverlays();
 
   // ??   _ppi->selectVar(fieldId);
 

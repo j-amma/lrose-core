@@ -110,6 +110,13 @@ void DisplayFieldController::setColorMap(string fieldName, ColorMap *newColorMap
   LOG(DEBUG) << "exit";
 }
 
+void DisplayFieldController::saveColorMap(string fieldName, ColorMap *newColorMap) {
+  
+  LOG(DEBUG) << "entry " << fieldName;
+  _model->saveColorMap(fieldName, newColorMap);
+  LOG(DEBUG) << "exit";
+}
+
 
 ColorMap *DisplayFieldController::colorMapMaxChanged(double newValue) {
   return _model->colorMapMaxChanged(newValue);

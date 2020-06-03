@@ -180,6 +180,8 @@ class DLL_EXPORT PolarWidget : public QWidget
 
   void gridRingsColor(const QColor &color);
 
+  void colorScaleLegend();
+
   /**
    * @brief Capture an image of the display.
    *

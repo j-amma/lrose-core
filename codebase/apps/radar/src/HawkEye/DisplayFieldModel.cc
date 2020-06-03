@@ -210,6 +210,32 @@ void DisplayFieldModel::setColorMap(string fieldName, ColorMap *newColorMap) {
   
 }
 
+// save/perpetuate the color map to the DisplayField object ... 
+// return NULL if not found
+void DisplayFieldModel::saveColorMap(string fieldName, ColorMap *newColorMap) {
+  
+  LOG(DEBUG) << "entry " << fieldName;
+
+  DisplayField *displayField = _findFieldByName(fieldName);
+  displayField->replaceColorMap(*newColorMap);
+
+  /*
+  // first, look in the working copies
+  map<string, ColorMap *>::iterator it = _workingCopies.find(fieldName);
+  if (it != _workingCopies.end()) {
+    LOG(DEBUG) << "found in the workingCopies";
+    _workingCopies.erase(it);  
+  } 
+
+  // insert new version into list
+  _workingCopies[fieldName] = newColorMap;
+  */
+
+
+  LOG(DEBUG) << "exit";
+  
+}
+
 void DisplayFieldModel::setColorMapMinMax(string fieldName, double min, double max) {
   DisplayField *field = _findFieldByName(fieldName);
   field->setColorMapRange(min, max);

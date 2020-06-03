@@ -363,6 +363,17 @@ void PolarWidget::gridRingsColor(const QColor &color)
   LOG(DEBUG) << "exit";
 }
 
+/*************************************************************************
+ * ColorScaleLegend()
+ */
+
+void PolarWidget::colorScaleLegend()
+{
+  LOG(DEBUG) << "enter " ;
+  update();
+  LOG(DEBUG) << "exit";
+}
+
 
 /*************************************************************************
  * getImage()
