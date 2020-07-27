@@ -42,6 +42,7 @@
 #include <vector>
 #include <iostream>
 #include <QPainter>
+#include <QPainterPath>
 #include <QRect>
 #include <QTransform>
 #include <QColor>

@@ -169,4 +169,6 @@ LIBS += -framework QtWidgets
 LIBS += -framework QtScript
 LIBS += -framework QtQml
 
-QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+# QMAKE_LFLAGS_SONAME  = -Wl,-install_name,@executable_path/../Frameworks/
+
+# QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
