@@ -28,8 +28,8 @@ public:
   //SoloFunctions(QObject *parent = nullptr) : QObject(parent) { }
 
 
-  But the field names change, so this list of vectors needs to be a map?
-  Q_PROPERTY(QVector<float> qilist MEMBER m_qilist) 
+
+  //Q_PROPERTY(QVector<float> qilist MEMBER m_qilist) 
 
   //  Q_INVOKABLE QString ZERO(QString field); // return the name of the new field that contains the result
   //  Q_INVOKABLE QString REMOVE_AIRCRAFT_MOTION(QString field); // return the name of the new field that contains the result

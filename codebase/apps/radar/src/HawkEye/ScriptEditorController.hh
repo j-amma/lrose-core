@@ -59,6 +59,7 @@ private:
 
   QJSEngine engine;
 
+  void setupFieldArrays();
   void setupSoloFunctions(SoloFunctionsController *soloFunctions);
   void fieldNamesProvided(vector<string> fieldNames);
   void _assign(string tempName, string userDefinedName);

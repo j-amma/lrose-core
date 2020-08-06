@@ -57,7 +57,9 @@ ScriptEditorController::ScriptEditorController(ScriptEditorView *view, ScriptEdi
 
   //  functionsModel = new SoloFunctionsModel(_currentModel);
   _soloFunctionsController = new SoloFunctionsController(_currentModel->_vol);
+
   setupSoloFunctions(_soloFunctionsController);
+  setupFieldArrays();
 
   // connect view signals to controller slots
 
@@ -176,11 +178,11 @@ void ScriptEditorController::open(string fileName)
 
 void ScriptEditorController::setupFieldArrays() {
 
-    QJSValue jsArray = myEngine.newArray(3); 
+    QJSValue jsArray = engine.newArray(3); 
     for (int i = 0; i < 3; ++i) {
        jsArray.setProperty(i, i);
     }
-    engine.globalObject().setProperty("VEL", jsArray);
+    engine.globalObject().setProperty("VEL_TEST", jsArray);
 }
 
 /*
@@ -554,132 +556,6 @@ uncate(100);
     LOG(DEBUG) << "exit";
 }
 
-
-// --------
-void ScriptEditorController::runForEachRayVector(QString script, bool useBoundary)
-{
-  LOG(DEBUG) << "enter";
-
-  QStringList newFieldNames;
-
-  
-    // Grab the context before evaluating the formula                                                      
-    //  YES! This works.  The new global variables are listed here;                                        
-    // just find them and add them to the spreadsheet and to the Model??                                   
-    // HERE!!!                                                                                             
-    // try iterating over the properties of the globalObject to find new variables                         
-    std::map<QString, QString> currentVariableContext;
-    QJSValue theGlobalObject = engine.globalObject();
-
-    QJSValueIterator it(theGlobalObject);
-    while (it.hasNext()) {
-      it.next();
-      QString theValue = it.value().toString();
-      theValue.truncate(100);
-
-      LOG(DEBUG) << it.name().toStdString() << ": " << theValue.toStdString(); // it.value().toString().tr\
-uncate(100);                                                                                               
-      currentVariableContext[it.name()] = it.value().toString();
-    }
-  
-      // ======                                                                                            
-    //    try {
-
-    // for each sweep
-   _soloFunctionsController->setCurrentSweepToFirst();
-
-   //while (_soloFunctionsController->moreSweeps()) {
-    // for each ray
-    _soloFunctionsController->setCurrentRayToFirst();
-
-    while (_soloFunctionsController->moreRays()) {
-      LOG(DEBUG) << "more rays ...";
-      // calculate boundary mask for each ray? 
-      // Yes, when the ray index changes a new boundary mask is calculated 
-      // in the SoloFunctionsController
-      _soloFunctionsController->applyBoundary(useBoundary);
-
-      QJSValue result = engine.evaluate(script);
-      if (result.isError()) {
-        QString message;
-        message.append(result.toString());
-        message.append(" on line number ");
-        message.append(result.property("lineNumber").toString());
-        LOG(DEBUG)
-          << "Uncaught exception at line"
-          << result.property("lineNumber").toInt()
-          << ":" << result.toString().toStdString();
-        throw message.toStdString();
-
-      } else {
-
-        LOG(DEBUG) << " the result is " << result.toString().toStdString();
-
-        if (result.isArray()) {
-          cerr << " the result is an array\n";
-    //vector<int> myvector;                                                                            
-    //myvector = engine.fromScriptValue(result);                                                       
-        }
-        if (result.isNumber()) {
-          cerr << " the result is a number " << result.toString().toStdString() << endl;
-          //setSelectionToValue(result.toString());                                                        
-        }
-  
-  
-      }
-      _soloFunctionsController->nextRay();
-    }
-    //_soloFunctionsController->nextSweep();
-    
-    //}
-      /*
-    } catch (const std::exception& ex) {
-      criticalMessage(ex.what());
-    } catch (const std::string& ex) {
-      criticalMessage(ex);
-    } catch (...) {
-      criticalMessage("Error occurred during evaluation");
-    }
-      */
-
-  // ======                                                                                            
-  //  YES! This works.  The new global variables are listed here;                                      
-  // just find them and add them to the spreadsheet and to the Model??                                 
-  // HERE!!!                                                                                           
-  // try iterating over the properties of the globalObject to find new variables                       
-        QJSValue newGlobalObject = engine.globalObject();
-
-        QJSValueIterator it2(newGlobalObject);
-        while (it2.hasNext()) {
-    it2.next();
-    QString theValue = it2.value().toString();
-    theValue.truncate(100);
-    LOG(DEBUG) << it2.name().toStdString() << ": " << theValue.toStdString();
-    if (currentVariableContext.find(it2.name()) == currentVariableContext.end()) {
-      // we have a newly defined variable                                                            
-      LOG(DEBUG) << "NEW VARIABLE " << it2.name().toStdString() <<  ": " << theValue.toStdString();
-      // COOL! at this point, we have the new field name AND the temporary field name in the RadxVol,
-      // so we can do an assignment now.
-            string tempName = theValue.toStdString();
-      string userDefinedName = it2.name().toStdString();
-      // only assign the ray data if this is a Solo Function, f(x)
-            size_t length = tempName.length();
-            if (length > 0) {
-            if (tempName[length-1] == '#') {
-              tempName.resize(length-1);
-        _assign(tempName, userDefinedName);
-        // add Variable list ToScriptEditor(it2.name(), it2.value());
-        newFieldNames << it2.name();
-      }
-      }
-    }
-        }
-
-
-    volumeUpdated(newFieldNames);
-    LOG(DEBUG) << "exit";
-}
-// --------
 
 void ScriptEditorController::_assign(string tempName, string userDefinedName) {
 
