@@ -1,4 +1,35 @@
 
+Example of user defined function:
+
+
+class MyMessage : public QObject
+{
+    Q_OBJECT
+public:
+    Q_PROPERTY(QString author MEMBER m_author) //  NOTIFY authorChanged)
+    Q_PROPERTY(QVariantList avec MEMBER m_avec) // NOTIFY avecChanged)
+
+    Q_PROPERTY(int anInt MEMBER m_int)
+    Q_PROPERTY(int *anIntArray MEMBER m_intArray)
+    Q_PROPERTY(QVector<int> qilist MEMBER m_qilist)  <<=== make each field a QVector property of radar volume,
+ 							   then the field is accessible as a JavaScript array.
+
+
+Setup the engine like this ... 
+Bring in the field values ...
+
+QJSValue messageObj = myEngine.newQObject(new MyMessage);
+myEngine.globalObject().setProperty("message", messageObj);
+
+
+Write the script like this ...
+  QString fworks = "function incr(val) { return val + 1 }; [8,9,10].map(incr)"; // works
+  QString f = "function incr(val) { return val + 1 }; message.qilist.map(incr)";
+  QJSValue result = myEngine.evaluate(f);
+  std::cout << "result = " << result.toString().toStdString() << std::endl;
+
+
+
 export PKG_CONFIG_PATH="/usr/local/opt/qt/lib/pkgconfig"
 
 testing ...

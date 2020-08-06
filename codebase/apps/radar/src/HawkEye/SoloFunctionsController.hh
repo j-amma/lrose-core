@@ -27,7 +27,10 @@ public:
   SoloFunctionsController(RadxVol *data, QObject *parent = nullptr);
   //SoloFunctions(QObject *parent = nullptr) : QObject(parent) { }
 
-  Q_INVOKABLE QString cat(QString animal) {return animal+"_cat"; }
+
+  But the field names change, so this list of vectors needs to be a map?
+  Q_PROPERTY(QVector<float> qilist MEMBER m_qilist) 
+
   //  Q_INVOKABLE QString ZERO(QString field); // return the name of the new field that contains the result
   //  Q_INVOKABLE QString REMOVE_AIRCRAFT_MOTION(QString field); // return the name of the new field that contains the result
 
