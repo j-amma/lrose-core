@@ -30,7 +30,7 @@ public:
   ScriptEditorController(ScriptEditorView *view, ScriptEditorModel *model);
 
   vector<string> getFieldNames();
-  //vector<float> *getData(string fieldName);
+  // vector<float> *getData(string fieldName);
   //void setData(string fieldName, vector<float> *data);
 
   void open(string fileName);
@@ -58,6 +58,8 @@ private:
   SoloFunctionsController *_soloFunctionsController;
 
   QJSEngine engine;
+
+  vector<string> initialFieldNames;
 
   void setupFieldArrays();
   void setupSoloFunctions(SoloFunctionsController *soloFunctions);

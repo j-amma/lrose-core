@@ -139,6 +139,7 @@ public:
   void applyBoundary(bool useBoundaryMask);
 
   void assign(string tempName, string userDefinedName);
+  const vector<float> *getData(string &fieldName);
 
 private:
 

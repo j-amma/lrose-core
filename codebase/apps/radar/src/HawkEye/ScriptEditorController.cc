@@ -59,7 +59,7 @@ ScriptEditorController::ScriptEditorController(ScriptEditorView *view, ScriptEdi
   _soloFunctionsController = new SoloFunctionsController(_currentModel->_vol);
 
   setupSoloFunctions(_soloFunctionsController);
-  setupFieldArrays();
+  //setupFieldArrays();
 
   // connect view signals to controller slots
 
@@ -120,7 +120,8 @@ vector<float> *ScriptEditorController::getData(string fieldName)
   return data;
  
 }
-
+*/
+/*
 void ScriptEditorController::setData(string fieldName, vector<float> *data)
 {
   LOG(DEBUG) << "setting values for " << fieldName;
@@ -178,11 +179,43 @@ void ScriptEditorController::open(string fileName)
 
 void ScriptEditorController::setupFieldArrays() {
 
+    
     QJSValue jsArray = engine.newArray(3); 
     for (int i = 0; i < 3; ++i) {
-       jsArray.setProperty(i, i);
+       jsArray.setProperty(i, i+0.5);
     }
     engine.globalObject().setProperty("VEL_TEST", jsArray);
+
+    
+    vector<string>::iterator it;
+
+    for(it = initialFieldNames.begin(); it != initialFieldNames.end(); it++) {
+      QString fieldName(QString::fromStdString(*it));
+
+          // ===== set field to array of numbers; begin =====
+            // get the field data, for the current (sweep, ray)
+      const vector<float> *fieldData = _soloFunctionsController->getData(*it);  
+
+      QJSValue fieldArray = engine.newArray(fieldData->size());
+      QString vectorName = fieldName + "_v";    
+
+
+      //std::vector<float> fieldData = getData(fieldName);
+      vector<float>::const_iterator itData;
+      int idx = 0;
+      for (itData=fieldData->begin(); itData != fieldData->end(); ++itData) {
+        fieldArray.setProperty(idx, *itData);
+        idx += 1;
+      }
+
+      //for (int i=0; i<fieldData.size(); i++) {
+      //  fieldArray.setProperty(i, fieldData.at(i));
+      //}
+      cout << "adding vector form " << vectorName.toStdString() << endl;
+      engine.globalObject().setProperty(vectorName, fieldArray);
+      cout << "end adding vector form " << vectorName.toStdString() << endl;
+      // ===== set field to array of numbers; end ====
+    } 
 }
 
 /*
@@ -457,6 +490,9 @@ void ScriptEditorController::runForEachRayScript(QString script, bool useBoundar
 uncate(100);                                                                                               
       currentVariableContext[it.name()] = it.value().toString();
     }
+
+    // set initial field names
+    initialFieldNames = getFieldNames();
   
       // ======                                                                                            
     //    try {
@@ -474,6 +510,9 @@ uncate(100);
       // Yes, when the ray index changes a new boundary mask is calculated 
       // in the SoloFunctionsController
       _soloFunctionsController->applyBoundary(useBoundary);
+
+      // TODO: set field values in javascript array? by (sweep, ray) would we apply boundary?
+      setupFieldArrays();
 
       QJSValue result = engine.evaluate(script);
       if (result.isError()) {
@@ -586,18 +625,6 @@ void ScriptEditorController::fieldNamesProvided(vector<string> fieldNames) {
       ////engine.globalObject().setProperty(fieldName, objectValue.property("name"));                      
       engine.globalObject().setProperty(fieldName, fieldName);                                           
 
-      /*
-      // ===== set field to array of numbers; begin =====
-      QJSValue fieldArray = engine.newArray(20);
-      QString vectorName = fieldName; //  + "_VECTOR";                                                     
-      for (int i=0; i<20; i++) {
-        fieldArray.setProperty(i, someValue);
-      }
-      cout << "adding vector form " << vectorName.toStdString() << endl;
-      engine.globalObject().setProperty(vectorName, fieldArray);
-      cout << "end adding vector form " << vectorName.toStdString() << endl;
-      // ===== set field to array of numbers; end ==== 
-      */
       //someValue += 1;                                                                                    
 
       // //} catch (Exception ex) {                                                                        
@@ -612,6 +639,7 @@ void ScriptEditorController::fieldNamesProvided(vector<string> fieldNames) {
       printQJSEngineContext();
 }
 
+// Not used? 
 void ScriptEditorController::addVariableToScriptEditor(QString name, QJSValue value) {
 
   LOG(DEBUG) << "adding variable to spreadsheet " << name.toStdString();

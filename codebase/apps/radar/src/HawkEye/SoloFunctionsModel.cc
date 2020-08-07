@@ -258,6 +258,52 @@ void SoloFunctionsModel::SetBoundaryMaskOriginal(RadxVol *vol,
 
 }
 
+
+// return data for the field, at the sweep and ray index
+const vector<float> *SoloFunctionsModel::GetData(string fieldName,  RadxVol *vol,
+              int rayIdx, int sweepIdx)  {
+
+  LOG(DEBUG) << "entry with fieldName ... " << fieldName << " radIdx=" << rayIdx
+       << " sweepIdx=" << sweepIdx;
+
+  vol->loadRaysFromFields();
+  
+  const RadxField *field;
+
+  //  get the ray for this field 
+  const vector<RadxRay *>  &rays = vol->getRays();
+  if (rays.size() > 1) {
+    LOG(DEBUG) <<  "ERROR - more than one ray; expected only one";
+  }
+  RadxRay *ray = rays.at(rayIdx);
+  if (ray == NULL) {
+    LOG(DEBUG) << "ERROR - ray is NULL";
+    throw "Ray is null";
+  } 
+
+  // get the data (in) and create space for new data (out)  
+  //  field = ray->getField(fieldName);
+  field = fetchDataField(ray, fieldName);
+  size_t nGates = ray->getNGates(); 
+
+  // data, _boundaryMask, and bad flag mask should have all the same dimensions = nGates
+  SoloFunctionsApi soloFunctionsApi;
+
+  if (_boundaryMaskSet) {
+    // verify dimensions on data in/out and boundary mask
+    if (nGates > _boundaryMaskLength)
+      throw "Error: boundary mask and field gate dimension are not equal (SoloFunctionsModel)";
+  }
+
+  cerr << "there are nGates " << nGates;
+  const float *data = field->getDataFl32();
+
+  vector<float> *dataVector = new vector<float>(nGates);
+  dataVector->assign(data, data+nGates);
+
+  return dataVector;
+}
+
 // return the temporary name for the new field in the volume
 string SoloFunctionsModel::ZeroMiddleThird(string fieldName,  RadxVol *vol,
 					   int rayIdx, int sweepIdx,

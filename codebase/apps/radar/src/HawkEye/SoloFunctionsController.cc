@@ -576,7 +576,12 @@ void SoloFunctionsController::assign(string tempName, string userDefinedName) {
   */
 }
 
+// Return data for the field, at the current sweep and ray indexes.
+const vector<float> *SoloFunctionsController::getData(string &fieldName) {
 
+  return soloFunctionsModel.GetData(fieldName, _data, _currentRayIdx, _currentSweepIdx);
+
+}
 
 /*
 SoloFunctions::SoloFunctions() // SpreadSheetController *controller) 
