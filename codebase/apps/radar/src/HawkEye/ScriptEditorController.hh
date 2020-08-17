@@ -62,6 +62,7 @@ private:
   vector<string> initialFieldNames;
 
   void setupFieldArrays();
+  void saveFieldArrays();
   void setupSoloFunctions(SoloFunctionsController *soloFunctions);
   void fieldNamesProvided(vector<string> fieldNames);
   void _assign(string tempName, string userDefinedName);

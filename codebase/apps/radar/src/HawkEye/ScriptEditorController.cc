@@ -179,12 +179,13 @@ void ScriptEditorController::open(string fileName)
 
 void ScriptEditorController::setupFieldArrays() {
 
-    
+    /*
     QJSValue jsArray = engine.newArray(3); 
     for (int i = 0; i < 3; ++i) {
        jsArray.setProperty(i, i+0.5);
     }
     engine.globalObject().setProperty("VEL_TEST", jsArray);
+    */
 
     
     vector<string>::iterator it;
@@ -211,11 +212,37 @@ void ScriptEditorController::setupFieldArrays() {
       //for (int i=0; i<fieldData.size(); i++) {
       //  fieldArray.setProperty(i, fieldData.at(i));
       //}
-      cout << "adding vector form " << vectorName.toStdString() << endl;
+      LOG(DEBUG) << "adding vector form " << vectorName.toStdString();
       engine.globalObject().setProperty(vectorName, fieldArray);
-      cout << "end adding vector form " << vectorName.toStdString() << endl;
+      LOG(DEBUG) << "end adding vector form " << vectorName.toStdString();
       // ===== set field to array of numbers; end ====
     } 
+}
+
+void ScriptEditorController::saveFieldArrays() {
+  // go through the context and save any new fields (as arrays)
+
+  LOG(DEBUG) << "current QJSEngine context ...";
+
+  std::map<QString, QString> currentVariableContext;
+  QJSValue theGlobalObject = engine.globalObject();
+
+  QJSValueIterator it2(theGlobalObject);
+  while (it2.hasNext()) {
+    it2.next();
+    QJSValue value = it2.value();
+    if (value.isArray()) {
+      LOG(DEBUG) << it2.name().toStdString() << " is an Array ";
+    
+      QString theValue = it2.value().toString();
+      theValue.truncate(100);
+
+      LOG(DEBUG) << it2.name().toStdString() << ": " << theValue.toStdString();
+    }
+    // currentVariableContext[it2.name()] = it2.value().toString();
+  }
+
+  LOG(DEBUG) << "end current QJSEngine context";
 }
 
 /*
@@ -540,6 +567,7 @@ uncate(100);
           //setSelectionToValue(result.toString());                                                        
         }
 	
+        saveFieldArrays();
 	
       }
       _soloFunctionsController->nextRay();
@@ -562,33 +590,33 @@ uncate(100);
 	// just find them and add them to the spreadsheet and to the Model??                                 
 	// HERE!!!                                                                                           
 	// try iterating over the properties of the globalObject to find new variables                       
-        QJSValue newGlobalObject = engine.globalObject();
+    QJSValue newGlobalObject = engine.globalObject();
 
-        QJSValueIterator it2(newGlobalObject);
-        while (it2.hasNext()) {
-	  it2.next();
-	  QString theValue = it2.value().toString();
-	  theValue.truncate(100);
-	  LOG(DEBUG) << it2.name().toStdString() << ": " << theValue.toStdString();
-	  if (currentVariableContext.find(it2.name()) == currentVariableContext.end()) {
-	    // we have a newly defined variable                                                            
-	    LOG(DEBUG) << "NEW VARIABLE " << it2.name().toStdString() <<  ": " << theValue.toStdString();
-	    // COOL! at this point, we have the new field name AND the temporary field name in the RadxVol,
-	    // so we can do an assignment now.
-            string tempName = theValue.toStdString();
-	    string userDefinedName = it2.name().toStdString();
-	    // only assign the ray data if this is a Solo Function, f(x)
-            size_t length = tempName.length();
-            if (length > 0) {
-            if (tempName[length-1] == '#') {
-              tempName.resize(length-1);
-	      _assign(tempName, userDefinedName);
-	      // add Variable list ToScriptEditor(it2.name(), it2.value());
-	      newFieldNames << it2.name();
+    QJSValueIterator it2(newGlobalObject);
+    while (it2.hasNext()) {
+	    it2.next();
+	    QString theValue = it2.value().toString();
+	    theValue.truncate(100);
+	    LOG(DEBUG) << it2.name().toStdString() << ": " << theValue.toStdString();
+	    if (currentVariableContext.find(it2.name()) == currentVariableContext.end()) {
+	      // we have a newly defined variable                                                            
+	      LOG(DEBUG) << "NEW VARIABLE " << it2.name().toStdString() <<  ": " << theValue.toStdString();
+	      // COOL! at this point, we have the new field name AND the temporary field name in the RadxVol,
+	      // so we can do an assignment now.
+        string tempName = theValue.toStdString();
+	      string userDefinedName = it2.name().toStdString();
+	      // only assign the ray data if this is a Solo Function, f(x)
+        size_t length = tempName.length();
+        if (length > 0) {
+          if (tempName[length-1] == '#') {
+            tempName.resize(length-1);
+	          _assign(tempName, userDefinedName);
+	          // add Variable list ToScriptEditor(it2.name(), it2.value());
+	          newFieldNames << it2.name();
+	        }
+	      }
 	    }
-	    }
-	  }
-        }
+    }
 
 
     volumeUpdated(newFieldNames);

@@ -304,6 +304,91 @@ const vector<float> *SoloFunctionsModel::GetData(string fieldName,  RadxVol *vol
   return dataVector;
 }
 
+void SoloFunctionsModel::SetData(string fieldName, RadxVol *vol,
+            int rayIdx, int sweepIdx, vector<float> data) { 
+
+  // What is being returned? the name of the new field in the model that
+  // contains the results.
+
+  LOG(DEBUG) << "entry with fieldName ... ";
+  LOG(DEBUG) << fieldName;
+
+  // gather data from context -- most of the data are in a DoradeRadxFile object
+
+  // TODO: convert the context RadxVol to DoradeRadxFile and DoradeData format;
+  //RadxVol vol = context->_vol;
+  // make sure the radar angles have been calculated.
+
+  vol->loadRaysFromFields(); // loadFieldsFromRays();
+
+  const RadxField *field;
+  //  field = vol->getFieldFromRay(fieldName);
+  //  if (field == NULL) {
+  //    LOG(DEBUG) << "no RadxField found in volume";
+  //    throw "No data field with name " + fieldName;;
+  //  }
+  
+  //  get the ray for this field 
+  const vector<RadxRay *>  &rays = vol->getRays();
+  if (rays.size() > 1) {
+    LOG(DEBUG) <<  "ERROR - more than one ray; expected only one";
+  }
+  RadxRay *ray = rays.at(rayIdx);
+  if (ray == NULL) {
+    LOG(DEBUG) << "ERROR - ray is NULL";
+    throw "Ray is null";
+  } 
+
+  const RadxGeoref *georef = ray->getGeoreference();
+  if (georef == NULL) {
+    LOG(DEBUG) << "ERROR - georef is NULL";
+    LOG(DEBUG) << "      trying to recover ...";
+    vol->setLocationFromStartRay();
+    georef = ray->getGeoreference();
+    if (georef == NULL) {
+      throw "Georef is null";
+    }
+  } 
+
+  // get the data (in) and create space for new data (out)  
+  //  field = ray->getField(fieldName);
+  field = fetchDataField(ray, fieldName);
+  size_t nGates = ray->getNGates(); 
+
+  //float *newData = new float[nGates];
+
+  if (_boundaryMaskSet) { //  && _boundaryMaskLength >= 3) {
+    // verify dimensions on data in/out and boundary mask
+    if (nGates > _boundaryMaskLength)
+      throw "Error: boundary mask and field gate dimension are not equal (SoloFunctionsModel)";
+
+  }
+
+  cerr << "there are nGates " << nGates;
+  float *newData = data.data();
+  
+  // insert new field into RadxVol                                                                             
+  cerr << "result = ";
+  for (int i=0; i<50; i++)
+    cerr << newData[i] << ", ";
+  cerr << endl;
+
+  Radx::fl32 missingValue = Radx::missingFl32; 
+  bool isLocal = false;
+
+  //RadxField *newField = new RadxField(newFieldName, "m/s");
+  //newField->copyMetaData(*field);
+  //newField->addDataFl32(nGates, newData);
+  RadxField *field1 = ray->addField(fieldName, "m/s", nGates, missingValue, newData, isLocal);
+
+  //string tempFieldName = field1->getName();
+  //tempFieldName.append("#");
+
+  LOG(DEBUG) << "exit ";
+
+}
+
+
 // return the temporary name for the new field in the volume
 string SoloFunctionsModel::ZeroMiddleThird(string fieldName,  RadxVol *vol,
 					   int rayIdx, int sweepIdx,
