@@ -48,6 +48,7 @@ public slots:
   void needFieldNames();
   // void needDataForField(string fieldName, int r, int c);
   void getVolumeChanges();
+  bool notDefined(QString &fieldName, std::map<QString, QString> &previousVariableContext);
   void runOneTimeOnlyScript(QString script);
   void runForEachRayScript(QString script, bool useBoundary);
 private:
@@ -62,10 +63,12 @@ private:
   vector<string> initialFieldNames;
 
   void setupFieldArrays();
-  void saveFieldArrays();
+  void saveFieldArrays(std::map<QString, QString> &previousVariableContext);
   void setupSoloFunctions(SoloFunctionsController *soloFunctions);
   void fieldNamesProvided(vector<string> fieldNames);
   void _assign(string tempName, string userDefinedName);
+  void _addFieldNameVectorsToContext(vector<string> &fieldNames, 
+    std::map<QString, QString> *currentVariableContext);
 };
 
 

@@ -140,6 +140,7 @@ public:
 
   void assign(string tempName, string userDefinedName);
   const vector<float> *getData(string &fieldName);
+  void setData(string &fieldName, vector<float> *fieldData);
 
 private:
 

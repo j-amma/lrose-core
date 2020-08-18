@@ -583,6 +583,10 @@ const vector<float> *SoloFunctionsController::getData(string &fieldName) {
 
 }
 
+void SoloFunctionsController::setData(string &fieldName, vector<float> *fieldData) {
+        soloFunctionsModel.SetData(fieldName, _data, _currentRayIdx, _currentSweepIdx, fieldData); 
+}
+
 /*
 SoloFunctions::SoloFunctions() // SpreadSheetController *controller) 
 {

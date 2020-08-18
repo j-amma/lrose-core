@@ -5,6 +5,7 @@
 //
 
 #include <stdio.h>
+#include <map>
 #include <QtWidgets>
 #include <QJSEngine>
 #include <QJSValue>
@@ -177,6 +178,8 @@ void ScriptEditorController::open(string fileName)
   //}
 }
 
+
+
 void ScriptEditorController::setupFieldArrays() {
 
     /*
@@ -219,7 +222,23 @@ void ScriptEditorController::setupFieldArrays() {
     } 
 }
 
-void ScriptEditorController::saveFieldArrays() {
+void ScriptEditorController::_addFieldNameVectorsToContext(vector<string> &fieldNames, 
+  std::map<QString, QString> *currentVariableContextPtr) {
+  std::map<QString, QString> currentVariableContext = *currentVariableContextPtr;
+  vector<string>::iterator nameItr;
+  for (nameItr = fieldNames.begin(); nameItr != fieldNames.end(); ++nameItr) {
+    QString vectorName(nameItr->c_str());
+    vectorName.append("_v");
+    currentVariableContext[vectorName] = vectorName;
+  }
+
+}
+
+bool ScriptEditorController::notDefined(QString &fieldName, std::map<QString, QString> &previousVariableContext) {
+      return (previousVariableContext.find(fieldName) == previousVariableContext.end());
+}
+
+void ScriptEditorController::saveFieldArrays(std::map<QString, QString> &previousVariableContext) {
   // go through the context and save any new fields (as arrays)
 
   LOG(DEBUG) << "current QJSEngine context ...";
@@ -232,12 +251,28 @@ void ScriptEditorController::saveFieldArrays() {
     it2.next();
     QJSValue value = it2.value();
     if (value.isArray()) {
-      LOG(DEBUG) << it2.name().toStdString() << " is an Array ";
-    
-      QString theValue = it2.value().toString();
-      theValue.truncate(100);
+      QString name = it2.name();
+      string fieldName = name.toStdString();
+      bool newField = notDefined(name, previousVariableContext);
+      if (newField) {
 
-      LOG(DEBUG) << it2.name().toStdString() << ": " << theValue.toStdString();
+        LOG(DEBUG) << fieldName << " is an Array ";
+      
+        // save to temporary name
+        fieldName.append("#");
+        vector <float> *floatData;
+        QJSValue jsArray = it2.value();
+        //QVector<int> integers;
+        const unsigned int length = jsArray.property("length").toUInt();
+        floatData = new vector<float>(length);
+        for (unsigned int i = 0; i < length; ++i) {
+            float theValue = (float) jsArray.property(i).toNumber();
+            floatData->at(i) = theValue;
+        }
+        _soloFunctionsController->setData(fieldName, floatData); 
+
+        LOG(DEBUG) << it2.name().toStdString() << ": " << it2.value().toString().toStdString();
+      }
     }
     // currentVariableContext[it2.name()] = it2.value().toString();
   }
@@ -520,6 +555,15 @@ uncate(100);
 
     // set initial field names
     initialFieldNames = getFieldNames();
+
+    // add initialFieldNames_v to currentVariableContext!
+    //_addFieldNameVectorsToContext(initialFieldNames, &currentVariableContext);
+    vector<string>::iterator nameItr;
+    for (nameItr = initialFieldNames.begin(); nameItr != initialFieldNames.end(); ++nameItr) {
+      QString vectorName(nameItr->c_str());
+      vectorName.append("_v");
+      currentVariableContext[vectorName] = vectorName;
+    }
   
       // ======                                                                                            
     //    try {
@@ -539,7 +583,7 @@ uncate(100);
       _soloFunctionsController->applyBoundary(useBoundary);
 
       // TODO: set field values in javascript array? by (sweep, ray) would we apply boundary?
-      setupFieldArrays();
+      setupFieldArrays(); 
 
       QJSValue result = engine.evaluate(script);
       if (result.isError()) {
@@ -567,7 +611,7 @@ uncate(100);
           //setSelectionToValue(result.toString());                                                        
         }
 	
-        saveFieldArrays();
+        saveFieldArrays(currentVariableContext);
 	
       }
       _soloFunctionsController->nextRay();
@@ -595,27 +639,33 @@ uncate(100);
     QJSValueIterator it2(newGlobalObject);
     while (it2.hasNext()) {
 	    it2.next();
-	    QString theValue = it2.value().toString();
-	    theValue.truncate(100);
-	    LOG(DEBUG) << it2.name().toStdString() << ": " << theValue.toStdString();
-	    if (currentVariableContext.find(it2.name()) == currentVariableContext.end()) {
-	      // we have a newly defined variable                                                            
-	      LOG(DEBUG) << "NEW VARIABLE " << it2.name().toStdString() <<  ": " << theValue.toStdString();
-	      // COOL! at this point, we have the new field name AND the temporary field name in the RadxVol,
-	      // so we can do an assignment now.
-        string tempName = theValue.toStdString();
-	      string userDefinedName = it2.name().toStdString();
-	      // only assign the ray data if this is a Solo Function, f(x)
-        size_t length = tempName.length();
-        if (length > 0) {
-          if (tempName[length-1] == '#') {
-            tempName.resize(length-1);
-	          _assign(tempName, userDefinedName);
-	          // add Variable list ToScriptEditor(it2.name(), it2.value());
-	          newFieldNames << it2.name();
-	        }
-	      }
-	    }
+
+      QJSValue value = it2.value();
+      if (value.isArray()) {
+
+  	    QString theValue = it2.value().toString();
+  	    theValue.truncate(100);
+  	    LOG(DEBUG) << it2.name().toStdString() << ": " << theValue.toStdString();
+  	    if (currentVariableContext.find(it2.name()) == currentVariableContext.end()) {
+  	      // we have a newly defined variable                                                            
+  	      LOG(DEBUG) << "NEW VARIABLE " << it2.name().toStdString() <<  ": " << theValue.toStdString();
+  	      // COOL! at this point, we have the new field name AND the temporary field name in the RadxVol,
+  	      // so we can do an assignment now.
+          string tempName = it2.name().toStdString();
+  	      string userDefinedName = it2.name().toStdString();
+  	      // only assign the ray data if this is a Solo Function, f(x)
+          //size_t length = tempName.length();
+          //if (length > 0) {
+            //if (tempName[length-1] == '#') {
+              //tempName.resize(length-1);
+            tempName.append("#");
+  	        _assign(tempName, userDefinedName);
+  	        // add Variable list ToScriptEditor(it2.name(), it2.value());
+  	        newFieldNames << it2.name();
+  	        //}
+  	      //}
+  	    }
+      }
     }
 
 

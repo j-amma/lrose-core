@@ -256,8 +256,9 @@ const float *data, float *newData, size_t nGates,
   RadxField *fetchDataField(RadxRay *ray, string &fieldName);
   const vector<float> *GetData(string fieldName,  RadxVol *vol,
               int rayIdx, int sweepIdx);
-  void SetData(string fieldName, RadxVol *vol,
-            int rayIdx, int sweepIdx, vector<float> data);
+  void SetData(string &fieldName,  RadxVol *vol,
+            int rayIdx, int sweepIdx, vector<float> *data);
+
 
 private:
 
