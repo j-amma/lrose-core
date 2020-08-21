@@ -461,6 +461,7 @@ void DisplayManager::_createFieldPanel()
     _fieldsLayout->addWidget(filtHeader, row, 3, alignCenter);
   }
   row++;
+  _rowOffset = row;
 
   // add fields, one row at a time
   // a row can have 1 or 2 buttons, depending on whether the
@@ -519,14 +520,15 @@ void DisplayManager::_createFieldPanel()
     if (filtField != NULL) {
       ifield++;
     }
+    _fieldsLayout->setRowStretch(row, 1);
 
     row++;
   }
 
-  QLabel *spacerRow = new QLabel("", _fieldPanel);
-  _fieldsLayout->addWidget(spacerRow, row, 0);
-  _fieldsLayout->setRowStretch(row, 1);
-  row++;
+  //QLabel *spacerRow = new QLabel("", _fieldPanel);
+  //_fieldsLayout->addWidget(spacerRow, row, 0);
+  //_fieldsLayout->setRowStretch(row, 1);
+  //row++;
 
   // HERE <<=== 
   //  _lastButtonRowFixed = row; // Q: is this just the size of _fieldButtons?
@@ -551,12 +553,7 @@ void DisplayManager::_updateFieldPanel(string newFieldName)
   int fsize4 = _params.label_font_size + 4;
   int fsize6 = _params.label_font_size + 6;
 
-  //_fieldPanel = new QGroupBox(_main);
-  //_fieldGroup = new QButtonGroup;
-  //_fieldsLayout = new QGridLayout(_fieldPanel);
-  //_fieldsLayout->setVerticalSpacing(5);
-
-  int row = 0;
+  int row; //  = _rowOffset;
   int nCols = 3;
   if (_haveFilteredFields) {
     nCols = 4;
@@ -564,28 +561,29 @@ void DisplayManager::_updateFieldPanel(string newFieldName)
   QFont font = _selectedLabelWidget->font();
   font.setPixelSize(fsize);
 
-  size_t nFields = _displayFieldController->getNFields();
 
-  int lastButtonRowFixed = _fieldButtons.size(); // Q: is this just the size of _fieldButtons?
 
-  row = lastButtonRowFixed + 1;
-  // add fields, one row at a time
   // a row can have 1 or 2 buttons, depending on whether the
   // filtered field is present
-  // for (size_t ifield = 0; ifield < _fields.size(); ifield++) {
+
+  size_t nFields = _displayFieldController->getNFields(); // 0 - based index
   size_t ifield = _displayFieldController->getFieldIndex(newFieldName);
-  if (ifield < nFields) {
+  //if (ifield < lastButtonRowFixed - 1) {
     // field already in panel
-    return;
-  }
+  //  return;
+  //}
 
     // get raw field - always present
     
-  const DisplayField *rawField = _displayFieldController->getField(ifield); //_fields[ifield];
-  int buttonRow = row; // rawField->getButtonRow();
+  DisplayField *rawField = _displayFieldController->getField(ifield); //_fields[ifield];
+  if (rawField->isHidden()) {
+    int lastButtonRowFixed = _fieldButtons.size(); // 1 - based index
+
+    row = lastButtonRowFixed + _rowOffset;
+    rawField->setButtonRow(row);
     
     // get filt field - may not be present
-    const DisplayField *filtField = _displayFieldController->getFiltered(ifield, buttonRow);
+    const DisplayField *filtField = _displayFieldController->getFiltered(ifield, -1);
 
     QLabel *label = new QLabel(_fieldPanel);
     label->setFont(font);
@@ -628,17 +626,17 @@ void DisplayManager::_updateFieldPanel(string newFieldName)
       connect(filtButton, SIGNAL(toggled(bool)), this, SLOT(_changeFieldVariable(bool)));
     }
 
-    if (filtField != NULL) {
-      ifield++;
-    }
-
-        row++;
+    //if (filtField != NULL) {
+    //  ifield++;
     //}
 
-  QLabel *spacerRow = new QLabel("", _fieldPanel);
-  _fieldsLayout->addWidget(spacerRow, row, 0);
-  _fieldsLayout->setRowStretch(row, 1);
-  row++;
+    //QLabel *spacerRow = new QLabel("", _fieldPanel);
+    //_fieldsLayout->addWidget(spacerRow, row, 0);
+    _fieldsLayout->setRowStretch(row, 1);
+    
+    rawField->setStateVisible();
+
+  }
 
   // connect slot for field change
   

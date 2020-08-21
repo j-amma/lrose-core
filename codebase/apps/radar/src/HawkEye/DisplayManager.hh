@@ -169,6 +169,7 @@ protected:
   //  vector <DisplayField *> _fields;
   DisplayFieldController *_displayFieldController;
   bool _haveFilteredFields;
+  int _rowOffset;
 
   // windows
 

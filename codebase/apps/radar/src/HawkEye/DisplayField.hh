@@ -62,6 +62,7 @@ public:
   const ColorMap &getColorMap() const { return _colorMap; }
 
   int getButtonRow() const { return _buttonRow; }
+  void setButtonRow(int row) { _buttonRow = row; }
   bool getIsFilt() const { return _isFilt; }
   bool haveColorMap() const { return _haveColorMap; }
   void setNoColorMap() { _haveColorMap = false; }
@@ -82,6 +83,8 @@ public:
   void setColorMapRange(double min, double max);
 
   enum DisplayFieldState {VISIBLE, DELETED, HIDDEN};
+  bool isHidden() { return _state == HIDDEN; }
+  void setStateVisible() { _state = VISIBLE; }
 
 private:
 

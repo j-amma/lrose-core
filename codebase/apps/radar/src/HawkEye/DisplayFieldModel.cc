@@ -122,8 +122,8 @@ DisplayField *DisplayFieldModel::getFiltered(size_t ifield, int buttonRow)
 {
   DisplayField *filtField = NULL;
   if (ifield < _fields.size() - 1) {
-    if (_fields[ifield+1]->getButtonRow() == buttonRow &&
-        _fields[ifield+1]->getIsFilt()) {
+    //if (_fields[ifield+1]->getButtonRow() == buttonRow &&
+    if (_fields[ifield+1]->getIsFilt()) {
       filtField = _fields[ifield+1];
     }
   }

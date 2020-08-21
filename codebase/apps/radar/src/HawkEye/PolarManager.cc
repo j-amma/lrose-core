@@ -1260,7 +1260,7 @@ void PolarManager::_addNewFields(QStringList  newFieldNames)
     int buttonRow = _displayFieldController->getNFields() + 1;
     DisplayField *field =
       new DisplayField(name, name, "m/s",
-		       "9", map, buttonRow, false);
+		       "-1", map, buttonRow, false);
     //if (noColorMap)
     field->setNoColorMap();
 
@@ -1453,9 +1453,9 @@ void PolarManager::_volumeDataChanged(QStringList newFieldNames)
   
 
   _addNewFields(newFieldNames);
-  if (newFieldNames.size() > 0)
-    _updateFieldPanel(newFieldNames[0].toStdString());
-  _fieldPanel->update();
+  //if (newFieldNames.size() > 0)
+    // _updateFieldPanel(newFieldNames[0].toStdString());
+  //_fieldPanel->update();
 
   // _applyDataEdits();
   //_activateArchiveRendering();
