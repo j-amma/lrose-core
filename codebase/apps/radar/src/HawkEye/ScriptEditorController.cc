@@ -271,7 +271,10 @@ void ScriptEditorController::saveFieldArrays(std::map<QString, QString> &previou
         }
         _soloFunctionsController->setData(fieldName, floatData); 
 
-        LOG(DEBUG) << it2.name().toStdString() << ": " << it2.value().toString().toStdString();
+        // just some debugging stuff
+        QString resultString = it2.value().toString();
+        resultString.truncate(25);
+        LOG(DEBUG) << it2.name().toStdString() << ": " << resultString.toStdString();
       }
     }
     // currentVariableContext[it2.name()] = it2.value().toString();
@@ -598,8 +601,10 @@ uncate(100);
         throw message.toStdString();
 
       } else {
+        QString resultString = result.toString();
+        resultString.truncate(25);
 
-        LOG(DEBUG) << " the result is " << result.toString().toStdString();
+        LOG(DEBUG) << " the result is " << resultString.toStdString();
 
         if (result.isArray()) {
           cerr << " the result is an array\n";

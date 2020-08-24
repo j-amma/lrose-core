@@ -64,7 +64,7 @@ void FieldColorController::modelChanged() // string fieldName) // , ColorMap new
 {
   LOG(DEBUG) << "enter"; 
 
-  string selectedField = _model->getSelectedFieldName();
+  string selectedField = _view->getSelectedFieldName();
 
   // get changes from model
   /*

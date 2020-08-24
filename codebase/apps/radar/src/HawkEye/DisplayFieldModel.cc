@@ -181,7 +181,7 @@ ColorMap *DisplayFieldModel::getColorMap(string fieldName) {
       _workingCopies[fieldName] = workingCopyColorMap;
     }
   }
-  setSelectedField(fieldName);
+  // setSelectedField(fieldName);
 
   if (0) workingCopyColorMap->print(cout);
 

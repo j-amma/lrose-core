@@ -24,8 +24,7 @@ public:
   ~ParameterColorView();
   void updateEvent(vector<string> fieldNames, string selectedField);
   bool getChanges();
-
-
+  string getSelectedFieldName() { return _selectedField; };
 
 public slots:
   void colorMapProvided(string fieldName, ColorMap *colorMap);

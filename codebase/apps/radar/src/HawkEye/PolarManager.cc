@@ -839,10 +839,7 @@ void PolarManager::_clearSweepRadioButtons()
 
 void PolarManager::_changeSweep(bool value) {
 
-  if (_params.debug) {
-    cerr << "From PolarManager: the sweep was changed ";
-    cerr << endl;
-  }
+  LOG(DEBUG) << "From PolarManager: the sweep was changed ";
 
   if (!value) {
     return;
@@ -850,10 +847,7 @@ void PolarManager::_changeSweep(bool value) {
 
   for (size_t ii = 0; ii < _sweepRButtons->size(); ii++) {
     if (_sweepRButtons->at(ii)->isChecked()) {
-      if (_params.debug) {
-        cerr << "sweepRButton " << ii << " is checked" << endl;
-        cerr << "  moving to sweep index " << ii << endl;
-      }
+      LOG(DEBUG) << "sweepRButton " << ii << " is checked; moving to sweep index " << ii;
       _sweepManager.setGuiIndex(ii);
       _ppi->setStartOfSweep(true);
       _rhi->setStartOfSweep(true);
@@ -1454,8 +1448,8 @@ void PolarManager::_volumeDataChanged(QStringList newFieldNames)
 
   _addNewFields(newFieldNames);
   //if (newFieldNames.size() > 0)
-    // _updateFieldPanel(newFieldNames[0].toStdString());
-  //_fieldPanel->update();
+  //   _updateFieldPanel(newFieldNames[0].toStdString());
+  _fieldPanel->update();
 
   // _applyDataEdits();
   //_activateArchiveRendering();
@@ -2270,13 +2264,13 @@ void PolarManager::_changeField(int fieldId, bool guiMode)
     }
   }
 
-  _displayFieldController->setSelectedField(fieldId);
-
   _prevFieldNum = fieldNum;
   fieldNum = fieldId;
 
   _ppi->selectVar(fieldNum);
   //_rhi->selectVar(fieldNum);  TODO: reinstate this 
+
+  _displayFieldController->setSelectedField(fieldId);
 
   // _colorBar->setColorMap(&_fields[_fieldNum]->getColorMap());
   _selectedField = _displayFieldController->getField(fieldNum);

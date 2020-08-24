@@ -635,6 +635,7 @@ void DisplayManager::_updateFieldPanel(string newFieldName)
     _fieldsLayout->setRowStretch(row, 1);
     
     rawField->setStateVisible();
+    _displayFieldController->setSelectedField(ifield);
 
   }
 

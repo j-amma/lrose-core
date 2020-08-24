@@ -66,7 +66,7 @@ void FieldRendererController::setBeams(const vector<Beam *> &beams)
 // add a Beam to each FieldRenderer
 void FieldRendererController::addBeam(Beam *beam)
 {
-  LOG(DEBUG) << "enter";
+  //LOG(DEBUG) << "enter";
 
   // for each field,
   //   add beam
@@ -88,7 +88,7 @@ void FieldRendererController::addBeam(Beam *beam)
   }
   */
   
-  LOG(DEBUG) << "exit";
+  //LOG(DEBUG) << "exit";
 }
  
 
