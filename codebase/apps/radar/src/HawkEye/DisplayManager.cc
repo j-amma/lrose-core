@@ -517,6 +517,8 @@ void DisplayManager::_createFieldPanel()
       connect(filtButton, SIGNAL(toggled(bool)), this, SLOT(_changeFieldVariable(bool)));
     }
 
+    _displayFieldController->setVisible(ifield);
+
     if (filtField != NULL) {
       ifield++;
     }

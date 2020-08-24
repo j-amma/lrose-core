@@ -60,6 +60,8 @@ public:
     string getBackgroundColor();
     void setBackgroundColor(string colorName);
 
+    void setVisible(size_t fieldIndex);
+
   DisplayFieldModel *getModel() {return _model;};
 
 private:

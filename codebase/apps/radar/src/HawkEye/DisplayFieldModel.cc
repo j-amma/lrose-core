@@ -243,6 +243,36 @@ void DisplayFieldModel::setColorMapMinMax(string fieldName, double min, double m
 }
 
 
+ColorMap *DisplayFieldModel::colorMapMaxChanged(string fieldName, double newValue) {
+  LOG(DEBUG) << "entry " << newValue;
+  LOG(DEBUG) << "affected fieldName " << fieldName;
+
+  ColorMap *workingVersion = getColorMap(fieldName);
+
+  if (newValue != workingVersion->rangeMax()) {
+    workingVersion->setRangeMax(newValue);
+  }
+  LOG(DEBUG) << "colorMap after max changed";
+  workingVersion->print(cout);
+  LOG(DEBUG) << "exit";
+  return workingVersion;
+}
+
+ColorMap *DisplayFieldModel::colorMapMinChanged(string fieldName, double newValue) {
+  LOG(DEBUG) << "entry " << newValue;
+  LOG(DEBUG) << "affected fieldName " << fieldName;
+
+  ColorMap *workingVersion = getColorMap(fieldName);
+
+  if (newValue != workingVersion->rangeMin()) {
+    workingVersion->setRangeMin(newValue);
+  }
+  LOG(DEBUG) << "colorMap after min changed";
+  workingVersion->print(cout);
+  LOG(DEBUG) << "exit";
+  return workingVersion;
+}
+
 ColorMap *DisplayFieldModel::colorMapMaxChanged(double newValue) {
   LOG(DEBUG) << "entry " << newValue;
   LOG(DEBUG) << "_selectedFieldName " << _selectedFieldName;
@@ -254,7 +284,7 @@ ColorMap *DisplayFieldModel::colorMapMaxChanged(double newValue) {
     string currentColorMapName = workingVersion->getName();
     LOG(DEBUG) << "current ColorMap name " << currentColorMapName;
     ColorMap *newColorMap = new ColorMap(workingVersion->rangeMin(), newValue,
-					 currentColorMapName);
+           currentColorMapName);
     delete workingVersion;
     workingVersion = newColorMap;
     _workingCopies[_selectedFieldName] = newColorMap;
@@ -377,4 +407,10 @@ size_t DisplayFieldModel::_lookupFieldIndex(string fieldName) {
   throw std::invalid_argument("field name not found");
 }
 
+void DisplayFieldModel::setVisible(size_t fieldIndex) {
+  if (fieldIndex < _fields.size())
+    _fields.at(fieldIndex)->setStateVisible();
+  else 
+    LOG(ERROR) << "fieldIndex out of bounds " << fieldIndex;
+}
 

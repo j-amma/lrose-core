@@ -1959,7 +1959,7 @@ void PpiWidget::ShowContextMenu(const QPoint &pos, RadxVol *vol)
   connect(&action1, SIGNAL(triggered()), this, SLOT(contextMenuCancel()));
   contextMenu.addAction(&action1);
 
-  QAction action3("Parameters + Colors", this);
+  QAction action3("Change Color Map", this);
   connect(&action3, SIGNAL(triggered()), this, SLOT(contextMenuParameterColors()));
   contextMenu.addAction(&action3);
 
@@ -1967,11 +1967,11 @@ void PpiWidget::ShowContextMenu(const QPoint &pos, RadxVol *vol)
   connect(&action4, SIGNAL(triggered()), this, SLOT(contextMenuView()));
   contextMenu.addAction(&action4);
 
-  QAction action5("Editor", this);
+  QAction action5("Edit Data", this);
   connect(&action5, SIGNAL(triggered()), this, SLOT(contextMenuEditor()));
   contextMenu.addAction(&action5);
   
-  QAction action6("Script", this);
+  QAction action6("Use Script", this);
   connect(&action6, SIGNAL(triggered()), this, SLOT(contextMenuExamine()));
   contextMenu.addAction(&action6);
 

@@ -53,6 +53,9 @@ public:
   ColorMap *colorMapMaxChanged(double newValue);
   ColorMap *colorMapMinChanged(double newValue);
 
+  ColorMap *colorMapMaxChanged(string fieldName, double newValue);
+  ColorMap *colorMapMinChanged(string fieldName, double newValue);
+
   string getGridColor();
   void setGridColor(string colorName);
 
@@ -64,6 +67,8 @@ public:
 
   string getBackgroundColor();
   void setBackgroundColor(string colorName);
+
+  void setVisible(size_t fieldIndex);
 
 private:
 

@@ -177,4 +177,8 @@ void DisplayFieldController::setBackgroundColor(string colorName) {
   _model->setBackgroundColor(colorName);
 }
 
+void DisplayFieldController::setVisible(size_t fieldIndex) {
+  _model->setVisible(fieldIndex);
+}
+
 

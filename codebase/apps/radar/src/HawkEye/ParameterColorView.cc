@@ -57,7 +57,7 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
       parameterList->addItem(QString::fromStdString(*fieldName));
       if (selectedField.compare(*fieldName) == 0) {
 	//        selectedIndex = idx;
-	parameterList->setCurrentRow(idx);
+	      parameterList->setCurrentRow(idx);
       }
       idx++;
     }
@@ -76,7 +76,7 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
     cancelButton->setIcon(QIcon(":/images/cancel_x.png"));
     QPushButton *saveButton = new QPushButton(tr("Save"));
     QPushButton *replotButton = new QPushButton(tr("Apply"));
-    replotButton->setIcon(QIcon(":/images/apply.png"));
+    replotButton->setIcon(QIcon(":/images/apply.png"));  // apply changes to selected field
     // Note: Command buttons in dialogs are by default auto-default buttons.
     // A default button is a push button that is activated when the user 
     // presses the Enter or Return key in a dialog.
@@ -245,7 +245,7 @@ void ParameterColorView::updateEvent(vector<string> fieldNames, string selectedF
   LOG(DEBUG) << "selected Field is ...";
   LOG(DEBUG) << selectedField;
 
-  //_selectedField = selectedField;
+  _selectedField = selectedField;
   emit getColorMap(selectedField);
   emit getGridColor();
   emit getEmphasisColor();
@@ -277,6 +277,7 @@ void ParameterColorView::fieldSelected(QListWidgetItem *current, QListWidgetItem
     _selectedField = newSelection;
     emit getColorMap(_selectedField);
   } 
+  LOG(DEBUG) << "selectedField is now " << _selectedField;
   LOG(DEBUG) << "exit";
 }
 

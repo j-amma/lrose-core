@@ -66,6 +66,8 @@ void FieldColorController::modelChanged() // string fieldName) // , ColorMap new
 
   string selectedField = _view->getSelectedFieldName();
 
+  LOG(DEBUG) << "selected field is " << selectedField;
+
   // get changes from model
   /*
   if (_model->colorMapChanged(fieldName)) {
@@ -163,7 +165,8 @@ void FieldColorController::getBackgroundColor()
 
 void FieldColorController::colorMapMaxChanged(double newValue) {
 
-  ColorMap *colorMap =_model->colorMapMaxChanged(newValue);
+  string affectedFieldName = _view->getSelectedFieldName();
+  ColorMap *colorMap =_model->colorMapMaxChanged(affectedFieldName, newValue);
 
   //  send new working colorMap to _view
   _view->colorMapProvided("", colorMap); 
@@ -171,7 +174,8 @@ void FieldColorController::colorMapMaxChanged(double newValue) {
 
 void FieldColorController::colorMapMinChanged(double newValue) {
 
-  ColorMap *colorMap =_model->colorMapMinChanged(newValue);
+  string affectedFieldName = _view->getSelectedFieldName();
+  ColorMap *colorMap =_model->colorMapMinChanged(affectedFieldName, newValue);
 
   //  send new working colorMap to _view
   _view->colorMapProvided("", colorMap); 
