@@ -618,9 +618,9 @@ void PpiWidget::updateBeamColors(//const RadxRay *ray,
 				 size_t nGates)
 {
 
-  LOG(DEBUG) << "enter";
+  //LOG(DEBUG) << "enter";
 
-  LOG(DEBUG) << "_ppiBeams.size() = " << _ppiBeams.size();  
+  //LOG(DEBUG) << "_ppiBeams.size() = " << _ppiBeams.size();  
 
   size_t displayFieldIdx = displayFieldController->getFieldIndex(fieldName);
   if (displayFieldIdx > nFields)
@@ -672,7 +672,7 @@ void PpiWidget::updateBeamColors(//const RadxRay *ray,
   // just add beam to the new fields 
   _fieldRendererController->addBeam(displayFieldIdx, beam);
 
-  LOG(DEBUG) << "exit";
+  //LOG(DEBUG) << "exit";
 }
 
 

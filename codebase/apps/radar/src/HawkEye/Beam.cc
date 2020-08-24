@@ -165,7 +165,7 @@ void Beam::updateFillColorsSparse(const std::vector<double>& field_data,
 				  const QBrush *background_brush,
 				  size_t fieldIdx)
 {
-  LOG(DEBUG) << "enter";
+  //LOG(DEBUG) << "enter";
   if (nFields_expected != _brushes.size())
     throw "error; unexpected number of fields (updateFillColorsSparse";
  
@@ -217,7 +217,7 @@ void Beam::updateFillColors(const Radx::fl32 *beam_data,
 			    const ColorMap *map,
 			    const QBrush *background_brush)
 {
-  LOG(DEBUG) << "enter";
+  //LOG(DEBUG) << "enter";
 
   // we are managing two separate indexes;
   // 1) for the new fields that starts at 0 ... number_new_fields

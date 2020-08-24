@@ -606,9 +606,9 @@ void DisplayManager::_updateFieldPanel(string newFieldName)
 
     QRadioButton *rawButton = new QRadioButton(_fieldPanel);
     rawButton->setToolTip(rawField->getName().c_str());
-    if (ifield == 0) {
+    //if (ifield == 0) {
       rawButton->click();
-    }
+    //}
     //row = buttonRow + 4;
     _fieldsLayout->addWidget(label, row, 0, alignCenter);
     _fieldsLayout->addWidget(key, row, 1, alignCenter);
@@ -651,17 +651,15 @@ void DisplayManager::_updateFieldPanel(string newFieldName)
 
 void DisplayManager::_changeFieldVariable(bool value) {
 
-  if (_params.debug) {
-    cerr << "DisplayManager:: the field variable was changed ";
-    cerr << endl;
-  }
+  LOG(DEBUG) << " field variable changed ";
+
   if (value) {
     for (size_t i = 0; i < _fieldButtons.size(); i++) {
       if (_fieldButtons.at(i)->isChecked()) {
-        if (_params.debug) cout << "_fieldButton " << i
+        LOG(DEBUG) << "_fieldButton " << i
 				<< "out of " << _fieldButtons.size() 
-				<< " is checked" << endl;
- 	_changeField(i, true);
+				<< " is checked";
+ 	      _changeField(i, true);
       }
     }
   }

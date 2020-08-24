@@ -97,10 +97,10 @@ void FieldRendererController::addBeam(Beam *beam)
 // add a Beam to a single FieldRenderer
 void FieldRendererController::addBeam(size_t fieldIndex, Beam *beam)
 {
-  LOG(DEBUG) << "enter";
+  //LOG(DEBUG) << "enter";
   _fieldRenderers[fieldIndex]->addBeam(beam);
   beam->setBeingRendered(fieldIndex, true);
-  LOG(DEBUG) << "exit";
+  //LOG(DEBUG) << "exit";
 }
  
 
