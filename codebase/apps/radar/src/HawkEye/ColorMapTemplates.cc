@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QFileDialog>
 
 ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     QDialog(parent)
@@ -20,6 +21,9 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     //page = new QWidget;
     FlowLayout *flowLayout = new FlowLayout(this); // page);
 
+    int wd = 8;
+    int hd = 3;
+
     // make the color map picker
 
     _defaultColorMap = new ColorMap(0.0, 100.0, "default");
@@ -30,7 +34,7 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     int w = _defaultColorMapLabel->width();
     int h = _defaultColorMapLabel->height();
     _defaultColorMapLabel->clear();
-    _defaultColorMapLabel->setPixmap(pixmap->scaled(w/2,h)); // ,Qt::KeepAspectRatio));
+    _defaultColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd)); // ,Qt::KeepAspectRatio));
     string name = "default"; // cmap->getName();
     _defaultColorMapLabel->setToolTip(QString::fromStdString(name));
     flowLayout->addWidget(_defaultColorMapLabel);
@@ -51,7 +55,7 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     pixmap = colorBar->getPixmap();
     _rainbowColorMapLabel = new ClickableLabel();
     _rainbowColorMapLabel->clear();
-    _rainbowColorMapLabel->setPixmap(pixmap->scaled(w/2,h));
+    _rainbowColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     name = "rainbow"; //cmap->getName();
     _rainbowColorMapLabel->setToolTip(QString::fromStdString(name));
     flowLayout->addWidget(_rainbowColorMapLabel);
@@ -62,7 +66,7 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     pixmap = colorBar->getPixmap();
     _eldoraDbzColorMapLabel = new ClickableLabel();
     _eldoraDbzColorMapLabel->clear();
-    _eldoraDbzColorMapLabel->setPixmap(pixmap->scaled(w/2,h));
+    _eldoraDbzColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     name = "eldoraDbz"; // cmap->getName();
     _eldoraDbzColorMapLabel->setToolTip(QString::fromStdString(name));
     flowLayout->addWidget(_eldoraDbzColorMapLabel);
@@ -73,7 +77,7 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     pixmap = colorBar->getPixmap();
     _spolDbzColorMapLabel = new ClickableLabel();
     _spolDbzColorMapLabel->clear();
-    _spolDbzColorMapLabel->setPixmap(pixmap->scaled(w/2,h));
+    _spolDbzColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     name = "spolDbz"; // cmap->getName();
     _spolDbzColorMapLabel->setToolTip(QString::fromStdString(name));
     flowLayout->addWidget(_spolDbzColorMapLabel);
@@ -84,7 +88,7 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     pixmap = colorBar->getPixmap();
     _eldoraVelColorMapLabel = new ClickableLabel();
     _eldoraVelColorMapLabel->clear();
-    _eldoraVelColorMapLabel->setPixmap(pixmap->scaled(w/2,h));
+    _eldoraVelColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     name = "eldoraVel"; // cmap->getName();
     _eldoraVelColorMapLabel->setToolTip(QString::fromStdString(name));
     flowLayout->addWidget(_eldoraVelColorMapLabel);
@@ -95,7 +99,7 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     pixmap = colorBar->getPixmap();
     _spolVelColorMapLabel = new ClickableLabel();
     _spolVelColorMapLabel->clear();
-    _spolVelColorMapLabel->setPixmap(pixmap->scaled(w/2,h));
+    _spolVelColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     name = "spolVel"; // cmap->getName();
     _spolVelColorMapLabel->setToolTip(QString::fromStdString(name));
     flowLayout->addWidget(_spolVelColorMapLabel);
@@ -106,7 +110,7 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     pixmap = colorBar->getPixmap();
     _spolDivColorMapLabel = new ClickableLabel();
     _spolDivColorMapLabel->clear();
-    _spolDivColorMapLabel->setPixmap(pixmap->scaled(w/2,h));
+    _spolDivColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     name = "spolDiv"; // cmap->getName();
     _spolDivColorMapLabel->setToolTip(QString::fromStdString(name));
     flowLayout->addWidget(_spolDivColorMapLabel);
@@ -120,6 +124,9 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     // connect(cmapLabel, &ClickableLabel::clicked, this, &ParameterColorDialog::pickColorPalette);
 
 
+    QPushButton *_importColorMapButton = new QPushButton("Import ColorMap");
+    flowLayout->addWidget(_importColorMapButton);
+
     setLayout(flowLayout);
 
     connect(_defaultColorMapLabel,   &ClickableLabel::clicked, this, &ColorMapTemplates::defaultClicked);
@@ -129,6 +136,8 @@ ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     connect(_spolVelColorMapLabel,   &ClickableLabel::clicked, this, &ColorMapTemplates::spolVelClicked);
     connect(_spolDivColorMapLabel,   &ClickableLabel::clicked, this, &ColorMapTemplates::spolDivClicked);
     connect(_spolDbzColorMapLabel,   &ClickableLabel::clicked, this, &ColorMapTemplates::spolDbzClicked);
+
+    connect(_importColorMapButton,   &QPushButton::clicked, this, &ColorMapTemplates::importColorMap);
 
 }
 
@@ -185,3 +194,49 @@ void ColorMapTemplates::spolDbzClicked() {
   LOG(DEBUG) << "exit";
 }
 
+void ColorMapTemplates::importColorMap() {
+  QString fileNameQ = QFileDialog::getOpenFileName(this,
+    tr("Import ColorMap"), "../share/color_scales", tr("ColorMap Files (*.colors)"));
+  string fileName = fileNameQ.toStdString();
+  LOG(DEBUG) << "fileName is " << fileName;
+
+    int wd = 2;
+    int hd = 1;
+
+//  ColorMap(const std::string &file_path, bool debug = false);
+
+    ColorMap *newMap = new ColorMap(fileName, false);
+    ColorBar *colorBar = new ColorBar(1, newMap);
+    colorBar->setAnnotationOff();
+    QPixmap *pixmap = colorBar->getPixmap();
+    ClickableLabel *newMapLabel = new ClickableLabel();
+    newMapLabel->clear();
+    int w = _defaultColorMapLabel->width();
+    int h = _defaultColorMapLabel->height();
+    newMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
+    newMapLabel->setToolTip(fileNameQ);
+    layout()->addWidget(newMapLabel);
+}
+
+/*
+
+ClickableLabel *getInternalColorMapLabel(string name) {
+    int wd = 8;
+    int hd = 3;
+
+    // make the color map picker
+
+    _defaultColorMap = new ColorMap(0.0, 100.0, "default");
+    ColorBar *colorBar = new ColorBar(1, _defaultColorMap);
+    colorBar->setAnnotationOff();
+    QPixmap *pixmap = colorBar->getPixmap();
+    _defaultColorMapLabel = new ClickableLabel();
+    int w = _defaultColorMapLabel->width();
+    int h = _defaultColorMapLabel->height();
+    _defaultColorMapLabel->clear();
+    _defaultColorMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd)); // ,Qt::KeepAspectRatio));
+    string name = "default"; // cmap->getName();
+    _defaultColorMapLabel->setToolTip(QString::fromStdString(name));
+    flowLayout->addWidget(_defaultColorMapLabel);
+}
+*/

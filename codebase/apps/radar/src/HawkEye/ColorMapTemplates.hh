@@ -35,6 +35,8 @@ private slots:
   void spolDivClicked();
   void spolDbzClicked();
 
+  void importColorMap();
+
 private:
 
   ClickableLabel *_defaultColorMapLabel;
