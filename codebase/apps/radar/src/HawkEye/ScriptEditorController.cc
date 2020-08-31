@@ -201,7 +201,7 @@ void ScriptEditorController::setupFieldArrays() {
       const vector<float> *fieldData = _soloFunctionsController->getData(*it);  
 
       QJSValue fieldArray = engine.newArray(fieldData->size());
-      QString vectorName = fieldName + "_v";    
+      QString vectorName = fieldName; //  + "_v";    
 
 
       //std::vector<float> fieldData = getData(fieldName);
@@ -228,7 +228,7 @@ void ScriptEditorController::_addFieldNameVectorsToContext(vector<string> &field
   vector<string>::iterator nameItr;
   for (nameItr = fieldNames.begin(); nameItr != fieldNames.end(); ++nameItr) {
     QString vectorName(nameItr->c_str());
-    vectorName.append("_v");
+    //vectorName.append("_v");
     currentVariableContext[vectorName] = vectorName;
   }
 
@@ -564,7 +564,7 @@ uncate(100);
     vector<string>::iterator nameItr;
     for (nameItr = initialFieldNames.begin(); nameItr != initialFieldNames.end(); ++nameItr) {
       QString vectorName(nameItr->c_str());
-      vectorName.append("_v");
+      //vectorName.append("_v");
       currentVariableContext[vectorName] = vectorName;
     }
   
@@ -705,8 +705,9 @@ void ScriptEditorController::fieldNamesProvided(vector<string> fieldNames) {
       QString fieldName(QString::fromStdString(*it));
       // //    try {                                                                                       
       ////QJSValue objectValue = engine.newQObject(new DataField(*it));                                    
-      ////engine.globalObject().setProperty(fieldName, objectValue.property("name"));                      
-      engine.globalObject().setProperty(fieldName, fieldName);                                           
+      ////engine.globalObject().setProperty(fieldName, objectValue.property("name"));    
+
+      engine.globalObject().setProperty(fieldName.append("_V"), fieldName);                                           
 
       //someValue += 1;                                                                                    
 

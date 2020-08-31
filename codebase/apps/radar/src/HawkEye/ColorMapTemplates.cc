@@ -196,7 +196,7 @@ void ColorMapTemplates::spolDbzClicked() {
 
 void ColorMapTemplates::importColorMapClicked(QString &text) {
   LOG(DEBUG) << "entry";
-  emit newColorPaletteSelected("???");
+ // emit newColorPaletteSelected("???");
   LOG(DEBUG) << "exit";
 }
 
@@ -223,8 +223,9 @@ void ColorMapTemplates::importColorMap() {
     newMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     newMapLabel->setToolTip(fileNameQ);
 
-    connect(newMapLabel, SIGNAL(ClickableLabel::clicked(QString& text)), 
-      this, SLOT(ColorMapTemplates::importColorMapClicked(QString& text));
+    // TODO: figure out how to connect newly imported color scale to slot with color scale name
+    //connect(newMapLabel, SIGNAL(ClickableLabel::clicked(QString& text)), 
+    //  this, SLOT(ColorMapTemplates::importColorMapClicked(QString& text));
 
     layout()->addWidget(newMapLabel);
 }
