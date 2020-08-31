@@ -36,6 +36,7 @@ private slots:
   void spolDbzClicked();
 
   void importColorMap();
+  void importColorMapClicked(QString &text);
 
 private:
 

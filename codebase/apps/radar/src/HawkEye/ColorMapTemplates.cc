@@ -194,6 +194,13 @@ void ColorMapTemplates::spolDbzClicked() {
   LOG(DEBUG) << "exit";
 }
 
+void ColorMapTemplates::importColorMapClicked(QString &text) {
+  LOG(DEBUG) << "entry";
+  emit newColorPaletteSelected("???");
+  LOG(DEBUG) << "exit";
+}
+
+
 void ColorMapTemplates::importColorMap() {
   QString fileNameQ = QFileDialog::getOpenFileName(this,
     tr("Import ColorMap"), "../share/color_scales", tr("ColorMap Files (*.colors)"));
@@ -215,6 +222,10 @@ void ColorMapTemplates::importColorMap() {
     int h = _defaultColorMapLabel->height();
     newMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     newMapLabel->setToolTip(fileNameQ);
+
+    connect(newMapLabel, SIGNAL(ClickableLabel::clicked(QString& text)), 
+      this, SLOT(ColorMapTemplates::importColorMapClicked(QString& text));
+
     layout()->addWidget(newMapLabel);
 }
 
