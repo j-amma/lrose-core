@@ -476,6 +476,11 @@ QString SoloFunctionsController::FLAG_GLITCHES(QString field, float constant, fl
 } 
 */
 
+const vector<bool> *SoloFunctionsController::GetBoundaryMask() {
+
+  return soloFunctionsModel.GetBoundaryMask();
+}
+
 
 void SoloFunctionsController::applyBoundary(bool useBoundaryMask) {
 

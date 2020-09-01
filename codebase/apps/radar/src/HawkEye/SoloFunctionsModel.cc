@@ -37,6 +37,12 @@ void SoloFunctionsModel::SetBoundaryMask(RadxVol *vol,
   //  SetBoundaryMaskOriginal(vol, rayIdx, sweepIdx);
 }
 
+const vector<bool> *SoloFunctionsModel::GetBoundaryMask() {
+  vector<bool> *dataVector = new vector<bool>(_boundaryMaskLength);
+  dataVector->assign(_boundaryMask, _boundaryMask+_boundaryMaskLength);
+  return dataVector;
+}
+
 
 void SoloFunctionsModel::CheckForDefaultMask(RadxVol *vol, int rayIdx, int sweepIdx, bool determineMask) {
 

@@ -62,6 +62,7 @@ private:
 
   vector<string> initialFieldNames;
 
+  void setupBoundaryArray();
   void setupFieldArrays();
   void saveFieldArrays(std::map<QString, QString> &previousVariableContext);
   void setupSoloFunctions(SoloFunctionsController *soloFunctions);

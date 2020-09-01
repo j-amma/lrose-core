@@ -178,18 +178,31 @@ void ScriptEditorController::open(string fileName)
   //}
 }
 
+void ScriptEditorController::setupBoundaryArray() {
+  const vector<bool> *boundaryMaskForRay = _soloFunctionsController->GetBoundaryMask();
 
+  QJSValue fieldArray = engine.newArray(boundaryMaskForRay->size());
+  QString vectorName("BOUNDARY");    
+
+
+  //std::vector<float> fieldData = getData(fieldName);
+  vector<bool>::const_iterator itData;
+  int idx = 0;
+  for (itData=boundaryMaskForRay->begin(); itData != boundaryMaskForRay->end(); ++itData) {
+    if (*itData)
+      fieldArray.setProperty(idx, true);
+    else 
+      fieldArray.setProperty(idx, false);
+    idx += 1;
+  }
+
+  engine.globalObject().setProperty(vectorName, fieldArray);
+  LOG(DEBUG) << "adding vector form " << vectorName.toStdString();
+  //boundaryMaskForRay->clear();
+  delete boundaryMaskForRay;
+} 
 
 void ScriptEditorController::setupFieldArrays() {
-
-    /*
-    QJSValue jsArray = engine.newArray(3); 
-    for (int i = 0; i < 3; ++i) {
-       jsArray.setProperty(i, i+0.5);
-    }
-    engine.globalObject().setProperty("VEL_TEST", jsArray);
-    */
-
     
     vector<string>::iterator it;
 
@@ -587,6 +600,7 @@ uncate(100);
 
       // TODO: set field values in javascript array? by (sweep, ray) would we apply boundary?
       setupFieldArrays(); 
+      setupBoundaryArray();
 
       QJSValue result = engine.evaluate(script);
       if (result.isError()) {
