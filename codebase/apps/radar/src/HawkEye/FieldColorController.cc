@@ -193,8 +193,9 @@ void FieldColorController::pickColorPaletteRequest()
 
 void FieldColorController::newColorPaletteSelected(string newColorMapName) {
 
-  _model->colorMapChanged(newColorMapName);
-  getColorMap(_model->getSelectedFieldName());
+  string editField = _view->getSelectedFieldName();
+  _model->colorMapChanged(editField, newColorMapName);
+  getColorMap(editField);
   _colorMapTemplates->close();
   //  _view->colorMapProvided("", newColorMap);
 

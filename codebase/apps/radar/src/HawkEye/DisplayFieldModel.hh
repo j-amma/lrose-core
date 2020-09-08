@@ -47,6 +47,7 @@ public:
   void saveColorMap(string fieldName, ColorMap *newColorMap);
   void setColorMapMinMax(string fieldName, double min, double max);
   void colorMapChanged(string newColorMapName);
+  void colorMapChanged(string fieldName, string newColorMapName);
   bool backgroundChanged(string fieldName);
 
   //  void colorMapMaxChanged(ColorMap *newColorMap);

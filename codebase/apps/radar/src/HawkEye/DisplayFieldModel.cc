@@ -330,6 +330,24 @@ void DisplayFieldModel::colorMapChanged(string newColorMapName) {
   LOG(DEBUG) << "exit";
 }
 
+void DisplayFieldModel::colorMapChanged(string fieldName, string newColorMapName) {
+  LOG(DEBUG) << "enter";
+  // change the ColorMap for the fieldName
+  ColorMap *workingVersion = getColorMap(fieldName);
+
+  // maintain the current min, max, step, center points
+  ColorMap *colorMap;
+  colorMap = new ColorMap(workingVersion->rangeMin(), 
+               workingVersion->rangeMax(), newColorMapName);
+  //  newColorMap->setRangeMax(workingVersion->rangeMax());  
+  //newColorMap->setRangeMin(workingVersion->rangeMin());  
+  // currently only using built in names
+  setColorMap(fieldName, colorMap);
+
+  
+  LOG(DEBUG) << "exit";
+}
+
 bool DisplayFieldModel::backgroundChanged(string fieldName) {
   LOG(DEBUG) << fieldName;
   LOG(DEBUG) << "background changed";
