@@ -2252,11 +2252,19 @@ void PolarManager::_changeField(int fieldId, bool guiMode)
   //  _selectedField->print(cerr);
   //}
 
+  // convert fieldId to field name (from the tool tip) because not all fields are displayed,
+  // so we cannot rely on the id/index.
+  QString fieldNameQt = _fieldButtons.at(fieldId)->toolTip();
+  string fieldName = fieldNameQt.toStdString();
+  LOG(DEBUG) << "fieldName is " << fieldName;
+
+  size_t newSelectionNum = _displayFieldController->getFieldIndex(fieldName);
+
   // if we click the already-selected field, go back to previous field
 
   size_t fieldNum = _displayFieldController->getSelectedFieldNum();
   if (guiMode) {
-    if (fieldNum == fieldId && _prevFieldNum >= 0) {
+    if (fieldNum == newSelectionNum && _prevFieldNum >= 0) {
       QRadioButton *button =
         (QRadioButton *) _fieldGroup->button(_prevFieldNum);
       button->click();
@@ -2265,12 +2273,12 @@ void PolarManager::_changeField(int fieldId, bool guiMode)
   }
 
   _prevFieldNum = fieldNum;
-  fieldNum = fieldId;
+  fieldNum = newSelectionNum;
 
   _ppi->selectVar(fieldNum);
   //_rhi->selectVar(fieldNum);  TODO: reinstate this 
 
-  _displayFieldController->setSelectedField(fieldId);
+  _displayFieldController->setSelectedField(fieldName);
 
   // _colorBar->setColorMap(&_fields[_fieldNum]->getColorMap());
   _selectedField = _displayFieldController->getField(fieldNum);

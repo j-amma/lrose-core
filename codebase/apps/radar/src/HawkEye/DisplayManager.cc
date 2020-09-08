@@ -659,6 +659,8 @@ void DisplayManager::_changeFieldVariable(bool value) {
         LOG(DEBUG) << "_fieldButton " << i
 				<< "out of " << _fieldButtons.size() 
 				<< " is checked";
+        QString fieldNameQ = _fieldButtons.at(i)->text();
+        LOG(DEBUG) << "fieldname is " << fieldNameQ.toStdString();
  	      _changeField(i, true);
       }
     }
