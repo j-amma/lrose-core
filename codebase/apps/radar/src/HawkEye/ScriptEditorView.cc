@@ -142,9 +142,9 @@ Q_DECLARE_METATYPE(QVector<double>)
     //setupContentsBlank();
     //cout << "setupContentsBlank\n";
     setupContextMenu();
-    cout << "setupContextMenu\n";
+    LOG(DEBUG) << "setupContextMenu";
     //setCentralWidget(table);
-    cout << "setCentralWidgets\n";
+    LOG(DEBUG) << "setCentralWidgets";
 
     QPushButton *firstSweepButton = new QPushButton("First Sweep");
     QPushButton *lastSweepButton = new QPushButton("Last Sweep");
@@ -189,7 +189,7 @@ Q_DECLARE_METATYPE(QVector<double>)
 
     setWindowTitle(title);
 
-    cerr << "after setup" << endl;
+    LOG(DEBUG) << "after setup";
 
 }
 
@@ -253,14 +253,39 @@ float  ScriptEditorView::myPow()
   return(999.9);
 }
 
-void ScriptEditorView::openScriptFile() {
-  QString fileNameQ = QFileDialog::getOpenFileName(this,
-    tr("Open Script from File"), ".", tr("Script Files (*.*)"));
-  string fileName = fileNameQ.toStdString();
-  LOG(DEBUG) << "fileName is " << fileName;
 
-  QString fileContent("Script Content Here");
-  formulaInputForEachRay->setText(fileContent);
+
+
+void ScriptEditorView::openScriptFile() {
+  //QString fileNameQ = QFileDialog::getOpenFileName(this,
+  //  tr("Open Script from File"), ".", tr("Script Files (*.*)"));
+  //string fileName = fileNameQ.toStdString();
+  //LOG(DEBUG) << "fileName is " << fileName;
+
+  //QString fileContent("Script Content Here");
+
+/*
+  auto fileContentReady = [](const QString &fileName, const QByteArray &fileContent) {
+    if (fileName.isEmpty()) {
+        // No file was selected
+    } else {
+        // Use fileName and fileContent
+    }
+  };
+*/
+  // takes zero arguments and returns nothing
+  std::function<void(const QString &, const QByteArray &)> fileContentReady;
+  fileContentReady = [this](const QString &fileName, const QByteArray &fileContent ) {
+    if (fileName.isEmpty()) {
+        // No file was selected
+    } else {
+        // Use fileName and fileContent
+      this->formulaInputForEachRay->setText(fileContent);
+    }
+  };
+  QFileDialog::getOpenFileContent("Images (*.png *.xpm *.jpg)",  fileContentReady);
+
+  // formulaInputForEachRay->setText(fileContent);
 
 }
 
@@ -271,6 +296,16 @@ void ScriptEditorView::saveScriptFile() {
   LOG(DEBUG) << "fileName is " << fileName;
 
   QString forEachRayScript = formulaInputForEachRay->getText();
+
+  //QFileDialog::saveFileContent(forEachRayScript.toUtf8(), fileNameQ);
+  QFile file(fileNameQ); 
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    QMessageBox::warning(this, "title", "Cannot write to file");
+  } else {
+    QTextStream out(&file);
+    out << forEachRayScript.toUtf8();
+    // out.close();
+  }
 
 }
 
