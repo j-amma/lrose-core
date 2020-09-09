@@ -86,6 +86,9 @@ protected:
   */
   void criticalMessage(std::string message);
 
+  void openScriptFile();
+  void saveScriptFile();
+
 private:
 
   //ScriptEditorController *_controller;

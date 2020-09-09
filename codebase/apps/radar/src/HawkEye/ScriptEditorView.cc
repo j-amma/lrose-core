@@ -74,20 +74,43 @@ Q_DECLARE_METATYPE(QVector<double>)
     QWidget *forEachWidget = new QWidget();
     forEachWidget->setLayout(forEachLayout);
     
-    int actionFontSize = 14;
+    int actionFontSize = 18;
     QVBoxLayout *actionLayout = new QVBoxLayout();
     QAction *cancelAct = new QAction(tr("&Cancel"), this);
-    cancelAct->setStatusTip(tr("Cancel changes"));
-    cancelAct->setIcon(QIcon(":/images/cancel_x.png"));
+    QFont font = cancelAct->font();
+    font.setPointSize(actionFontSize);
+    cancelAct->setFont(font);
+    cancelAct->setStatusTip(tr("cancel changes"));
+    // cancelAct->setIcon(QIcon(":/images/cancel_x.png"));
     connect(cancelAct, &QAction::triggered, this, &ScriptEditorView::cancelFormulaInput);
     toolBar->addAction(cancelAct);
 
-    QAction *okAct = new QAction(tr("&Ok"), this);
-    okAct->setStatusTip(tr("Accept changes"));
-    okAct->setIcon(QIcon(":/images/ok_check.png"));
+    QAction *okAct = new QAction(tr("&Run"), this);
+    font = okAct->font();
+    font.setPointSize(actionFontSize);
+    okAct->setFont(font);
+    okAct->setStatusTip(tr("run script"));
+    //okAct->setIcon(QIcon(":/images/ok_check.png"));
     connect(okAct, &QAction::triggered, this, &ScriptEditorView::acceptFormulaInput);
     toolBar->addAction(okAct);
 
+    QAction *openFileAct = new QAction(tr("&Open"), this);
+    font = openFileAct->font();
+    font.setPointSize(actionFontSize);
+    openFileAct->setFont(font);
+    openFileAct->setStatusTip(tr("get script from file"));
+    connect(openFileAct, &QAction::triggered, this, &ScriptEditorView::openScriptFile);
+    toolBar->addAction(openFileAct);
+
+    QAction *saveFileAct = new QAction(tr("&Save"), this);
+    font = saveFileAct->font();
+    font.setPointSize(actionFontSize);
+    saveFileAct->setFont(font);
+    saveFileAct->setStatusTip(tr("save script to file"));
+    connect(saveFileAct, &QAction::triggered, this, &ScriptEditorView::saveScriptFile);
+    toolBar->addAction(saveFileAct);
+
+/*
     QAction *applyAct = new QAction(tr("&Apply"), this);
     applyAct->setStatusTip(tr("Apply changes to display"));
     applyAct->setIcon(QIcon(":/images/apply.png"));
@@ -97,6 +120,7 @@ Q_DECLARE_METATYPE(QVector<double>)
     applyAct->setFont(applyFont);
     connect(applyAct, &QAction::triggered, this, &ScriptEditorView::applyChanges);
     toolBar->addAction(applyAct);
+*/
 
     useBoundaryWidget = new QCheckBox("Use Boundary", this);
     useBoundaryWidget->setChecked(true);
@@ -160,30 +184,14 @@ Q_DECLARE_METATYPE(QVector<double>)
     setCentralWidget(mainWidget);
 
     statusBar();
-    //connect(table, &QTableWidget::currentItemChanged,
-    //        this, &ScriptEditorView::updateStatus);
-    //connect(table, &QTableWidget::currentItemChanged,
-    //        this, &ScriptEditorView::updateColor);
-    //connect(table, &QTableWidget::currentItemChanged,
-    //        this, &ScriptEditorView::updateTextEdit);
-    //connect(table, &QTableWidget::itemChanged,
-    //        this, &ScriptEditorView::updateStatus);
-    //    connect(formulaInput, &QTextEdit::returnPressed, this, &ScriptEditorView::returnPressed);
-    // connect(formulaInput, &TextEdit::Pressed, this, &ScriptEditorView::returnPressed);
-    //connect(table, &QTableWidget::itemChanged,
-    //        this, &ScriptEditorView::updateTextEdit);
-
 
     QString title("Script Editor");
-    //title.append(QString::number(rayAzimuth, 'f', 2));
-    //title.append(" degrees");
+
     setWindowTitle(title);
 
     cerr << "after setup" << endl;
-    //setupSoloFunctions();
+
 }
-
-
 
 
 void ScriptEditorView::init()
@@ -245,11 +253,32 @@ float  ScriptEditorView::myPow()
   return(999.9);
 }
 
+void ScriptEditorView::openScriptFile() {
+  QString fileNameQ = QFileDialog::getOpenFileName(this,
+    tr("Open Script from File"), ".", tr("Script Files (*.*)"));
+  string fileName = fileNameQ.toStdString();
+  LOG(DEBUG) << "fileName is " << fileName;
+
+  QString fileContent("Script Content Here");
+  formulaInputForEachRay->setText(fileContent);
+
+}
+
+void ScriptEditorView::saveScriptFile() {
+  QString fileNameQ = QFileDialog::getSaveFileName(this,
+    tr("Save Script to File"), ".", tr("Script Files (*.*)"));
+  string fileName = fileNameQ.toStdString();
+  LOG(DEBUG) << "fileName is " << fileName;
+
+  QString forEachRayScript = formulaInputForEachRay->getText();
+
+}
+
 void ScriptEditorView::applyChanges()
 {
   // TODO: send a list of the variables in the GlobalObject of the
   // QJSEngine to the model (via the controller?)
-  emit applyVolumeEdits();
+  // emit applyVolumeEdits();
 }
 
 void ScriptEditorView::acceptFormulaInput()
@@ -410,241 +439,6 @@ vector<string> *ScriptEditorView::getVariablesFromScriptEditor() {
   return names;
 }
 
-//
-// Get data from spreadsheet/table because we need to capture individual cell edits
-//
-/*
-vector<float> *ScriptEditorView::getDataForVariableFromScriptEditor(int column, string fieldName) {
-
-  vector<float> *data = new vector<float>;
-
-  int c = 0;
-  // QTableWidgetItem *tableWidgetItem = table->horizontalHeaderItem(c);
-  // TODO; verify fieldName and matches expected name
-  LOG(DEBUG) << "getting data for column " << column << ", " << fieldName;;
-  // go through the rows and put the data into a vector
-  for (int r = 0; r < table->rowCount(); r++) {
-    QTableWidgetItem *tableWidgetItem = table->item(r, c);
-    bool ok;
-    float value = tableWidgetItem->text().toFloat(&ok);
-    if (ok) {
-      data->push_back(value);
-      LOG(DEBUG) << value;
-    } else {
-      QMessageBox::warning(this, tr("HawkEye"),
-                           tr("Could not convert to number.\n"),
-                           QMessageBox::Abort);
-    }
-    
-  }
-	
-  return data;
-}
-*/
-
-/*
-void ScriptEditorView::setSelectionToValue(QString value)
-{
-  //    QTableWidgetItem *item = table->currentItem();
-  //    QColor col = item ? item->backgroundColor() : table->palette().base().color();
-  //    col = QColorDialog::getColor(col, this);
-  //    if (!col.isValid())
-  //        return;
-
-    QList<QTableWidgetItem*> selected = table->selectedItems();
-    if (selected.count() == 0)
-        return;
-
-    foreach (QTableWidgetItem *i, selected) {
-        if (i)
-          i->setText(value); // setBackgroundColor(col);
-    }
-
-    //updateColor(table->currentItem());
-}
-*/
-
-/*
-void ScriptEditorView::selectColor()
-{
-    QTableWidgetItem *item = table->currentItem();
-    QColor col = item ? item->backgroundColor() : table->palette().base().color();
-    col = QColorDialog::getColor(col, this);
-    if (!col.isValid())
-        return;
-
-    QList<QTableWidgetItem*> selected = table->selectedItems();
-    if (selected.count() == 0)
-        return;
-
-    foreach (QTableWidgetItem *i, selected) {
-        if (i)
-            i->setBackgroundColor(col);
-    }
-
-    updateColor(table->currentItem());
-}
-*/
-
-/*
-bool ScriptEditorView::runFunctionDialog(const QString &title,
-                                 const QString &c1Text,
-                                 const QString &c2Text,
-                                 const QString &opText,
-                                 const QString &outText,
-                                 QString *cell1, QString *cell2, QString *outCell)
-{
-    QStringList rows, cols;
-    for (int c = 0; c < table->columnCount(); ++c)
-        cols << QChar('A' + c);
-    for (int r = 0; r < table->rowCount(); ++r)
-        rows << QString::number(1 + r);
-
-    QDialog functionDialog(this);
-    //functionDialog.setWindowTitle(title);
-
-    TextEdit textEditArea();
-
-    QPushButton cancelButton(tr("Cancel"), &functionDialog);
-    connect(&cancelButton, &QAbstractButton::clicked, &functionDialog, &QDialog::reject);
-
-    QPushButton okButton(tr("OK"), &functionDialog);
-    okButton.setDefault(true);
-    connect(&okButton, &QAbstractButton::clicked, &functionDialog, &QDialog::accept);
-
-    QHBoxLayout *buttonsLayout = new QHBoxLayout;
-    buttonsLayout->addStretch(1);
-    buttonsLayout->addWidget(&okButton);
-    buttonsLayout->addSpacing(10);
-    buttonsLayout->addWidget(&cancelButton);
-
-    QHBoxLayout *dialogLayout = new QHBoxLayout(&functionDialog);
-    dialogLayout->addWidget(&textEditArea);
-    dialogLayout->addStretch(1);
-    dialogLayout->addItem(buttonsLayout);
-
-    if (addDialog.exec()) {
-        QString formula = textEditArea.getText();
-        return true;
-    }
-
-    return false;
-}
-*/
- /*
-bool ScriptEditorView::runInputDialog(const QString &title,
-                                 const QString &c1Text,
-                                 const QString &c2Text,
-                                 const QString &opText,
-                                 const QString &outText,
-                                 QString *cell1, QString *cell2, QString *outCell)
-{
-    QStringList rows, cols;
-    for (int c = 0; c < table->columnCount(); ++c)
-        cols << QChar('A' + c);
-    for (int r = 0; r < table->rowCount(); ++r)
-        rows << QString::number(1 + r);
-
-    QDialog addDialog(this);
-    addDialog.setWindowTitle(title);
-
-    QGroupBox group(title, &addDialog);
-    group.setMinimumSize(250, 100);
-
-    QLabel cell1Label(c1Text, &group);
-    QComboBox cell1RowInput(&group);
-    int c1Row, c1Col;
-    ScriptEditorUtils::decode_pos(*cell1, &c1Row, &c1Col);
-    cell1RowInput.addItems(rows);
-    cell1RowInput.setCurrentIndex(c1Row);
-
-    QComboBox cell1ColInput(&group);
-    cell1ColInput.addItems(cols);
-    cell1ColInput.setCurrentIndex(c1Col);
-
-    QLabel operatorLabel(opText, &group);
-    operatorLabel.setAlignment(Qt::AlignHCenter);
-
-    QLabel cell2Label(c2Text, &group);
-    QComboBox cell2RowInput(&group);
-    int c2Row, c2Col;
-    ScriptEditorUtils::decode_pos(*cell2, &c2Row, &c2Col);
-    cell2RowInput.addItems(rows);
-    cell2RowInput.setCurrentIndex(c2Row);
-    QComboBox cell2ColInput(&group);
-    cell2ColInput.addItems(cols);
-    cell2ColInput.setCurrentIndex(c2Col);
-
-    QLabel equalsLabel("=", &group);
-    equalsLabel.setAlignment(Qt::AlignHCenter);
-
-    QLabel outLabel(outText, &group);
-    QComboBox outRowInput(&group);
-    int outRow, outCol;
-    ScriptEditorUtils::decode_pos(*outCell, &outRow, &outCol);
-    outRowInput.addItems(rows);
-    outRowInput.setCurrentIndex(outRow);
-    QComboBox outColInput(&group);
-    outColInput.addItems(cols);
-    outColInput.setCurrentIndex(outCol);
-
-    QPushButton cancelButton(tr("Cancel"), &addDialog);
-    connect(&cancelButton, &QAbstractButton::clicked, &addDialog, &QDialog::reject);
-
-    QPushButton okButton(tr("OK"), &addDialog);
-    okButton.setDefault(true);
-    connect(&okButton, &QAbstractButton::clicked, &addDialog, &QDialog::accept);
-
-    QHBoxLayout *buttonsLayout = new QHBoxLayout;
-    buttonsLayout->addStretch(1);
-    buttonsLayout->addWidget(&okButton);
-    buttonsLayout->addSpacing(10);
-    buttonsLayout->addWidget(&cancelButton);
-
-    QVBoxLayout *dialogLayout = new QVBoxLayout(&addDialog);
-    dialogLayout->addWidget(&group);
-    dialogLayout->addStretch(1);
-    dialogLayout->addItem(buttonsLayout);
-
-    QHBoxLayout *cell1Layout = new QHBoxLayout;
-    cell1Layout->addWidget(&cell1Label);
-    cell1Layout->addSpacing(10);
-    cell1Layout->addWidget(&cell1ColInput);
-    cell1Layout->addSpacing(10);
-    cell1Layout->addWidget(&cell1RowInput);
-
-    QHBoxLayout *cell2Layout = new QHBoxLayout;
-    cell2Layout->addWidget(&cell2Label);
-    cell2Layout->addSpacing(10);
-    cell2Layout->addWidget(&cell2ColInput);
-    cell2Layout->addSpacing(10);
-    cell2Layout->addWidget(&cell2RowInput);
-
-    QHBoxLayout *outLayout = new QHBoxLayout;
-    outLayout->addWidget(&outLabel);
-    outLayout->addSpacing(10);
-    outLayout->addWidget(&outColInput);
-    outLayout->addSpacing(10);
-    outLayout->addWidget(&outRowInput);
-
-    QVBoxLayout *vLayout = new QVBoxLayout(&group);
-    vLayout->addItem(cell1Layout);
-    vLayout->addWidget(&operatorLabel);
-    vLayout->addItem(cell2Layout);
-    vLayout->addWidget(&equalsLabel);
-    vLayout->addStretch(1);
-    vLayout->addItem(outLayout);
-
-    if (addDialog.exec()) {
-        *cell1 = cell1ColInput.currentText() + cell1RowInput.currentText();
-        *cell2 = cell2ColInput.currentText() + cell2RowInput.currentText();
-        *outCell = outColInput.currentText() + outRowInput.currentText();
-        return true;
-    }
-
-    return false;
-}
-*/
 
 void ScriptEditorView::notImplementedMessage() {
       QMessageBox::information(this, "Not Implemented", "Not Implemented");
