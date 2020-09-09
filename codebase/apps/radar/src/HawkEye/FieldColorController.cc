@@ -183,7 +183,7 @@ void FieldColorController::colorMapMinChanged(double newValue) {
 
 void FieldColorController::pickColorPaletteRequest()
 {
-  _colorMapTemplates = new ColorMapTemplates(_view);
+  _colorMapTemplates = _colorMapTemplates->getInstance(_view);
   //  colorMapTemplates.init();
   
   connect(_colorMapTemplates, SIGNAL(newColorPaletteSelected(string)),
@@ -200,6 +200,16 @@ void FieldColorController::newColorPaletteSelected(string newColorMapName) {
   //  _view->colorMapProvided("", newColorMap);
 
 }
+
+//void FieldColorController::newColorPaletteSelected(ColorMap *newColorMap) {
+
+//  string editField = _view->getSelectedFieldName();
+//  _model->colorMapChanged(editField, newColorMap);
+//  getColorMap(editField);
+//  _colorMapTemplates->close();
+  //  _view->colorMapProvided("", newColorMap);
+
+//}
 
 void FieldColorController::newGridColorSelected(QColor newColor) {
   LOG(DEBUG) << "enter ";

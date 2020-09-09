@@ -17,8 +17,9 @@ class ColorMapTemplates : public QDialog
     Q_OBJECT
 
 public:
-    ColorMapTemplates(QWidget *parent = 0);
-    ~ColorMapTemplates();
+  ColorMapTemplates *getInstance(QWidget *parent = 0);
+
+  ColorMap *getColorMap(string name);
 
 signals:
   void newColorPaletteSelected(string newColorMapName);
@@ -36,9 +37,14 @@ private slots:
   void spolDbzClicked();
 
   void importColorMap();
-  void importColorMapClicked(QString &text);
+  void importedMapClicked();
+  //void importColorMapClicked(QString &text);
 
 private:
+
+  ColorMapTemplates(QWidget *parent = 0);
+  ~ColorMapTemplates();
+  static ColorMapTemplates *_instance;
 
   ClickableLabel *_defaultColorMapLabel;
   ClickableLabel *_rainbowColorMapLabel;
@@ -56,6 +62,9 @@ private:
   ColorMap *_eldoraVelColorMap;
   ColorMap *_spolVelColorMap;
   ColorMap *_spolDivColorMap;
+
+  // TODO: this mapping should probably go into a model
+  std::map<std::string, ColorMap *> _imports;
 
 };
 

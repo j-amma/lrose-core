@@ -8,6 +8,15 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 
+ColorMapTemplates *ColorMapTemplates::_instance = NULL;
+
+ColorMapTemplates *ColorMapTemplates::getInstance(QWidget *parent) {
+  if (_instance == NULL) 
+    _instance = new ColorMapTemplates(parent);
+  
+  return _instance;
+}
+
 ColorMapTemplates::ColorMapTemplates(QWidget *parent) :
     QDialog(parent)
 {
@@ -194,12 +203,33 @@ void ColorMapTemplates::spolDbzClicked() {
   LOG(DEBUG) << "exit";
 }
 
+void ColorMapTemplates::importedMapClicked() {
+  LOG(DEBUG) << "entry";
+   // e.g. check with member variable _foobarButton
+   //QObject* obj = sender();
+   //if( obj == _foobarButton )
+   //{ 
+   //   ...
+   //}
+
+   // e.g. casting to the class you know its connected with
+   ClickableLabel* label = qobject_cast<ClickableLabel*>(sender());
+   if( label != NULL ) 
+   { 
+      string colorScaleName = label->toolTip().toStdString();
+      LOG(DEBUG) << "just clicked " << colorScaleName;
+   
+      emit newColorPaletteSelected(colorScaleName);
+   }
+  LOG(DEBUG) << "exit";
+}
+/*
 void ColorMapTemplates::importColorMapClicked(QString &text) {
   LOG(DEBUG) << "entry";
  // emit newColorPaletteSelected("???");
   LOG(DEBUG) << "exit";
 }
-
+*/
 
 void ColorMapTemplates::importColorMap() {
   QString fileNameQ = QFileDialog::getOpenFileName(this,
@@ -223,11 +253,25 @@ void ColorMapTemplates::importColorMap() {
     newMapLabel->setPixmap(pixmap->scaled(w/wd,h/hd));
     newMapLabel->setToolTip(fileNameQ);
 
-    // TODO: figure out how to connect newly imported color scale to slot with color scale name
-    //connect(newMapLabel, SIGNAL(ClickableLabel::clicked(QString& text)), 
-    //  this, SLOT(ColorMapTemplates::importColorMapClicked(QString& text));
-
     layout()->addWidget(newMapLabel);
+
+    // connect newly imported color scale to slot with color scale name
+    connect(newMapLabel, &ClickableLabel::clicked, this, &ColorMapTemplates::importedMapClicked);
+
+    // save the ColorMap in the list of imports
+    _imports[fileName] = newMap;
+
+}
+
+ColorMap *ColorMapTemplates::getColorMap(string name) {
+  std::map<std::string, ColorMap *>::iterator it;
+  it = _imports.find(name);
+  if (it == _imports.end()) {
+    LOG(DEBUG) << "color map not found for " << name;
+    return NULL;
+  } else {
+    return it->second;
+  }
 }
 
 /*

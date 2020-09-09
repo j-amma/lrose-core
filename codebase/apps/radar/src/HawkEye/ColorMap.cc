@@ -360,9 +360,12 @@ ColorMap::ColorMap(
     colors = &rainbowRGB[0];
     tableSize = RGBSIZE(rainbowRGB);
   } else {
-    // rainbow will be our default map.
-    colors = &rainbowRGB[0];
-    tableSize = RGBSIZE(rainbowRGB);
+    // try to read from file path ... 
+    //if (readMap(builtinName)) {
+      // rainbow will be our default map.
+      colors = &rainbowRGB[0];
+      tableSize = RGBSIZE(rainbowRGB);
+    //}
   }
 
   vector<int> red, green, blue;

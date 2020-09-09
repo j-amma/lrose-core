@@ -4,6 +4,7 @@
 #include "DisplayField.hh"
 #include "ColorMap.hh"
 #include "ColorBar.hh"
+#include "ColorMapTemplates.hh"
 
 
 DisplayFieldModel::DisplayFieldModel(vector<DisplayField *> displayFields,
@@ -337,8 +338,16 @@ void DisplayFieldModel::colorMapChanged(string fieldName, string newColorMapName
 
   // maintain the current min, max, step, center points
   ColorMap *colorMap;
-  colorMap = new ColorMap(workingVersion->rangeMin(), 
+  // look for the colorMap in the import list first.
+  // if not found, look in the built in list. 
+  // ColorMap returns a default color map if not found in the built in list.
+  ColorMapTemplates *colorMapTemplates;
+  colorMapTemplates = colorMapTemplates->getInstance();
+  colorMap = colorMapTemplates->getColorMap(newColorMapName);
+  if (colorMap == NULL) {
+    colorMap = new ColorMap(workingVersion->rangeMin(), 
                workingVersion->rangeMax(), newColorMapName);
+  }
   //  newColorMap->setRangeMax(workingVersion->rangeMax());  
   //newColorMap->setRangeMin(workingVersion->rangeMin());  
   // currently only using built in names
@@ -347,6 +356,23 @@ void DisplayFieldModel::colorMapChanged(string fieldName, string newColorMapName
   
   LOG(DEBUG) << "exit";
 }
+
+//void DisplayFieldModel::colorMapChanged(string fieldName, ColorMap *colorMap) {
+//  LOG(DEBUG) << "enter";
+  // change the ColorMap for the fieldName
+  //ColorMap *workingVersion = getColorMap(fieldName);
+
+  // maintain the current min, max, step, center points
+  //ColorMap *colorMap;
+  //colorMap = new ColorMap(workingVersion->rangeMin(), 
+ //              workingVersion->rangeMax(), newColorMapName);
+  //  newColorMap->setRangeMax(workingVersion->rangeMax());  
+  //newColorMap->setRangeMin(workingVersion->rangeMin());  
+  // currently only using built in names
+ // setColorMap(fieldName, colorMap);
+  
+//  LOG(DEBUG) << "exit";
+//}
 
 bool DisplayFieldModel::backgroundChanged(string fieldName) {
   LOG(DEBUG) << fieldName;
