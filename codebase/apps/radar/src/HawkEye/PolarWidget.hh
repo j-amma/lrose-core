@@ -580,6 +580,7 @@ class DLL_EXPORT PolarWidget : public QWidget
   virtual void contextMenuEditor();
   virtual void contextMenuExamine(); // const QPoint &pos);
   virtual void contextMenuDataWidget();
+  virtual void contextMenuHistogram();
   
 
 };

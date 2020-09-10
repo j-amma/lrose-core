@@ -821,6 +821,12 @@ void PolarWidget::contextMenuDataWidget()
   //  notImplemented();                                                                                                   
 }
 
+void PolarWidget::contextMenuHistogram()
+{
+  informationMessage();
+  //  notImplemented();                                                                                                   
+}
+
 
 void PolarWidget::ExamineEdit(const RadxRay *closestRay) 
 {

@@ -5,7 +5,7 @@ QT += qml
 # requires(qtConfig(filedialog))
 
 TEMPLATE = app
-TARGET = HawkEye
+TARGET = HawkEyeEdit_Elle
 ICON = HawkEyeElleIcon.icns 
 
 CONFIG += qt

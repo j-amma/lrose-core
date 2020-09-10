@@ -1975,6 +1975,10 @@ void PpiWidget::ShowContextMenu(const QPoint &pos, RadxVol *vol)
   connect(&action6, SIGNAL(triggered()), this, SLOT(contextMenuExamine()));
   contextMenu.addAction(&action6);
 
+  QAction action7("Histogram", this);
+  connect(&action7, SIGNAL(triggered()), this, SLOT(contextMenuHistogram()));
+  contextMenu.addAction(&action7);
+
   /*
   QAction action7("Data Widget", this);
   connect(&action7, SIGNAL(triggered()), this, SLOT(contextMenuDataWidget()));
