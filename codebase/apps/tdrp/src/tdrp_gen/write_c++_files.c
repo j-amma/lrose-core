@@ -78,8 +78,9 @@ int write_hh_file(const char *class_name,
 		  int n_defs,
                   const char *prog_name,
                   const char *lib_name,
+                  const char *output_dir,
                   int singleton)
-
+  
 {
 
   char hname[4192];
@@ -91,7 +92,12 @@ int write_hh_file(const char *class_name,
    * open file
    */
   
-  sprintf(hname,"%s.hh", class_name);
+  if (strcmp(output_dir, ".")) {
+    sprintf(hname,"%s/%s.hh", output_dir, class_name);
+  } else {
+    sprintf(hname,"%s.hh", class_name);
+  }
+
   if ((hfile = fopen(hname, "w")) == NULL) {
     fprintf(stderr, "ERROR: tdrp_gen:write_hh_file, opening file\n");
     perror(hname);
@@ -504,6 +510,7 @@ int write_cc_file(const char *class_name,
 		  int n_defs,
                   const char *prog_name,
                   const char *lib_name,
+                  const char *output_dir,
                   int singleton)
   
 {
@@ -517,7 +524,11 @@ int write_cc_file(const char *class_name,
    * open file
    */
 
-  sprintf(cname,"%s.cc", class_name);
+  if (strcmp(output_dir, ".")) {
+    sprintf(cname,"%s/%s.cc", output_dir, class_name);
+  } else {
+    sprintf(cname,"%s.cc", class_name);
+  }
 
   if ((cfile = fopen(cname, "w")) == NULL) {
     fprintf(stderr, "ERROR: tdrp_gen:write_cc_file, opening file\n");

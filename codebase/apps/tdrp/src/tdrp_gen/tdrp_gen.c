@@ -63,6 +63,7 @@ int main(int argc, char **argv)
   char *paramdef_path = NULL;
   char *module = "";
   char *class_name = "Params";
+  char *output_dir = ".";
   char *prog_name = NULL;
   char *lib_name = NULL;
   int i;
@@ -119,6 +120,13 @@ int main(int argc, char **argv)
 	Usage(stderr);
 	exit(-1);
       }
+    } else if (!strcmp(argv[i], "-dir")) {
+      if (i < argc - 1) {
+	output_dir = argv[++i];
+      } else {
+	Usage(stderr);
+	exit(-1);
+      }
     } else if (!strcmp(argv[i], "-lib")) {
       if (i < argc - 1) {
 	lib_name = argv[++i];
@@ -158,6 +166,9 @@ int main(int argc, char **argv)
 	    paramdef_path);
     fprintf(stdout, "  Creating files '%s.hh' and '%s.cc'.\n",
 	    class_name, class_name);
+    if (strcmp(output_dir, ".")) {
+      fprintf(stdout, "  Writing to dir '%s'.\n", output_dir);
+    }
   }
   
   /*
@@ -239,7 +250,7 @@ int main(int argc, char **argv)
      */
     
     if (write_hh_file(class_name, t_entries, n_defs, 
-                      prog_name, lib_name, singleton)) {
+                      prog_name, lib_name, output_dir, singleton)) {
       return (-1);
     }
     
@@ -248,7 +259,7 @@ int main(int argc, char **argv)
      */
     
     if (write_cc_file(class_name, t_entries, n_defs,
-                      prog_name, lib_name, singleton)) {
+                      prog_name, lib_name, output_dir, singleton)) {
       return (-1);
     }
 
@@ -258,7 +269,7 @@ int main(int argc, char **argv)
      * write out C mode header file
      */
     
-    if (write_h_file(module, t_entries, n_defs, prog_name, lib_name)) {
+    if (write_h_file(module, t_entries, n_defs, prog_name, lib_name, output_dir)) {
       return (-1);
     }
     
@@ -266,7 +277,7 @@ int main(int argc, char **argv)
      * write out C code file
      */
     
-    if (write_c_file(module, t_entries, n_defs, prog_name, lib_name)) {
+    if (write_c_file(module, t_entries, n_defs, prog_name, lib_name, output_dir)) {
       return (-1);
     }
 
@@ -316,6 +327,8 @@ static void Usage(FILE *out)
 	  "    to empty string.\n"
 	  "  [-f paramdef_path] parameter definition file path.\n"
 	  "    This arg is REQUIRED.\n"
+	  "  [-dir path] optional dir path to which to write the output.\n"
+	  "    Default is the current directory.\n"
 	  "  [-h] gives usage.\n"
 	  "  [-c++] C++ mode - generates .hh and .cc class files.\n"
 	  "  [-class className] In C++ mode, set the name of the params class.\n"
