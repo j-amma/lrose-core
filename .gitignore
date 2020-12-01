@@ -210,6 +210,11 @@ codebase/apps/hydro/src/RainGage/RainGage
 codebase/apps/hydro/src/RateAccum/RateAccum
 codebase/apps/hydro/src/Shape2Map/Shape2Map
 
+codebase/apps/ingest/src/hiResNids2Mdv/hiResNids2Mdv
+codebase/apps/ingest/src/hiResNidsEchoTop2Mdv/hiResNidsEchoTop2Mdv
+codebase/apps/ingest/src/hiResNidsStormPrecip2Mdv/hiResNidsStormPrecip2Mdv
+codebase/apps/ingest/src/hiResNidsVil2Mdv/hiResNidsVil2Mdv
+codebase/apps/ingest/src/lowResNids2Mdv/lowResNids2Mdv
 codebase/apps/ingest/src/AcData2Spdb/AcData2Spdb
 codebase/apps/ingest/src/AcTrack2Polygon/AcTrack2Polygon
 codebase/apps/ingest/src/AcarsNc2GenPt/AcarsNc2GenPt
@@ -403,6 +408,9 @@ codebase/apps/procmap/src/procmap_register/procmap_register
 codebase/apps/procmap/src/procmap_unregister/procmap_unregister
 codebase/apps/procmap/src/test_procmap/test_procmap
 
+codebase/apps/radar/src/AparAscope/
+codebase/apps/radar/src/Condor/
+codebase/apps/radar/src/ConvStrat/
 codebase/apps/radar/src/AparTsPrint/AparTsPrint
 codebase/apps/radar/src/AparTsSim/AparTsSim
 codebase/apps/radar/src/AparTs2Moments/AparTs2Moments
