@@ -46,7 +46,7 @@ Group::Group(const Group& original) : H5Object(), CommonFG(), id(original.id)
 // Function:    Group::closeObjId
 ///\brief       Closes an object, which was opened with Group::getObjId
 ///
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - March, 2017
 //--------------------------------------------------------------------------
 void Group::closeObjId(hid_t obj_id) const
@@ -86,7 +86,6 @@ Group::Group(const hid_t existing_id) : H5Object(), CommonFG(), id(existing_id)
     incRefCount(); // increment number of references to this id
 }
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    Group overload constructor - dereference
 ///\brief       Given a reference, ref, to an hdf5 group, creates a Group object
@@ -94,7 +93,7 @@ Group::Group(const hid_t existing_id) : H5Object(), CommonFG(), id(existing_id)
 ///\param       ref - IN: Reference pointer
 ///\param       ref_type - IN: Reference type - default to H5R_OBJECT
 ///\param       plist - IN: Property list - default to PropList::DEFAULT
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 ///\par Description
 ///             \c obj can be DataSet, Group, or named DataType, that
 ///             is a datatype that has been named by DataType::commit.
@@ -104,13 +103,12 @@ Group::Group(const H5Location& loc, const void* ref, H5R_type_t ref_type, const 
 {
     id = H5Location::p_dereference(loc.getId(), ref, ref_type, plist, "constructor - by dereference");
 }
-#endif
 
 //--------------------------------------------------------------------------
 // Function:    Group::getNumObjs
 ///\brief       Returns the number of objects in this group.
 ///\return      Number of objects
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - January, 2003
 //--------------------------------------------------------------------------
 hsize_t Group::getNumObjs() const
@@ -129,7 +127,7 @@ hsize_t Group::getNumObjs() const
 ///\param       obj_name - IN: Path to the object
 ///\param       plist    - IN: Access property list for the link pointing to
 ///                            the object
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 ///\par Description
 ///             This function opens an object in a group or file, using
 ///             H5Oopen.  Thus, an object can be opened without knowing
@@ -153,7 +151,7 @@ hid_t Group::getObjId(const char* obj_name, const PropList& plist) const
 ///\param       obj_name - IN: Path to the object
 ///\param       plist    - IN: Access property list for the link pointing to
 ///                            the object
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - March, 2017
 //--------------------------------------------------------------------------
 hid_t Group::getObjId(const H5std_string& obj_name, const PropList& plist) const
@@ -183,7 +181,7 @@ hid_t Group::getId() const
 // Function:    Group::p_setId
 ///\brief       Sets the identifier of this object to a new value.
 ///
-///\exception   H5x::IdComponentException when the attempt to close the HDF5
+///\exception   H5::IdComponentException when the attempt to close the HDF5
 ///             object fails
 // Description:
 //              The underlaying reference counting in the C library ensures
@@ -209,7 +207,7 @@ void Group::p_setId(const hid_t new_id)
 // Function:    Group::close
 ///\brief       Closes this group.
 ///
-///\exception   H5x::GroupIException
+///\exception   H5::GroupIException
 // Programmer   Binh-Minh Ribler - Mar 9, 2005
 //--------------------------------------------------------------------------
 void Group::close()
@@ -228,10 +226,10 @@ void Group::close()
 
 //--------------------------------------------------------------------------
 // Function:    Group::throwException
-///\brief       Throws H5x::GroupIException.
+///\brief       Throws H5::GroupIException.
 ///\param       func_name - Name of the function where failure occurs
 ///\param       msg       - Message describing the failure
-///\exception   H5x::GroupIException
+///\exception   H5::GroupIException
 // Description
 //              This function is also used in H5Location's methods so that
 //              proper exception can be thrown for file or group.  The

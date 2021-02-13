@@ -54,7 +54,7 @@ PredType::PredType(const PredType& original) : AtomType(original) {}
 ///\brief       Assignment operator.
 ///\param       rhs - IN: Reference to the predefined datatype
 ///\return      Reference to PredType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Description
 //              Makes a copy of the type on the right hand side and stores
 //              the new id in the left hand side object.
@@ -958,7 +958,7 @@ September 2015:
 
         Old Method:
         ----------
-                // Declaration of the constant - in "H5PredType.hh"
+                // Declaration of the constant - in "H5PredType.h"
                 static const PredType NATIVE_INT;
 
                 // Definition of the constant - in "H5PredType.cpp"
@@ -966,10 +966,10 @@ September 2015:
 
         New Method:
         ----------
-                // Declare pointer for a constant - in "H5PredType.hh"
-                static PredType* NATIVE_INT_; // "H5PredType.hh"
+                // Declare pointer for a constant - in "H5PredType.h"
+                static PredType* NATIVE_INT_; // "H5PredType.h"
 
-                // Change previous constant to reference - in "H5PredType.hh"
+                // Change previous constant to reference - in "H5PredType.h"
                 static const PredType& NATIVE_INT;
 
                 // The assignment of the first static constant, named
@@ -1001,7 +1001,7 @@ September 2015:
 
         Old Method:
         ----------
-                // Declaration of the constant - in "H5DataSpace.hh"
+                // Declaration of the constant - in "H5DataSpace.h"
                 static const DataSpace ALL;
 
                 // Definition of the constant - in "H5DataSpace.cpp"
@@ -1009,10 +1009,10 @@ September 2015:
 
         New Method:
         ----------
-                // Declare pointer for a constant - in "H5DataSpace.hh"
-                static DataSpace* ALL_; // "H5DataSpace.hh"
+                // Declare pointer for a constant - in "H5DataSpace.h"
+                static DataSpace* ALL_; // "H5DataSpace.h"
 
-                // Change previous constant to reference - in "H5DataSpace.hh"
+                // Change previous constant to reference - in "H5DataSpace.h"
                 static const DataSpace& ALL;
 
                 // Creates a dynamic DataSpace object representing the C constant
@@ -1055,7 +1055,7 @@ September 2015:
 
         Old Method:
         ----------
-                // Declaration of the constant - in "H5PropList.hh"
+                // Declaration of the constant - in "H5PropList.h"
                 static const PropList DEFAULT;
 
                 // Definition of the constant - in "H5PropList.cpp"
@@ -1063,10 +1063,10 @@ September 2015:
 
         New Method:
         ----------
-                // Declare pointer for a constant - in "H5PropList.hh"
-                static PropList* DEFAULT_; // "H5PropList.hh"
+                // Declare pointer for a constant - in "H5PropList.h"
+                static PropList* DEFAULT_; // "H5PropList.h"
 
-                // Change previous constant to reference - in "H5PropList.hh"
+                // Change previous constant to reference - in "H5PropList.h"
                 static const PropList& DEFAULT;
 
                 // Creates a dynamic PropList object representing the C constant

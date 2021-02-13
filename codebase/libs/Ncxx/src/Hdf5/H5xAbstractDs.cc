@@ -42,7 +42,7 @@ AbstractDs::AbstractDs(){}
 ///\brief       Returns the class of the datatype that is used by this
 ///             object, which can be a dataset or an attribute.
 ///\return      Datatype class identifier
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5T_class_t AbstractDs::getTypeClass() const
@@ -90,7 +90,7 @@ H5T_class_t AbstractDs::getTypeClass() const
 ///\brief       Returns the generic datatype of this abstract dataset, which
 ///             can be a dataset or an attribute.
 ///\return      DataType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataType AbstractDs::getDataType() const
@@ -117,7 +117,7 @@ DataType AbstractDs::getDataType() const
 ///\brief       Returns the array datatype of this abstract dataset which
 ///             can be a dataset or an attribute.
 ///\return      ArrayType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Jul, 2005
 //--------------------------------------------------------------------------
 ArrayType AbstractDs::getArrayType() const
@@ -146,7 +146,7 @@ ArrayType AbstractDs::getArrayType() const
 ///\brief       Returns the compound datatype of this abstract dataset which
 ///             can be a dataset or an attribute.
 ///\return      CompType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 CompType AbstractDs::getCompType() const
@@ -173,7 +173,7 @@ CompType AbstractDs::getCompType() const
 ///\brief       Returns the enumeration datatype of this abstract dataset which
 ///             can be a dataset or an attribute.
 ///\return      EnumType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 EnumType AbstractDs::getEnumType() const
@@ -200,7 +200,7 @@ EnumType AbstractDs::getEnumType() const
 ///\brief       Returns the integer datatype of this abstract dataset which
 ///             can be a dataset or an attribute.
 ///\return      IntType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 IntType AbstractDs::getIntType() const
@@ -227,7 +227,7 @@ IntType AbstractDs::getIntType() const
 ///\brief       Returns the floating-point datatype of this abstract dataset,
 ///             which can be a dataset or an attribute.
 ///\return      FloatType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 FloatType AbstractDs::getFloatType() const
@@ -254,7 +254,7 @@ FloatType AbstractDs::getFloatType() const
 ///\brief       Returns the string datatype of this abstract dataset which
 ///             can be a dataset or an attribute.
 ///\return      StrType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 StrType AbstractDs::getStrType() const
@@ -281,7 +281,7 @@ StrType AbstractDs::getStrType() const
 ///\brief       Returns the floating-point datatype of this abstract dataset,
 ///             which can be a dataset or an attribute.
 ///\return      VarLenType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Jul, 2005
 //--------------------------------------------------------------------------
 VarLenType AbstractDs::getVarLenType() const

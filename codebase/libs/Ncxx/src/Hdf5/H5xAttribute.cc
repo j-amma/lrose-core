@@ -19,14 +19,6 @@
 #include <string>
 #include <cstring>
 
-#ifndef HDfree
-    #define HDfree(M)    free(M)
-#endif /* HDfree */
-
-#ifndef HDmemset
-    #define HDmemset(X,C,Z)    memset(X,C,Z)
-#endif /* HDmemset */
-
 #include <Ncxx/H5x.hh>
 
 namespace H5x {
@@ -58,7 +50,7 @@ Attribute::Attribute(const Attribute& original) : AbstractDs(), H5Location(), id
 ///\brief       Creates an Attribute object using the id of an existing
 ///             attribute.
 ///\param       existing_id - IN: Id of an existing attribute
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 Attribute::Attribute(const hid_t existing_id) : AbstractDs(), H5Location(), id(existing_id)
@@ -71,7 +63,7 @@ Attribute::Attribute(const hid_t existing_id) : AbstractDs(), H5Location(), id(e
 ///\brief       Writes data to this attribute.
 ///\param       mem_type  - IN: Attribute datatype (in memory)
 ///\param       buf       - IN: Data to be written
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void Attribute::write(const DataType& mem_type, const void *buf) const
@@ -89,7 +81,7 @@ void Attribute::write(const DataType& mem_type, const void *buf) const
 ///             It writes a \a H5std_string to this attribute.
 ///\param       mem_type  - IN: Attribute datatype (in memory)
 ///\param       strg      - IN: Data to be written
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Apr, 2003
 //--------------------------------------------------------------------------
 void Attribute::write(const DataType& mem_type, const H5std_string& strg) const
@@ -127,7 +119,7 @@ void Attribute::write(const DataType& mem_type, const H5std_string& strg) const
 ///\brief       Reads data from this attribute.
 ///\param       mem_type -  IN: Attribute datatype (in memory)
 ///\param       buf      - OUT: Buffer for read data
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void Attribute::read(const DataType& mem_type, void *buf) const
@@ -145,7 +137,7 @@ void Attribute::read(const DataType& mem_type, void *buf) const
 ///             It reads a \a H5std_string from this attribute.
 ///\param       mem_type  - IN: Attribute datatype (in memory)
 ///\param       strg      - IN: Buffer for read string
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Apr, 2003
 // Modification
 //      Mar 2008
@@ -183,7 +175,7 @@ void Attribute::read(const DataType& mem_type, H5std_string& strg) const
 // Function:    Attribute::getInMemDataSize
 ///\brief       Gets the size in memory of the attribute's data.
 ///\return      Size of data (in memory)
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Apr 2009
 //--------------------------------------------------------------------------
 size_t Attribute::getInMemDataSize() const
@@ -248,7 +240,7 @@ size_t Attribute::getInMemDataSize() const
 // Function:    Attribute::getSpace
 ///\brief       Gets a copy of the dataspace for this attribute.
 ///\return      Dataspace instance
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataSpace Attribute::getSpace() const
@@ -275,7 +267,7 @@ DataSpace Attribute::getSpace() const
 ///\param       attr_name - OUT: Buffer for the name string as char*
 ///\param       buf_size  -  IN: Length of the buffer, default to 0
 ///\return      Actual length of the attribute name
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 ///\par Description
 ///             This function retrieves \a buf_size chars of the attribute's
 ///             name including null termination.  Thus, if the actual length
@@ -308,7 +300,7 @@ ssize_t Attribute::getName(char* attr_name, size_t buf_size) const
 // Function:    Attribute::getName
 ///\brief       Returns the name of this attribute as an \a H5std_string.
 ///\return      Name of the attribute
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - May, 2004
 // Modification
 //      Mar 2014 - BMR
@@ -357,7 +349,7 @@ H5std_string Attribute::getName() const
 ///             specifying a desired length to be retrieved of the name.
 ///\return      Name (or part of name) of the attribute
 ///\param       len  -  IN: Desired length of the name
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //      Mar 2014 - BMR
@@ -379,7 +371,7 @@ H5std_string Attribute::getName(size_t len) const
 ///\param       attr_name - OUT: Buffer for the name string as \a H5std_string
 ///\param       len  -  IN: Desired length of the name, default to 0
 ///\return      Actual length of the attribute name
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 ///\par Description
 ///             This function retrieves the attribute's name as a string.  The
 ///             buf_size can specify a specific length or default to 0, in
@@ -429,7 +421,7 @@ ssize_t Attribute::getName(H5std_string& attr_name, size_t len) const
 // Param        len  -  IN: Desired length of the name
 // Param        attr_name - OUT: Buffer for the name string
 // Return       Actual length of the attribute name
-// Exception    H5x::AttributeIException
+// Exception    H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Nov, 2001
 // Modification
 //              Modified to call its replacement. -BMR, 2014/04/16
@@ -445,7 +437,7 @@ ssize_t Attribute::getName(H5std_string& attr_name, size_t len) const
 // Function:    Attribute::getStorageSize
 ///\brief       Returns the amount of storage size required for this attribute.
 ///\return      Size of the storage or 0, for no data
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Note:        H5Dget_storage_size returns 0 when there is no data.  This
 //              function should have no failure. (from SLU)
 // Programmer   Binh-Minh Ribler - Mar, 2005
@@ -481,7 +473,7 @@ hid_t Attribute::getId() const
 // Function:    Attribute::p_get_type (private)
 // Purpose      Gets the datatype of this attribute.
 // Return       Id of the datatype
-// Exception    H5x::AttributeIException
+// Exception    H5::AttributeIException
 // Description
 //              This private function is used in AbstractDs.
 // Programmer   Binh-Minh Ribler - 2000
@@ -502,7 +494,7 @@ hid_t Attribute::p_get_type() const
 // brief       Reads a fixed length \a H5std_string from an attribute.
 // param       mem_type  - IN: Attribute datatype (in memory)
 // param       strg      - IN: Buffer for read string
-// exception   H5x::AttributeIException
+// exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Jul, 2009
 // Modification
 //      Jul 2009
@@ -538,7 +530,7 @@ void Attribute::p_read_fixed_len(const DataType& mem_type, H5std_string& strg) c
 // brief       Reads a variable length \a H5std_string from an attribute.
 // param       mem_type  - IN: Attribute datatype (in memory)
 // param       strg      - IN: Buffer for read string
-// exception   H5x::AttributeIException
+// exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Jul, 2009
 // Modification
 //        Jul 2009
@@ -568,7 +560,7 @@ void Attribute::p_read_variable_len(const DataType& mem_type, H5std_string& strg
 // Function:    Attribute::p_setId
 ///\brief       Sets the identifier of this object to a new value.
 ///
-///\exception   H5x::IdComponentException when the attempt to close the HDF5
+///\exception   H5::IdComponentException when the attempt to close the HDF5
 ///             object fails
 // Description:
 //              The underlaying reference counting in the C library ensures
@@ -594,7 +586,7 @@ void Attribute::p_setId(const hid_t new_id)
 // Function:    Attribute::close
 ///\brief       Closes this attribute.
 ///
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Mar 9, 2005
 //--------------------------------------------------------------------------
 void Attribute::close()

@@ -35,7 +35,7 @@ namespace H5x {
 ///\brief       Opens the named generic datatype at this location.
 ///\param       name  - IN: Name of the datatype to open
 ///\return      DataType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataType CommonFG::openDataType(const char* name) const
@@ -71,7 +71,7 @@ DataType CommonFG::openDataType(const H5std_string& name) const
 ///\brief       Opens the named array datatype at this location.
 ///\param       name  - IN: Name of the array datatype to open
 ///\return      ArrayType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - Jul, 2005
 //--------------------------------------------------------------------------
 ArrayType CommonFG::openArrayType(const char* name) const
@@ -107,7 +107,7 @@ ArrayType CommonFG::openArrayType(const H5std_string& name) const
 ///\brief       Opens the named compound datatype at this location.
 ///\param       name  - IN: Name of the compound datatype to open
 ///\return      CompType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 CompType CommonFG::openCompType(const char* name) const
@@ -143,7 +143,7 @@ CompType CommonFG::openCompType(const H5std_string& name) const
 ///\brief       Opens the named enumeration datatype at this location.
 ///\param       name  - IN: Name of the enumeration datatype to open
 ///\return      EnumType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 EnumType CommonFG::openEnumType(const char* name) const
@@ -179,7 +179,7 @@ EnumType CommonFG::openEnumType(const H5std_string& name) const
 ///\brief       Opens the named integer datatype at this location.
 ///\param       name  - IN: Name of the integer datatype to open
 ///\return      IntType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 IntType CommonFG::openIntType(const char* name) const
@@ -215,7 +215,7 @@ IntType CommonFG::openIntType(const H5std_string& name) const
 ///\brief       Opens the named floating-point datatype at this location.
 ///\param       name  - IN: Name of the floating-point datatype to open
 ///\return      FloatType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 FloatType CommonFG::openFloatType(const char* name) const
@@ -251,7 +251,7 @@ FloatType CommonFG::openFloatType(const H5std_string& name) const
 ///\brief       Opens the named string datatype at this location.
 ///\param       name  - IN: Name of the string datatype to open
 ///\return      StrType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 StrType CommonFG::openStrType(const char* name) const
@@ -287,7 +287,7 @@ StrType CommonFG::openStrType(const H5std_string& name) const
 ///\brief       Opens the named variable length datatype at this location.
 ///\param       name  - IN: Name of the variable length datatype to open
 ///\return      VarLenType instance
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - Jul, 2005
 //--------------------------------------------------------------------------
 VarLenType CommonFG::openVarLenType(const char* name) const
@@ -335,7 +335,7 @@ CommonFG::~CommonFG() {}
 
 //--------------------------------------------------------------------------
 // Function:    f_DataType_setId - friend
-// Purpose:     This function is friend to class H5x::DataType so that it
+// Purpose:     This function is friend to class H5::DataType so that it
 //              can set DataType::id in order to work around a problem
 //              described in the JIRA issue HDFFV-7947.
 //              Applications shouldn't need to use it.
@@ -350,7 +350,7 @@ void f_DataType_setId(DataType* dtype, hid_t new_id)
 
 //--------------------------------------------------------------------------
 // Function:    f_DataSet_setId - friend
-// Purpose:     This function is friend to class H5x::DataSet so that it
+// Purpose:     This function is friend to class H5::DataSet so that it
 //              can set DataSet::id in order to work around a problem
 //              described in the JIRA issue HDFFV-7947.
 //              Applications shouldn't need to use it.

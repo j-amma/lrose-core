@@ -29,7 +29,7 @@ LinkAccPropList* LinkAccPropList::DEFAULT_ = 0;
 // Function:    LinkAccPropList::getConstant
 //              Creates a LinkAccPropList object representing the HDF5 constant
 //              H5P_LINK_ACCESS, pointed to by LinkAccPropList::DEFAULT_
-// exception    H5x::PropListIException
+// exception    H5::PropListIException
 // Description
 //              If LinkAccPropList::DEFAULT_ already points to an allocated
 //              object, throw a PropListIException.  This scenario should not
@@ -59,7 +59,7 @@ LinkAccPropList* LinkAccPropList::getConstant()
 // Function:    LinkAccPropList::deleteConstants
 // Purpose:     Deletes the constant object that LinkAccPropList::DEFAULT_
 //              points to.
-// exception    H5x::PropListIException
+// exception    H5::PropListIException
 // Programmer   Binh-Minh Ribler - December, 2016
 //--------------------------------------------------------------------------
 void LinkAccPropList::deleteConstants()
@@ -104,7 +104,7 @@ LinkAccPropList::LinkAccPropList(const hid_t plist_id) : PropList(plist_id) {}
 ///             before the library assumes it has found a cycle and aborts the
 ///             traversal.
 ///
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - March 1, 2017
 //--------------------------------------------------------------------------
 void LinkAccPropList::setNumLinks(size_t nlinks) const
@@ -122,7 +122,7 @@ void LinkAccPropList::setNumLinks(size_t nlinks) const
 ///\brief       Gets the number of soft or user-defined links that can be
 ///             traversed before a failure occurs.
 ///
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - March 1, 2017
 //--------------------------------------------------------------------------
 size_t LinkAccPropList::getNumLinks() const

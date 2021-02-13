@@ -29,7 +29,7 @@ FileCreatPropList* FileCreatPropList::DEFAULT_ = 0;
 // Function:    FileCreatPropList::getConstant
 // Purpose      Creates a FileCreatPropList object representing the HDF5
 //              constant H5P_FILE_ACCESS, pointed to by FileCreatPropList::DEFAULT_
-// exception    H5x::PropListIException
+// exception    H5::PropListIException
 // Description
 //              If FileCreatPropList::DEFAULT_ already points to an allocated
 //              object, throw a PropListIException.  This scenario should not happen.
@@ -106,7 +106,7 @@ FileCreatPropList::FileCreatPropList(const hid_t plist_id) : PropList(plist_id) 
 ///\param       freelist - OUT: The global free list.
 ///\param       stab     - OUT: The root symbol table entry.
 ///\param       shhdr    - OUT: Shared object headers.
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             Any (or even all) of the output arguments can be null pointers.
 // Programmer   Binh-Minh Ribler - 2000
@@ -126,7 +126,7 @@ void FileCreatPropList::getVersion(unsigned& super, unsigned& freelist, unsigned
 // Function:    FileCreatPropList::setUserblock
 ///\brief       Sets the user block size field of this file creation property list.
 ///\param       size - IN: User block size to be set, in bytes
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The default user block size is 0; it may be set to any power
 ///             of 2 equal to 512 or greater (512, 1024, 2048, etc.)
@@ -146,7 +146,7 @@ void FileCreatPropList::setUserblock(hsize_t size) const
 // Function:    FileCreatPropList::getUserblock
 ///\brief       Returns the user block size of this file creation property list.
 ///\return      User block size
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 hsize_t FileCreatPropList::getUserblock() const
@@ -167,7 +167,7 @@ hsize_t FileCreatPropList::getUserblock() const
 ///             address objects in an HDF5 file.
 ///\param       sizeof_addr - IN: Size of an object offset in bytes
 ///\param       sizeof_size - IN: Size of an object length in bytes.
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pset_sizes API in
 ///             the HDF5 C Reference Manual.
@@ -188,7 +188,7 @@ void FileCreatPropList::setSizes(size_t sizeof_addr, size_t sizeof_size) const
 ///\brief       Retrieves the size of the offsets and lengths used in an
 ///             HDF5 file.
 ///
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void FileCreatPropList::getSizes(size_t& sizeof_addr, size_t& sizeof_size) const
@@ -207,7 +207,7 @@ void FileCreatPropList::getSizes(size_t& sizeof_addr, size_t& sizeof_size) const
 ///             nodes.
 ///\param       ik - IN: Symbol table tree rank
 ///\param       lk - IN: Symbol table node size
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pset_sym_k API in
 ///             the HDF5 C Reference Manual.
@@ -228,7 +228,7 @@ void FileCreatPropList::setSymk(unsigned ik, unsigned lk) const
 ///\brief       Retrieves the size of the symbol table B-tree 1/2 rank and
 ///             the symbol table leaf node 1/2 size.
 ///
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pget_sym_k API in
 ///             the HDF5 C Reference Manual.
@@ -249,7 +249,7 @@ void FileCreatPropList::getSymk(unsigned& ik, unsigned& lk) const
 ///\brief       Sets the size of the parameter used to control the B-trees
 ///             for indexing chunked datasets.
 ///\param       ik - IN: 1/2 rank of chunked storage B-tree
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pset_istore_k API in
 ///             the HDF5 C Reference Manual.
@@ -269,7 +269,7 @@ void FileCreatPropList::setIstorek(unsigned ik) const
 // Function:    FileCreatPropList::getIstorek
 ///\brief       Returns the 1/2 rank of an indexed storage B-tree.
 ///\return      1/2 rank of chunked storage B-tree
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pget_istore_k API in
 ///             the HDF5 C Reference Manual.
@@ -287,7 +287,6 @@ unsigned FileCreatPropList::getIstorek() const
     return(ik);
 }
 
-#ifdef HDV5_V10
 //--------------------------------------------------------------------------
 // Function:    FileCreatPropList::setFileSpaceStrategy
 ///\brief       Sets the strategy and the threshold value that the library
@@ -296,7 +295,7 @@ unsigned FileCreatPropList::getIstorek() const
 ///\param       persist   - IN: Whether to persist free-space
 ///\param       threshold - IN: Free-space section threshold. The library
 ///             default is 1, which is to track all free-space sections.
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             If the given strategy is zero, the property will not be
 ///             changed and the existing strategy will be retained.
@@ -323,7 +322,7 @@ void FileCreatPropList::setFileSpaceStrategy(H5F_fspace_strategy_t strategy, hbo
 ///\param       strategy  - OUT: Strategy for file space management
 ///\param       persist   - OUT: Whether to persist free-space
 ///\param       threshold - OUT: Free-space section threshold
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - Feb, 2017
 //--------------------------------------------------------------------------
 void FileCreatPropList::getFileSpaceStrategy(H5F_fspace_strategy_t& strategy, hbool_t& persist, hsize_t& threshold) const
@@ -340,7 +339,7 @@ void FileCreatPropList::getFileSpaceStrategy(H5F_fspace_strategy_t& strategy, hb
 // Function:    FileCreatPropList::setFileSpacePagesize
 ///\brief       Sets the file space page size for paged aggregation.
 ///\param       fsp_psize - IN: Filespace's page size
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - Feb, 2017
 //--------------------------------------------------------------------------
 void FileCreatPropList::setFileSpacePagesize(hsize_t fsp_psize) const
@@ -358,7 +357,7 @@ void FileCreatPropList::setFileSpacePagesize(hsize_t fsp_psize) const
 ///\brief       Returns the file space page size for aggregating small
 ///             metadata or raw data.
 ///\return      File space page size
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - Feb, 2017
 //--------------------------------------------------------------------------
 hsize_t FileCreatPropList::getFileSpacePagesize() const
@@ -372,8 +371,6 @@ hsize_t FileCreatPropList::getFileSpacePagesize() const
     }
     return(fsp_psize);
 }
-
-#endif
 
 //--------------------------------------------------------------------------
 // Function:    FileCreatPropList destructor

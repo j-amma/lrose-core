@@ -23,7 +23,7 @@ namespace H5x {
 // Function:    H5Library::open (static)
 ///\brief       Initializes the HDF5 library.
 ///
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void H5Library::open()
@@ -39,7 +39,7 @@ void H5Library::open()
 // Function:    H5Library::close (static)
 ///\brief       Flushes all data to disk, closes files, and cleans up memory.
 ///
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void H5Library::close()
@@ -55,7 +55,7 @@ void H5Library::close()
 // Function:    H5Library::dontAtExit (static)
 ///\brief       Instructs library not to install the C \c atexit cleanup routine
 ///
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              Removed the check for failure returned from H5dont_atexit.
@@ -72,7 +72,7 @@ void H5Library::dontAtExit()
 ///\param       majnum - OUT: Major version of the library
 ///\param       minnum - OUT: Minor version of the library
 ///\param       relnum - OUT: Release number of the library
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void H5Library::getLibVersion(unsigned& majnum, unsigned& minnum, unsigned& relnum)
@@ -91,7 +91,7 @@ void H5Library::getLibVersion(unsigned& majnum, unsigned& minnum, unsigned& reln
 ///\param       majnum - IN: Major version of the library
 ///\param       minnum - IN: Minor version of the library
 ///\param       relnum - IN: Release number of the library
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 ///\par Description
 ///             For information about library version, please refer to
 ///             the H5check_version API in the HDF5 C Reference Manual.
@@ -112,7 +112,7 @@ void H5Library::checkVersion(unsigned majnum, unsigned minnum, unsigned relnum)
 ///             library, which are supposed to free any unused memory they
 ///             have allocated.
 ///
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 ///\par Description
 ///             It is not required that H5Library::garbageCollect be called
 ///             at any particular time; it is only necessary in certain
@@ -146,7 +146,7 @@ void H5Library::garbageCollect()
 //                                    the C++ library is done
 //                      <classname>::deleteConstants - deletes all references
 //                                    for <classname> global constants
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 //
 // Programmer   Binh-Minh Ribler - September, 2015
 //--------------------------------------------------------------------------
@@ -228,7 +228,7 @@ void H5Library::termH5cpp()
 ///\param       arr_list_lim   - IN: Limit on memory used in each "array" free list
 ///\param       blk_global_lim - IN: Limit on all "block" free list memory used
 ///\param       blk_list_lim   - IN: Limit on memory used in each "block" free list
-///\exception   H5x::LibraryIException
+///\exception   H5::LibraryIException
 ///\par Description
 ///             Setting a value of -1 for a limit means no limit of that type.
 ///             For more information on free list limits, please refer to

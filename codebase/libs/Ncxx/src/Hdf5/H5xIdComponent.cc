@@ -14,10 +14,6 @@
 #include <string>
 #include <cstring>
 
-#ifndef HDmemset
-    #define HDmemset(X,C,Z)    memset(X,C,Z)
-#endif /* HDmemset */
-
 #include <Ncxx/H5x.hh>
 
 namespace H5x {
@@ -253,7 +249,7 @@ bool IdComponent::typeExists(H5I_type_t type)
 ///\brief       Assignment operator.
 ///\param       rhs - IN: Reference to the existing object
 ///\return      Reference to IdComponent instance
-///\exception   H5x::IdComponentException when attempt to close the HDF5
+///\exception   H5::IdComponentException when attempt to close the HDF5
 ///             object fails
 // Description
 //              First, close the current valid id of this object.  Then
@@ -287,7 +283,7 @@ IdComponent& IdComponent::operator=(const IdComponent& rhs)
 // Function:    IdComponent::setId
 ///\brief       Sets the identifier of this object to a new value.
 ///\param       new_id - IN: New identifier to be set to
-///\exception   H5x::IdComponentException when the attempt to close the HDF5
+///\exception   H5::IdComponentException when the attempt to close the HDF5
 ///             object fails
 // Description:
 //              p_setId ensures that the current valid id of this object is
@@ -365,7 +361,7 @@ IdComponent::IdComponent()
 //--------------------------------------------------------------------------
 // Function:    IdComponent::p_get_file_name (protected)
 // Purpose      Gets the name of the file, in which this object belongs.
-// Exception:   H5x::IdComponentException
+// Exception:   H5::IdComponentException
 // Description:
 //              This function is protected so that the user applications can
 //              only have access to its code via H5Location subclasses.

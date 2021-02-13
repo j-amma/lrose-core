@@ -28,7 +28,7 @@ FloatType::FloatType() {}
 // Function:    FloatType overloaded constructor
 ///\brief       Creates a floating-point datatype using a predefined type.
 ///\param       pred_type - IN: Predefined datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 FloatType::FloatType(const PredType& pred_type) : AtomType()
@@ -42,7 +42,7 @@ FloatType::FloatType(const PredType& pred_type) : AtomType()
 ///\brief       Creates an FloatType object using the id of an existing
 ///             datatype.
 ///\param       existing_id - IN: Id of an existing datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 FloatType::FloatType(const hid_t existing_id) : AtomType( existing_id ) {}
@@ -59,7 +59,7 @@ FloatType::FloatType(const FloatType&  original) : AtomType( original ){}
 ///\brief       Gets the floating-point datatype of the specified dataset
 ///\param       dataset - IN: Dataset that this floating-point datatype
 ///             associates with
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 FloatType::FloatType(const DataSet& dataset) : AtomType()
@@ -79,7 +79,7 @@ FloatType::FloatType(const DataSet& dataset) : AtomType()
 ///             given its name, provided as a C character string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Float type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -98,7 +98,7 @@ FloatType::FloatType(const H5Location& loc, const char *dtype_name) : AtomType()
 ///             given its name, provided as an \c H5std_string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Float type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -116,7 +116,7 @@ FloatType::FloatType(const H5Location& loc, const H5std_string& dtype_name) : At
 ///\brief       Returns an FloatType object via DataType* by decoding the
 ///             binary object description of this type.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 DataType* FloatType::decode() const
@@ -141,7 +141,7 @@ DataType* FloatType::decode() const
 ///\param       esize - OUT: Retrieved size of exponent, in bits
 ///\param       mpos  - OUT: Retrieved mantissa bit-position
 ///\param       msize - OUT: Retrieved size of mantissa, in bits
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void FloatType::getFields(size_t& spos, size_t& epos, size_t& esize, size_t& mpos, size_t& msize) const
@@ -162,7 +162,7 @@ void FloatType::getFields(size_t& spos, size_t& epos, size_t& esize, size_t& mpo
 ///\param       esize - OUT: Size of exponent, in bits
 ///\param       mpos  - OUT: Mantissa bit-position
 ///\param       msize - OUT: Size of mantissa, in bits
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void FloatType::setFields(size_t spos, size_t epos, size_t esize, size_t mpos, size_t msize) const
@@ -178,7 +178,7 @@ void FloatType::setFields(size_t spos, size_t epos, size_t esize, size_t mpos, s
 // Function:    FloatType::getEbias
 ///\brief       Retrieves the exponent bias of a floating-point type.
 ///\return      Exponent bias
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 size_t FloatType::getEbias() const
@@ -196,7 +196,7 @@ size_t FloatType::getEbias() const
 // Function:    FloatType::setEbias
 ///\brief       Sets the exponent bias of a floating-point type.
 ///\param       ebias - Exponent bias value
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void FloatType::setEbias(size_t ebias) const
@@ -216,7 +216,7 @@ void FloatType::setEbias(size_t ebias) const
 ///             \li \c H5T_NORM_IMPLIED (0) - MSB of mantissa is not stored
 ///             \li \c H5T_NORM_MSBSET (1) - MSB of mantissa is always 1
 ///             \li \c H5T_NORM_NONE (2) - Mantissa is not normalized
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             For your convenience, this function also provides the text
 ///             string of the returned normalization type, via parameter
@@ -244,7 +244,7 @@ H5T_norm_t FloatType::getNorm(H5std_string& norm_string) const
 // Function:    FloatType::setNorm
 ///\brief       Sets the mantissa normalization of a floating-point datatype.
 ///\param       norm - IN: Mantissa normalization type
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             Valid values for normalization type include:
 ///             \li \c H5T_NORM_IMPLIED (0) - MSB of mantissa is not stored
@@ -269,7 +269,7 @@ void FloatType::setNorm(H5T_norm_t norm) const
 ///             \li \c H5T_PAD_ZERO (0) - Set background to zeros
 ///             \li \c H5T_PAD_ONE (1) - Set background to ones
 ///             \li \c H5T_PAD_BACKGROUND (2) - Leave background alone
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             For your convenience, this function also provides the text
 ///             string of the returned internal padding type, via parameter
@@ -297,7 +297,7 @@ H5T_pad_t FloatType::getInpad(H5std_string& pad_string) const
 // Function:    FloatType::setInpad
 ///\brief       Fills unused internal floating point bits.
 ///\param       inpad - IN: Internal padding type
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             If any internal bits of a floating point type are unused
 ///             (that is, those significant bits which are not part of the

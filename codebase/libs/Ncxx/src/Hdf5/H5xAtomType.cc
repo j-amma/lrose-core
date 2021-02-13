@@ -29,7 +29,7 @@ AtomType::AtomType() : DataType() {}
 // Function:    AtomType overloaded constructor [protected]
 // Purpose      Creates an AtomType object using an existing id.
 // Parameter    existing_id - IN: Id of an existing datatype
-// Exception    H5x::DataTypeIException
+// Exception    H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 AtomType::AtomType(const hid_t existing_id) : DataType(existing_id) {}
@@ -46,7 +46,7 @@ AtomType::AtomType(const AtomType& original) : DataType(original) {}
 // Function:    AtomType::setSize
 ///\brief       Sets the total size for an atomic datatype.
 ///\param       size - IN: Size to set
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void AtomType::setSize(size_t size) const
@@ -66,7 +66,7 @@ void AtomType::setSize(size_t size) const
 ///             \li \c H5T_ORDER_LE
 ///             \li \c H5T_ORDER_BE
 ///             \li \c H5T_ORDER_VAX
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Mar, 2005
 //--------------------------------------------------------------------------
 H5T_order_t AtomType::getOrder() const
@@ -97,7 +97,7 @@ H5T_order_t AtomType::getOrder() const
 ///             \li \c H5T_ORDER_LE
 ///             \li \c H5T_ORDER_BE
 ///             \li \c H5T_ORDER_VAX
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5T_order_t AtomType::getOrder(H5std_string& order_string) const
@@ -122,7 +122,7 @@ H5T_order_t AtomType::getOrder(H5std_string& order_string) const
 ///             \li \c H5T_ORDER_LE
 ///             \li \c H5T_ORDER_BE
 ///             \li \c H5T_ORDER_VAX
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void AtomType::setOrder(H5T_order_t order) const
@@ -139,7 +139,7 @@ void AtomType::setOrder(H5T_order_t order) const
 // Function:    AtomType::getPrecision
 ///\brief       Returns the precision of an atomic datatype.
 ///\return      Number of significant bits
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             The precision is the number of significant bits which,
 ///             unless padding is present, is 8 times larger than the
@@ -163,7 +163,7 @@ size_t AtomType::getPrecision() const
 // Function:    AtomType::setPrecision
 ///\brief       Sets the precision of an atomic datatype.
 ///\param       precision - IN: Number of bits of precision
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             For information, please refer to the H5Tset_precision API in
 ///             the HDF5 C Reference Manual.
@@ -183,7 +183,7 @@ void AtomType::setPrecision(size_t precision) const
 // Function:    AtomType::getOffset
 ///\brief       Retrieves the bit offset of the first significant bit.
 ///\return      Offset value
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             For information, please refer to the H5Tget_offset API in
 ///             the HDF5 C Reference Manual.
@@ -210,7 +210,7 @@ int AtomType::getOffset() const
 // Function:    AtomType::setOffset
 ///\brief       Sets the bit offset of the first significant bit.
 ///\param       offset - IN: Offset of first significant bit
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             For information, please refer to the H5Tset_offset API in
 ///             the HDF5 C Reference Manual.
@@ -232,7 +232,7 @@ void AtomType::setOffset(size_t offset) const
 ///             bit padding.
 ///\param       lsb - OUT: Least-significant bit padding type
 ///\param       msb - OUT: Most-significant bit padding type
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             Possible values for \a lsb and \a msb include:
 ///             \li \c H5T_PAD_ZERO (0) - Set background to zeros.
@@ -255,7 +255,7 @@ void AtomType::getPad(H5T_pad_t& lsb, H5T_pad_t& msb) const
 ///\brief       Sets the least and most-significant bits padding types.
 ///\param       lsb - IN: Least-significant bit padding type
 ///\param       msb - IN: Most-significant bit padding type
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             Valid values for \a lsb and \a msb include:
 ///             \li \c H5T_PAD_ZERO (0) - Set background to zeros.

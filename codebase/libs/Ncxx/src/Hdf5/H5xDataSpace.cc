@@ -36,7 +36,7 @@ DataSpace* DataSpace::ALL_ = 0;
 // Function:    DataSpace::getConstant
 //              Creates a DataSpace object representing the HDF5 constant
 //              H5S_ALL, pointed to by DataSpace::ALL_
-// Exception    H5x::DataSpaceIException
+// Exception    H5::DataSpaceIException
 // Description
 //              If DataSpace::ALL_ already points to an allocated object, throw
 //              a DataSpaceIException.  This scenario should not happen.
@@ -85,7 +85,7 @@ const DataSpace& DataSpace::ALL = *getConstant();
 ///\param       type - IN: Type of the dataspace to be created, which
 ///             currently can be either \c H5S_SCALAR or \c H5S_SIMPLE;
 ///             default to \c H5S_SCALAR.
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataSpace::DataSpace(H5S_class_t type) : IdComponent()
@@ -103,7 +103,7 @@ DataSpace::DataSpace(H5S_class_t type) : IdComponent()
 ///\param       rank - IN: Number of dimensions of dataspace.
 ///\param       dims - IN: An array of the size of each dimension.
 ///\param       maxdims - IN: An array of the maximum size of each dimension.
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataSpace::DataSpace(int rank, const hsize_t * dims, const hsize_t * maxdims) : IdComponent()
@@ -120,7 +120,7 @@ DataSpace::DataSpace(int rank, const hsize_t * dims, const hsize_t * maxdims) : 
 ///\brief       Creates a DataSpace object using the id of an existing
 ///             dataspace.
 ///\param       existing_id - IN: Id of an existing dataspace
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataSpace::DataSpace(const hid_t existing_id) : IdComponent(), id(existing_id)
@@ -143,7 +143,7 @@ DataSpace::DataSpace(const DataSpace& original) : IdComponent(), id(original.id)
 // Function:    DataSpace::copy
 ///\brief       Makes a copy of an existing dataspace.
 ///\param       like_space  - IN: Dataspace to be copied
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              - Replaced resetIdComponent() with decRefCount() to use C
@@ -175,7 +175,7 @@ void DataSpace::copy(const DataSpace& like_space)
 ///\brief       Assignment operator.
 ///\param       rhs - IN: Reference to the existing dataspace
 ///\return      Reference to DataSpace instance
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Description
 //              Makes a copy of the type on the right hand side and stores
 //              the new id in the left hand side object.
@@ -193,7 +193,7 @@ DataSpace& DataSpace::operator=(const DataSpace& rhs)
 ///\brief       Determines whether this dataspace is a simple dataspace.
 ///\return      \c true if the dataspace is a simple dataspace, and \c false,
 ///             otherwise
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 bool DataSpace::isSimple () const
@@ -214,7 +214,7 @@ bool DataSpace::isSimple () const
 // Function:    DataSpace::offsetSimple
 ///\brief       Sets the offset of this simple dataspace.
 ///\param       offset  - IN: Offset to position the selection at
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 ///\par Description
 ///             This function creates an offset for the selection within
 ///             an extent, allowing the same shaped selection to be moved
@@ -238,7 +238,7 @@ void DataSpace::offsetSimple (const hssize_t* offset) const
 ///\param       maxdims - IN: Pointer to the value of the new member
 ///\return      Number of dimensions, the same value as returned by
 ///             \c DataSpace::getSimpleExtentNdims()
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int DataSpace::getSimpleExtentDims (hsize_t *dims, hsize_t *maxdims) const
@@ -256,7 +256,7 @@ int DataSpace::getSimpleExtentDims (hsize_t *dims, hsize_t *maxdims) const
 // Function:    DataSpace::getSimpleExtentNdims
 ///\brief       Returns the dimensionality of a dataspace.
 ///\return      Number of dimensions
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int DataSpace::getSimpleExtentNdims () const
@@ -274,7 +274,7 @@ int DataSpace::getSimpleExtentNdims () const
 // Function:    DataSpace::getSimpleExtentNpoints
 ///\brief       Returns the number of elements in a dataspace.
 ///\return      Number of elements
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Modification
 //              12/05/00: due to C API change
 //                      return type hssize_t vs. hsize_t
@@ -297,7 +297,7 @@ hssize_t DataSpace::getSimpleExtentNpoints () const
 // Function:    DataSpace::getSimpleExtentType
 ///\brief       Returns the current class of a dataspace.
 ///\return      Class of the dataspace
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5S_class_t DataSpace::getSimpleExtentType () const
@@ -315,7 +315,7 @@ H5S_class_t DataSpace::getSimpleExtentType () const
 // Function:    DataSpace::extentCopy
 ///\brief       Copies the extent of a dataspace.
 ///\param       dest_space  - IN: Dataspace to copy from
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSpace::extentCopy (const DataSpace& dest_space) const
@@ -334,7 +334,7 @@ void DataSpace::extentCopy (const DataSpace& dest_space) const
 //              compatibility.  It differs from the above function in that it
 //              misses const.  This wrapper will be removed in future release.
 // Param        dest_space  - IN: Dataspace to copy from
-// Exception    H5x::DataSpaceIException
+// Exception    H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              Modified to call its replacement. -BMR, 2014/04/16
@@ -352,7 +352,7 @@ void DataSpace::extentCopy (const DataSpace& dest_space) const
 ///\param       rank  - IN: Rank of the dataspace
 ///\param       current_size - IN: Array containing current size of dataspace
 ///\param       maximum_size - IN: Array containing maximum size of dataspace
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSpace::setExtentSimple(int rank, const hsize_t *current_size, const hsize_t *maximum_size) const
@@ -369,7 +369,7 @@ void DataSpace::setExtentSimple(int rank, const hsize_t *current_size, const hsi
 // Function:    DataSpace::setExtentNone
 ///\brief       Removes the extent from a dataspace.
 ///
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSpace::setExtentNone () const
@@ -385,7 +385,7 @@ void DataSpace::setExtentNone () const
 // Function:    DataSpace::getSelectNpoints
 ///\brief       Returns the number of elements in a dataspace selection.
 ///\return      Number of elements
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 hssize_t DataSpace::getSelectNpoints () const
@@ -403,7 +403,7 @@ hssize_t DataSpace::getSelectNpoints () const
 // Function:    DataSpace::getSelectHyperNblocks
 ///\brief       Returns number of hyperslab blocks.
 ///\return      Number of hyperslab blocks
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 hssize_t DataSpace::getSelectHyperNblocks () const
@@ -423,7 +423,7 @@ hssize_t DataSpace::getSelectHyperNblocks () const
 ///\param       startblock  - IN: Hyperslab block to start with
 ///\param       numblocks - IN: Number of hyperslab blocks to get
 ///\param       buf - IN: List of hyperslab blocks selected
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSpace::getSelectHyperBlocklist(hsize_t startblock, hsize_t numblocks, hsize_t *buf) const
@@ -441,7 +441,7 @@ void DataSpace::getSelectHyperBlocklist(hsize_t startblock, hsize_t numblocks, h
 // Function:    DataSpace::getSelectElemNpoints
 ///\brief       Returns the number of element points in the current selection.
 ///\return      Number of element points
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 hssize_t DataSpace::getSelectElemNpoints () const
@@ -461,7 +461,7 @@ hssize_t DataSpace::getSelectElemNpoints () const
 ///\param       startpoint  - IN: Element point to start with
 ///\param       numpoints - IN: Number of element points to get
 ///\param       buf - IN: List of element points selected
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 ///\par Description
 ///             For information, please refer to the C API
 ///             H5Sget_select_elem_pointlist in the HDF5 C Reference Manual.
@@ -484,7 +484,7 @@ void DataSpace::getSelectElemPointlist (hsize_t startpoint, hsize_t numpoints, h
 ///\param       start  - IN: Starting coordinates of the bounding box
 ///\param       end - IN: Ending coordinates of the bounding box, i.e.,
 ///             the coordinates of the diagonally opposite corner
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 ///\par Description
 ///             For information, please refer to the H5Sget_select_bounds API in
 ///             the HDF5 C Reference Manual.
@@ -509,7 +509,7 @@ void DataSpace::getSelectBounds (hsize_t* start, hsize_t* end) const
 ///\param       num_elements  - IN: Number of elements to be selected
 ///\param       coord  - IN: A 2-dimensional array of 0-based values
 ///             specifying the coordinates of the elements being selected
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 ///\par Description
 ///             For information, please refer to the H5Sselect_elements API in
 ///             the HDF5 C Reference Manual.
@@ -530,7 +530,7 @@ void DataSpace::selectElements (H5S_seloper_t op, const size_t num_elements, con
 // Function:    DataSpace::selectAll
 ///\brief       Selects the entire dataspace.
 ///
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSpace::selectAll () const
@@ -546,7 +546,7 @@ void DataSpace::selectAll () const
 // Function:    DataSpace::selectNone
 ///\brief       Resets the selection region to include no elements.
 ///
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSpace::selectNone () const
@@ -565,7 +565,7 @@ void DataSpace::selectNone () const
 ///             dataspace.
 ///\return      \c true if the selection is within the extent of the
 ///             dataspace, and \c false, otherwise
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 bool DataSpace::selectValid () const
@@ -590,7 +590,7 @@ bool DataSpace::selectValid () const
 ///\param       start - IN: Offset of the start of hyperslab
 ///\param       stride - IN: Hyperslab stride - default to \c NULL
 ///\param       block - IN: Size of block in the hyperslab - default to \c NULL
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 ///\par Description
 ///             For information, please refer to the H5Sselect_hyperslab API in
 ///             the HDF5 C Reference Manual.
@@ -629,7 +629,7 @@ hid_t DataSpace::getId() const
 // Function:    DataSpace::p_setId
 ///\brief       Sets the identifier of this object to a new value.
 ///
-///\exception   H5x::IdComponentException when the attempt to close the HDF5
+///\exception   H5::IdComponentException when the attempt to close the HDF5
 ///             object fails
 // Description:
 //              The underlaying reference counting in the C library ensures
@@ -655,7 +655,7 @@ void DataSpace::p_setId(const hid_t new_id)
 // Function:    DataSpace::close
 ///\brief       Closes this dataspace.
 ///
-///\exception   H5x::DataSpaceIException
+///\exception   H5::DataSpaceIException
 // Programmer   Binh-Minh Ribler - Mar 9, 2005
 //--------------------------------------------------------------------------
 void DataSpace::close()

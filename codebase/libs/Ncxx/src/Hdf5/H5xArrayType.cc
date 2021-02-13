@@ -28,7 +28,7 @@ ArrayType::ArrayType() : DataType() {}
 // Function:    ArrayType overloaded constructor
 ///\brief       Creates an ArrayType object using an existing id.
 ///\param       existing_id - IN: Id of an existing datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May 2004
 //--------------------------------------------------------------------------
 ArrayType::ArrayType(const hid_t existing_id) : DataType(existing_id) {}
@@ -47,7 +47,7 @@ ArrayType::ArrayType(const ArrayType& original) : DataType(original) {}
 ///\param       base_type - IN: Existing datatype
 ///\param       ndims     - IN: Rank of the array, [0..H5S_MAX_RANK]
 ///\param       dims      - IN: Size of each array dimension
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May 2004
 //--------------------------------------------------------------------------
 ArrayType::ArrayType(const DataType& base_type, int ndims, const hsize_t* dims) : DataType()
@@ -67,7 +67,7 @@ ArrayType::ArrayType(const DataType& base_type, int ndims, const hsize_t* dims) 
 ///             given its name, provided as a C character string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Array type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -86,7 +86,7 @@ ArrayType::ArrayType(const H5Location& loc, const char *dtype_name) : DataType()
 ///             given its name, provided as an \c H5std_string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Array type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -104,7 +104,7 @@ ArrayType::ArrayType(const H5Location& loc, const H5std_string& dtype_name) : Da
 ///\brief       Assignment operator
 ///\param       rhs - IN: Reference to the existing array datatype
 ///\return      Reference to ArrayType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Description
 //              Closes the id on the lhs object first with setId, then copies
 //              each data member from the rhs object. (Issue HDFFV-9562)
@@ -132,7 +132,7 @@ ArrayType& ArrayType::operator=(const ArrayType& rhs)
 ///\brief       Returns an ArrayType object via DataType* by decoding the
 ///             binary object description of this type.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 DataType* ArrayType::decode() const
@@ -153,7 +153,7 @@ DataType* ArrayType::decode() const
 // Function:    ArrayType::getArrayNDims
 ///\brief       Returns the number of dimensions for an array datatype.
 ///\return      Number of dimensions
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May 2004
 //--------------------------------------------------------------------------
 int ArrayType::getArrayNDims() const
@@ -173,7 +173,7 @@ int ArrayType::getArrayNDims() const
 ///\brief       Retrieves the size of all dimensions of an array datatype.
 ///\param       dims - OUT: Sizes of dimensions
 ///\return      Number of dimensions
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May 2004
 //--------------------------------------------------------------------------
 int ArrayType::getArrayDims(hsize_t* dims) const

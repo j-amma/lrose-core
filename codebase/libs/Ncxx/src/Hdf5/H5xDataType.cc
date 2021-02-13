@@ -18,14 +18,6 @@
 #endif
 #include <string>
 
-#ifndef HDcalloc
-    #define HDcalloc(N,Z)    calloc(N,Z)
-#endif /* HDcalloc */
-
-#ifndef HDfree
-    #define HDfree(M)    free(M)
-#endif /* HDfree */
-
 #include <Ncxx/H5x.hh>
 
 namespace H5x {
@@ -62,7 +54,7 @@ DataType::DataType(const hid_t existing_id) : H5Object(), id(existing_id), encod
 ///\brief       Creates a object given its class and size
 ///\param       type_class - IN: Class of datatype to create
 ///\param       size       - IN: Number of bytes in the datatype to create
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataType::DataType(const H5T_class_t type_class, size_t size) : H5Object(), encoded_buf(NULL), buf_size(0)
@@ -75,7 +67,6 @@ DataType::DataType(const H5T_class_t type_class, size_t size) : H5Object(), enco
     }
 }
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    DataType overload constructor - dereference
 ///\brief       Given a reference, ref, to an hdf5 group, creates a
@@ -84,14 +75,13 @@ DataType::DataType(const H5T_class_t type_class, size_t size) : H5Object(), enco
 ///\param       ref - IN: Reference pointer
 ///\param       ref_type - IN: Reference type - default to H5R_OBJECT
 ///\param       plist - IN: Property list - default to PropList::DEFAULT
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 // Programmer   Binh-Minh Ribler - Oct, 2006
 //--------------------------------------------------------------------------
 DataType::DataType(const H5Location& loc, const void* ref, H5R_type_t ref_type, const PropList& plist) : H5Object(), encoded_buf(NULL), buf_size(0)
 {
     id = H5Location::p_dereference(loc.getId(), ref, ref_type, plist, "constructor - by dereference");
 }
-#endif // HDF5_V10
 
 //--------------------------------------------------------------------------
 // Function:    DataType overload constructor - dereference
@@ -101,7 +91,7 @@ DataType::DataType(const H5Location& loc, const void* ref, H5R_type_t ref_type, 
 // param       ref - IN: Reference pointer
 // param       ref_type - IN: Reference type - default to H5R_OBJECT
 // param       plist - IN: Property list - default to PropList::DEFAULT
-// exception   H5x::ReferenceException
+// exception   H5::ReferenceException
 // Programmer   Binh-Minh Ribler - Oct, 2006
 // Modification
 //        Jul, 2008
@@ -127,7 +117,7 @@ DataType::DataType(const DataType& original) : H5Object(), id(original.id), enco
 // Function:    DataType overloaded constructor
 ///\brief       Creates a DataType instance using a predefined type
 ///\param       pred_type - IN: Predefined datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2015
 // Description
 //              Copying the type so that when a predefined type is passed in,
@@ -150,7 +140,7 @@ DataType::DataType(const PredType& pred_type) : H5Object(), encoded_buf(NULL), b
 ///             its name as a char*.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Datatype name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -169,7 +159,7 @@ DataType::DataType(const H5Location& loc, const char *dtype_name) : H5Object(), 
 ///             its name as an \c H5std_string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Datatype name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -186,7 +176,7 @@ DataType::DataType(const H5Location& loc, const H5std_string& dtype_name) : H5Ob
 // Function:    DataType::copy
 ///\brief       Copies an existing datatype to this datatype object
 ///\param       like_type - IN: Datatype to be copied
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              - Replaced resetIdComponent() with decRefCount() to use C
@@ -214,7 +204,7 @@ void DataType::copy(const DataType& like_type)
 // Function:    DataType::copy
 ///\brief       Copies the datatype of the given dataset to this datatype object
 ///\param       dset - IN: Dataset
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Jan, 2007
 ///\par Description
 ///             The resulted dataset will be transient and modifiable.
@@ -240,7 +230,7 @@ void DataType::copy(const DataSet& dset)
 // Function:    DataType::p_decode
 // Purpose      Returns an id of a type by decoding the binary object
 ///             description of this datatype.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 hid_t DataType::p_decode() const
@@ -271,7 +261,7 @@ hid_t DataType::p_decode() const
 ///\brief       Returns a DataType instance by decoding the binary object
 ///             description of this datatype.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 DataType* DataType::decode() const
@@ -292,7 +282,7 @@ DataType* DataType::decode() const
 // Function:    DataType::encode
 ///\brief       Creates a binary object description of this datatype.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 void DataType::encode()
@@ -325,7 +315,7 @@ void DataType::encode()
 ///\brief       Determines whether this datatype has a binary object
 ///             description.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 bool DataType::hasBinaryDesc() const
@@ -341,7 +331,7 @@ bool DataType::hasBinaryDesc() const
 ///\brief       Assignment operator
 ///\param       rhs - IN: Reference to the existing datatype
 ///\return      Reference to DataType instance
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Description
 //              Makes a copy of the type on the right hand side and stores
 //              the new id in the left hand side object.
@@ -370,7 +360,7 @@ DataType& DataType::operator=(const DataType& rhs)
 ///             whether the two objects refer to the same actual datatype.
 ///\param       compared_type - IN: Reference to the datatype to compare
 ///\return      true if the datatypes are equal, and false, otherwise.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 bool DataType::operator==(const DataType& compared_type) const
@@ -394,7 +384,7 @@ bool DataType::operator==(const DataType& compared_type) const
 ///             whether the two objects refer to different actual datatypes.
 ///\param       compared_type - IN: Reference to the datatype to compare
 ///\return      true if the datatypes are not equal, and false, otherwise.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // July, 2018
 //--------------------------------------------------------------------------
 bool DataType::operator!=(const DataType& compared_type) const
@@ -409,7 +399,7 @@ bool DataType::operator!=(const DataType& compared_type) const
 //\param        loc_id - IN: The id of either a file, group, dataset, named
 //                           datatype, or attribute.
 //\param        name - IN: Name of the datatype
-//\exception    H5x::DataTypeIException
+//\exception    H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification:
 //              Copied from DataType::commit and made into private function
@@ -430,7 +420,7 @@ void DataType::p_commit(hid_t loc_id, const char* name)
 ///             named datatype
 ///\param       loc - IN: A location (file, dataset, datatype, or group)
 ///\param       name - IN: Name of the datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Jan, 2007
 //--------------------------------------------------------------------------
 void DataType::commit(const H5Location& loc, const char* name)
@@ -445,7 +435,7 @@ void DataType::commit(const H5Location& loc, const char* name)
 //              misses const's.  This wrapper will be removed in future release.
 // Param        loc - IN: A location (file, dataset, datatype, or group)
 // Param        name - IN: Name of the datatype
-// Exception    H5x::DataTypeIException
+// Exception    H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Jan, 2007
 // Modification
 //              Planned for removal. -BMR, 2014/04/16
@@ -476,7 +466,7 @@ void DataType::commit(const H5Location& loc, const H5std_string& name)
 //              misses const's.  This wrapper will be removed in future release.
 // Param        loc - IN: A location (file, dataset, datatype, or group)
 // Param        name - IN: Name of the datatype
-// Exception    H5x::DataTypeIException
+// Exception    H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Jan, 2007
 // Modification
 //              Planned for removal. -BMR, 2014/04/16
@@ -494,7 +484,7 @@ void DataType::commit(const H5Location& loc, const H5std_string& name)
 ///             transient type.
 ///\return      \c true if the datatype is a named type, and \c false,
 ///             otherwise.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 bool DataType::committed() const
@@ -518,7 +508,7 @@ bool DataType::committed() const
 ///\param       dest   - IN: Destination datatype
 ///\param       pcdata - IN: Pointer to type conversion data
 ///\return      Pointer to a suitable conversion function
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5T_conv_t DataType::find(const DataType& dest, H5T_cdata_t **pcdata) const
@@ -542,7 +532,7 @@ H5T_conv_t DataType::find(const DataType& dest, H5T_cdata_t **pcdata) const
 ///\param       background - IN: Optional background buffer
 ///\param       plist - IN: Property list - default to PropList::DEFAULT
 ///\return      Pointer to a suitable conversion function
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataType::convert(const DataType& dest, size_t nelmts, void *buf, void *background, const PropList& plist) const
@@ -564,7 +554,7 @@ void DataType::convert(const DataType& dest, size_t nelmts, void *buf, void *bac
 // Function:    DataType::lock
 ///\brief       Locks a datatype, making it read-only and non-destructible.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             This is normally done by the library for predefined data
 ///             types so the application doesn't inadvertently change or
@@ -588,7 +578,7 @@ void DataType::lock() const
 // Function:    DataType::getClass
 ///\brief       Returns the datatype class identifier.
 ///\return      Datatype class identifier
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5T_class_t DataType::getClass() const
@@ -607,7 +597,7 @@ H5T_class_t DataType::getClass() const
 // Function:    DataType::getSize
 ///\brief       Returns the size of a datatype.
 ///\return      Datatype size in bytes
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 size_t DataType::getSize() const
@@ -625,7 +615,7 @@ size_t DataType::getSize() const
 // Function:    DataType::getSuper
 ///\brief       Returns the base datatype from which a datatype is derived.
 ///\return      DataType object
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataType DataType::getSuper() const
@@ -658,7 +648,7 @@ DataType DataType::getSuper() const
 ///\param       dest - IN: Destination datatype.
 ///\param       func - IN: Function to convert between source and
 ///             destination datatypes.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             For information, please refer to the H5Tregister API in
 ///             the HDF5 C Reference Manual.
@@ -698,7 +688,7 @@ void DataType::registerFunc(H5T_pers_t pers, const H5std_string& name, const Dat
 ///\param       dest - IN: Destination datatype.
 ///\param       func - IN: Function to convert between source and
 ///             destination datatypes.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataType::unregister(H5T_pers_t pers, const char* name, const DataType& dest, H5T_conv_t func) const
@@ -730,7 +720,7 @@ void DataType::unregister(H5T_pers_t pers, const H5std_string& name, const DataT
 ///\brief       Tags an opaque datatype.
 ///\param       tag - IN: Descriptive ASCII string with which the opaque
 ///             datatype is to be tagged.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataType::setTag(const char* tag) const
@@ -759,7 +749,7 @@ void DataType::setTag(const H5std_string& tag) const
 // Function:    DataType::getTag
 ///\brief       Gets the tag associated with an opaque datatype.
 ///\return      Tag associated with the opaque datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5std_string DataType::getTag() const
@@ -771,11 +761,7 @@ H5std_string DataType::getTag() const
     if (tag_Cstr != NULL)
     {
         H5std_string tag = H5std_string(tag_Cstr); // C string to string object
-#ifdef HDF5_V10
         H5free_memory(tag_Cstr); // free the C string
-#else
-        HDfree(tag_Cstr); // free the C string
-#endif
         return (tag); // return the tag
     }
     else
@@ -790,7 +776,7 @@ H5std_string DataType::getTag() const
 ///             datatype.
 ///\return      true if this datatype contains or is the specified type,
 ///             and false, otherwise.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 bool DataType::detectClass(H5T_class_t cls) const
@@ -812,7 +798,7 @@ bool DataType::detectClass(H5T_class_t cls) const
 ///\brief       Checks whether a predtype is a certain class of datatype.
 ///\return      true if this predtype is the specified type class, and false,
 ///             otherwise.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - August, 2017
 //--------------------------------------------------------------------------
 bool DataType::detectClass(const PredType& pred_type, H5T_class_t cls)
@@ -834,7 +820,7 @@ bool DataType::detectClass(const PredType& pred_type, H5T_class_t cls)
 ///\brief       Check whether this datatype is a variable-length string.
 ///\return      true if this datatype is a variable-length string, and
 ///             false, otherwise.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 bool DataType::isVariableStr() const
@@ -856,7 +842,7 @@ bool DataType::isVariableStr() const
 ///\brief       Returns a copy of the property list, which is for datatype
 ///             creation.
 ///\return      A property list object
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - March, 2017
 // Description
 //              Currently, there is no datatype creation property list class
@@ -899,7 +885,7 @@ hid_t DataType::getId() const
 ///\brief       Opens an HDF5 datatype given its name
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Datatype name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              This function was introduced in 1.10.1 to be used by the new
@@ -918,7 +904,7 @@ hid_t DataType::p_opentype(const H5Location& loc, const char *dtype_name) const
 // Function:    DataType::p_setId
 ///\brief       Sets the identifier of this object to a new value.
 ///
-///\exception   H5x::IdComponentException when the attempt to close the HDF5
+///\exception   H5::IdComponentException when the attempt to close the HDF5
 ///             object fails
 // Description:
 //              The underlaying reference counting in the C library ensures
@@ -944,7 +930,7 @@ void DataType::p_setId(const hid_t new_id)
 // Function:    DataType::close
 ///\brief       Closes the datatype if it is not a predefined type.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Mar 9, 2005
 //--------------------------------------------------------------------------
 void DataType::close()
@@ -979,7 +965,7 @@ void DataType::close()
 //                handle the reference counting - BMR, Jun 1, 2006
 //              - Added the use of H5CPP_EXITED to terminate the HDF5 library
 //                and elimiate previous memory leaks.  See comments in the
-//                header file "H5PredType.hh" for details. - BMR, Mar 30, 2012
+//                header file "H5PredType.h" for details. - BMR, Mar 30, 2012
 //              - Major re-implementation of the global constants was done
 //                to avoid relying on the order of the creation and deletion
 //                of the global constants.  Hence, H5CPP_EXITED was removed.

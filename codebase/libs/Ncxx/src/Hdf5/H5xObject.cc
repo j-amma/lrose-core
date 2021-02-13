@@ -14,10 +14,6 @@
 #include <string>
 #include <cstring>
 
-#ifndef HDmemset
-    #define HDmemset(X,C,Z)    memset(X,C,Z)
-#endif /* HDmemset */
-
 #include <Ncxx/H5x.hh>
 
 namespace H5x {
@@ -34,7 +30,6 @@ extern "C" herr_t userAttrOpWrpr(hid_t loc_id, const char *attr_name,
     return 0;
 }
 
-#ifdef HDF5_V10
 // userVisitOpWrpr interfaces between the user's function and the
 // C library function H5Ovisit3
 extern "C" herr_t userVisitOpWrpr(hid_t obj_id, const char *attr_name,
@@ -45,7 +40,6 @@ extern "C" herr_t userVisitOpWrpr(hid_t obj_id, const char *attr_name,
     int status = myData->op(*myData->obj, s_attr_name, obj_info, myData->opData);
     return status;
 }
-#endif // HDF5_V10
 
 //--------------------------------------------------------------------------
 // Function:    H5Object default constructor (protected)
@@ -55,7 +49,7 @@ H5Object::H5Object() : H5Location() {}
 
 //--------------------------------------------------------------------------
 // Function:    f_Attribute_setId - friend
-// Purpose:     This function is friend to class H5x::Attribute so that it
+// Purpose:     This function is friend to class H5::Attribute so that it
 //              can set Attribute::id in order to work around a problem
 //              described in the JIRA issue HDFFV-7947.
 //              Applications shouldn't need to use it.
@@ -79,7 +73,7 @@ void f_Attribute_setId(Attribute* attr, hid_t new_id)
 ///\param       create_plist - IN: Creation property list - default to
 ///             PropList::DEFAULT
 ///\return      Attribute instance
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 ///\par Description
 ///             The attribute name specified in \a name must be unique.
 ///             Attempting to create an attribute with the same name as an
@@ -125,7 +119,7 @@ Attribute H5Object::createAttribute(const H5std_string& name, const DataType& da
 ///\brief       Opens an attribute given its name.
 ///\param       name - IN: Name of the attribute
 ///\return      Attribute instance
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 Attribute H5Object::openAttribute(const char* name) const
@@ -160,7 +154,7 @@ Attribute H5Object::openAttribute(const H5std_string& name) const
 ///\brief       Opens an attribute given its index.
 ///\param       idx - IN: Index of the attribute, a 0-based, non-negative integer
 ///\return      Attribute instance
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 Attribute H5Object::openAttribute(const unsigned int idx) const
@@ -188,10 +182,10 @@ Attribute H5Object::openAttribute(const unsigned int idx) const
 ///\param       op_data - IN: User's data to pass to user's operator function
 ///\return      Returned value of the last operator if it was non-zero, or
 ///             zero if all attributes were processed
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 ///\par Description
 ///             The signature of user_op is
-///             void (*)(H5x::H5Location&, H5std_string, void*).
+///             void (*)(H5::H5Location&, H5std_string, void*).
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int H5Object::iterateAttrs(attr_operator_t user_op, unsigned *_idx, void *op_data)
@@ -220,7 +214,6 @@ int H5Object::iterateAttrs(attr_operator_t user_op, unsigned *_idx, void *op_dat
         throw AttributeIException(inMemFunc("iterateAttrs"), "H5Aiterate2 failed");
 }
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    H5Object::visit
 ///\brief       Recursively visits all HDF5 objects accessible from this object.
@@ -248,7 +241,7 @@ int H5Object::iterateAttrs(attr_operator_t user_op, unsigned *_idx, void *op_dat
 ///             \li On failure:
 ///                 \li an exception Exception will be thrown if something went
 ///                     wrong within the library or the operator failed
-///\exception   H5x::Exception
+///\exception   H5::Exception
 ///\par Description
 ///             For information, please refer to the H5Ovisit3 API in the HDF5
 ///             C Reference Manual.
@@ -280,7 +273,7 @@ void H5Object::visit(H5_index_t idx_type, H5_iter_order_t order, visit_operator_
 ///\return      Object version, which can have the following values:
 ///             \li \c H5O_VERSION_1
 ///             \li \c H5O_VERSION_2
-///\exception   H5x::ObjHeaderIException
+///\exception   H5::ObjHeaderIException
 ///             Exception will be thrown when:
 ///             - an error returned by the C API
 ///             - version number is not one of the valid values above
@@ -306,26 +299,19 @@ unsigned H5Object::objVersion() const
     }
     return(version);
 }
-#endif // HDF5_V10
 
 //--------------------------------------------------------------------------
 // Function:    H5Object::getNumAttrs
 ///\brief       Returns the number of attributes attached to this HDF5 object.
 ///\return      Number of attributes
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int H5Object::getNumAttrs() const
 {
-
-
-#ifdef HDF5_V10
     H5O_info2_t oinfo;    /* Object info */
+
     if(H5Oget_info3(getId(), &oinfo, H5O_INFO_NUM_ATTRS) < 0)
-#else
-    H5O_info_t oinfo;    /* Object info */
-    if(H5Oget_info(getId(), &oinfo) < 0)
-#endif
         throw AttributeIException(inMemFunc("getNumAttrs"), "H5Oget_info failed");
     else
         return(static_cast<int>(oinfo.num_attrs));
@@ -335,7 +321,7 @@ int H5Object::getNumAttrs() const
 // Function:    H5Object::attrExists
 ///\brief       Checks whether the named attribute exists at this location.
 ///\param       name - IN: Name of the attribute to be queried
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2013
 //--------------------------------------------------------------------------
 bool H5Object::attrExists(const char* name) const
@@ -368,7 +354,7 @@ bool H5Object::attrExists(const H5std_string& name) const
 // Function:    H5Object::removeAttr
 ///\brief       Removes the named attribute from this object.
 ///\param       name - IN: Name of the attribute to be removed
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void H5Object::removeAttr(const char* name) const
@@ -395,7 +381,7 @@ void H5Object::removeAttr(const H5std_string& name) const
 ///\brief       Renames the named attribute from this object.
 ///\param       oldname - IN: Name of the attribute to be renamed
 ///\param       newname - IN: New name ame of the attribute
-///\exception   H5x::AttributeIException
+///\exception   H5::AttributeIException
 // Programmer   Binh-Minh Ribler - Mar, 2005
 //--------------------------------------------------------------------------
 void H5Object::renameAttr(const char* oldname, const char* newname) const
@@ -445,7 +431,7 @@ ssize_t H5Object::getObjName(char *obj_name, size_t buf_size) const
 // Function:    H5Object::getObjName
 ///\brief       Returns the name of this object as an \a H5std_string.
 ///\return      Name of the object
-///\exception   H5x::Exception
+///\exception   H5::Exception
 // Programmer   Binh-Minh Ribler - Mar, 2014
 //--------------------------------------------------------------------------
 H5std_string H5Object::getObjName() const
@@ -489,7 +475,7 @@ H5std_string H5Object::getObjName() const
 ///\param       obj_name - OUT: Buffer for the name string as \a H5std_string
 ///\param       len  -  IN: Desired length of the name, default to 0
 ///\return      Actual length of the object name
-///\exception   H5x::Exception
+///\exception   H5::Exception
 ///\par Description
 ///             This function retrieves the object's name as an std string.
 ///             buf_size can specify a specific length or default to 0, in

@@ -27,7 +27,7 @@ VarLenType::VarLenType() : DataType() {}
 // Function:    VarLenType overloaded constructor
 ///\brief       Creates an VarLenType object using an existing id.
 ///\param       existing_id - IN: Id of an existing datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 VarLenType::VarLenType(const hid_t existing_id) : DataType(existing_id) {}
@@ -43,7 +43,7 @@ VarLenType::VarLenType(const VarLenType& original) : DataType(original) {}
 // Function:    VarLenType overloaded constructor
 ///\brief       Deprecated - will be removed after 1.10.2
 ///\param       base_type - IN: Pointer to existing datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Description
 //              DataType passed by pointer to avoid clashing with copy
 //              constructor.
@@ -66,7 +66,7 @@ VarLenType::VarLenType(const DataType* base_type) : DataType()
 ///\brief       Creates a new variable-length datatype based on the specified
 ///             \a base_type.
 ///\param       base_type - IN: An existing datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 VarLenType::VarLenType(const DataType& base_type) : DataType()
@@ -85,7 +85,7 @@ VarLenType::VarLenType(const DataType& base_type) : DataType()
 ///             length datatype given its name, provided as a C char*.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Variable length type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -104,7 +104,7 @@ VarLenType::VarLenType(const H5Location& loc, const char *dtype_name) : DataType
 ///             length datatype given its name, provided as an \c H5std_string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: Variable length type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -122,7 +122,7 @@ VarLenType::VarLenType(const H5Location& loc, const H5std_string& dtype_name) : 
 ///\brief       Returns an VarLenType object via DataType* by decoding the
 ///             binary object description of this type.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 DataType* VarLenType::decode() const

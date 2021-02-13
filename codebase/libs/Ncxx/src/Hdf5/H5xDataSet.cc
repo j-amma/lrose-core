@@ -19,14 +19,6 @@
 #include <string>
 #include <cstring>
 
-#ifndef HDfree
-    #define HDfree(M)    free(M)
-#endif /* HDfree */
-
-#ifndef HDmemset
-    #define HDmemset(X,C,Z)    memset(X,C,Z)
-#endif /* HDmemset */
-
 #include <Ncxx/H5x.hh>
 
 namespace H5x {
@@ -68,7 +60,6 @@ DataSet::DataSet(const DataSet& original) : H5Object(), AbstractDs(), id(origina
     incRefCount(); // increment number of references to this id
 }
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    DataSet overload constructor - dereference
 ///\brief       Given a reference, ref, to an hdf5 location, creates a
@@ -78,7 +69,7 @@ DataSet::DataSet(const DataSet& original) : H5Object(), AbstractDs(), id(origina
 ///\param       ref - IN: Reference pointer
 ///\param       ref_type - IN: Reference type - default to H5R_OBJECT
 ///\param       plist - IN: Property list - default to PropList::DEFAULT
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 ///\par Description
 ///             \c loc can be DataSet, Group, H5File, or named DataType, that
 ///             is a datatype that has been named by DataType::commit.
@@ -97,20 +88,19 @@ DataSet::DataSet(const H5Location& loc, const void* ref, H5R_type_t ref_type, co
 ///\param       ref - IN: Reference pointer
 ///\param       ref_type - IN: Reference type - default to H5R_OBJECT
 ///\param       plist - IN: Property list - default to PropList::DEFAULT
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 // Programmer   Binh-Minh Ribler - Oct, 2006
 //--------------------------------------------------------------------------
 DataSet::DataSet(const Attribute& attr, const void* ref, H5R_type_t ref_type, const PropList& plist) : H5Object(), AbstractDs(), id(H5I_INVALID_HID)
 {
     id = H5Location::p_dereference(attr.getId(), ref, ref_type, plist, "constructor - by dereference");
 }
-#endif // HDF5_V10
 
 //--------------------------------------------------------------------------
 // Function:    DataSet::getSpace
 ///\brief       Gets a copy of the dataspace of this dataset.
 ///\return      DataSpace instance
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DataSpace DataSet::getSpace() const
@@ -147,7 +137,7 @@ hid_t DataSet::p_get_type() const
 // Function:    DataSet::getCreatePlist
 ///\brief       Gets the dataset creation property list.
 ///\return      DSetCreatPropList instance
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 DSetCreatPropList DataSet::getCreatePlist() const
@@ -168,7 +158,7 @@ DSetCreatPropList DataSet::getCreatePlist() const
 // Function:    DataSet::getAccessPlist
 ///\brief       Gets the dataset access property list.
 ///\return      DSetAccPropList instance
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // July 2018
 //--------------------------------------------------------------------------
 DSetAccPropList DataSet::getAccessPlist() const
@@ -189,7 +179,7 @@ DSetAccPropList DataSet::getAccessPlist() const
 // Function:    DataSet::getStorageSize
 ///\brief       Returns the amount of storage required for a dataset.
 ///\return      Size of the storage or 0, for no data
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Note:        H5Dget_storage_size returns 0 when there is no data.  This
 //              function should have no failure. (from SLU)
 // Programmer   Binh-Minh Ribler - Mar, 2005
@@ -204,7 +194,7 @@ hsize_t DataSet::getStorageSize() const
 // Function:    DataSet::getInMemDataSize
 ///\brief       Gets the size in memory of the dataset's data.
 ///\return      Size of data (in memory)
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - Apr 2009
 //--------------------------------------------------------------------------
 size_t DataSet::getInMemDataSize() const
@@ -269,7 +259,7 @@ size_t DataSet::getInMemDataSize() const
 // Function:    DataSet::getOffset
 ///\brief       Returns the address of this dataset in the file.
 ///\return      Address of dataset
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 haddr_t DataSet::getOffset() const
@@ -288,7 +278,7 @@ haddr_t DataSet::getOffset() const
 // Function:    DataSet::getSpaceStatus
 ///\brief       Determines whether space has been allocated for a dataset.
 ///\param       status - OUT: Space allocation status
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSet::getSpaceStatus(H5D_space_status_t& status) const
@@ -306,7 +296,7 @@ void DataSet::getSpaceStatus(H5D_space_status_t& status) const
 ///\param       type - IN: Datatype, which is the datatype for the buffer
 ///\param       space - IN: Selection for the memory buffer
 ///\return      Amount of storage
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 hsize_t DataSet::getVlenBufSize(const DataType& type, const DataSpace& space) const
@@ -331,7 +321,7 @@ hsize_t DataSet::getVlenBufSize(const DataType& type, const DataSpace& space) co
 //              compatibility.  It differs from the above function in that it
 //              misses const's.  This wrapper will be removed in future release.
 // Return       Amount of storage
-// Exception    H5x::DataSetIException
+// Exception    H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              Modified to call its replacement. -BMR, 2014/04/16
@@ -343,7 +333,6 @@ hsize_t DataSet::getVlenBufSize(const DataType& type, const DataSpace& space) co
 //    return(getVlenBufSize(type, space));
 //}
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    DataSet::vlenReclaim
 ///\brief       Reclaims VL datatype memory buffers.
@@ -352,7 +341,7 @@ hsize_t DataSet::getVlenBufSize(const DataType& type, const DataSpace& space) co
 ///             VL datatypes within
 ///\param       xfer_plist - IN: Property list used to create the buffer
 ///\param       buf - IN: Pointer to the buffer to be reclaimed
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSet::vlenReclaim(const DataType& type, const DataSpace& space, const DSetMemXferPropList& xfer_plist, void* buf)
@@ -377,7 +366,7 @@ void DataSet::vlenReclaim(const DataType& type, const DataSpace& space, const DS
 ///             VL datatypes within
 ///\param       xfer_plist - IN: Property list used to create the buffer
 ///\param       buf - IN: Pointer to the buffer to be reclaimed
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //\parDescription
 //              This function has better prototype for the users than the
@@ -397,8 +386,6 @@ void DataSet::vlenReclaim(void* buf, const DataType& type, const DataSpace& spac
     }
 }
 
-#endif
-
 //--------------------------------------------------------------------------
 // Function:    DataSet::read
 ///\brief       Reads raw data from the specified dataset.
@@ -407,7 +394,7 @@ void DataSet::vlenReclaim(void* buf, const DataType& type, const DataSpace& spac
 ///\param       mem_space - IN: Memory dataspace
 ///\param       file_space - IN: Dataset's dataspace in the file
 ///\param       xfer_plist - IN: Transfer property list for this I/O operation
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 ///\par Description
 ///             This function reads raw data from this dataset into the
 ///             buffer \a buf, converting from file datatype and dataspace
@@ -438,7 +425,7 @@ void DataSet::read(void* buf, const DataType& mem_type, const DataSpace& mem_spa
 ///\param       mem_space - IN: Memory dataspace
 ///\param       file_space - IN: Dataset's dataspace in the file
 ///\param       xfer_plist - IN: Transfer property list for this I/O operation
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //      Jul 2009
@@ -482,7 +469,7 @@ void DataSet::read(H5std_string& strg, const DataType& mem_type, const DataSpace
 ///\param       mem_space - IN: Memory dataspace
 ///\param       file_space - IN: Dataset's dataspace in the file
 ///\param       xfer_plist - IN: Transfer property list for this I/O operation
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 ///\par Description
 ///             This function writes raw data from an application buffer
 ///             \a buf to a dataset, converting from memory datatype
@@ -564,7 +551,7 @@ void DataSet::write(const H5std_string& strg, const DataType& mem_type, const Da
 ///             each element in \a buf iterated over
 ///\param       op_data - IN/OUT: Pointer to any user-defined data associated
 ///             with the operation
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 ///\note        This function may not work correctly yet - it's still
 ///             under development.
 // Programmer   Binh-Minh Ribler - 2000
@@ -587,7 +574,7 @@ int DataSet::iterateElems(void* buf, const DataType& type, const DataSpace& spac
 // Function:    DataSet::extend
 ///\brief       Extends a dataset with unlimited dimension.
 ///\param       size - IN: Array containing the new magnitude of each dimension
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 ///\par Description
 ///             For information, please refer to the H5Dset_extent API in
 ///             the HDF5 C Reference Manual.
@@ -608,7 +595,7 @@ void DataSet::extend(const hsize_t* size) const
 ///\param       buf - IN/OUT: Memory buffer to fill selection within
 ///\param       buf_type - IN: Datatype of the elements in buffer
 ///\param       space - IN: Dataspace describing memory buffer & containing selection to use
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2014
 //--------------------------------------------------------------------------
 void DataSet::fillMemBuf(const void *fill, const DataType& fill_type, void *buf, const DataType& buf_type, const DataSpace& space) const
@@ -633,7 +620,7 @@ void DataSet::fillMemBuf(const void *fill, const DataType& fill_type, void *buf,
 // Param        buf - IN/OUT: Memory buffer to fill selection within
 // Param        buf_type - IN: Datatype of the elements in buffer
 // Param        space - IN: Dataspace describing memory buffer & containing selection to use
-// Exception    H5x::DataSetIException
+// Exception    H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              Modified to call its replacement. -BMR, 2014/04/16
@@ -651,7 +638,7 @@ void DataSet::fillMemBuf(const void *fill, const DataType& fill_type, void *buf,
 ///\param       buf - IN/OUT: Memory buffer to fill selection within
 ///\param       buf_type - IN: Datatype of the elements in buffer
 ///\param       space - IN: Dataspace describing memory buffer & containing selection to use
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DataSet::fillMemBuf(void *buf, const DataType& buf_type, const DataSpace& space) const
@@ -673,7 +660,7 @@ void DataSet::fillMemBuf(void *buf, const DataType& buf_type, const DataSpace& s
 // Param        buf - IN/OUT: Memory buffer to fill selection within
 // Param        buf_type - IN: Datatype of the elements in buffer
 // Param        space - IN: Dataspace describing memory buffer & containing selection to use
-// Exception    H5x::DataSetIException
+// Exception    H5::DataSetIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              Modified to call its replacement. -BMR, 2014/04/16
@@ -706,7 +693,7 @@ hid_t DataSet::getId() const
 // brief       Reads a fixed length \a H5std_string from a dataset.
 // param       mem_type  - IN: DataSet datatype (in memory)
 // param       strg      - IN: Buffer for read string
-// exception   H5x::DataSetIException
+// exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - Jul, 2009
 // Modification
 //      Jul 2009
@@ -744,7 +731,7 @@ void DataSet::p_read_fixed_len(const hid_t mem_type_id, const hid_t mem_space_id
 // brief       Reads a variable length \a H5std_string from an dataset.
 // param       mem_type  - IN: DataSet datatype (in memory)
 // param       strg      - IN: Buffer for read string
-// exception   H5x::DataSetIException
+// exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - Jul, 2009
 // Modification
 //      Jul 2009
@@ -773,7 +760,7 @@ void DataSet::p_read_variable_len(const hid_t mem_type_id, const hid_t mem_space
 // Function:    DataSet::p_setId (protected)
 ///\brief       Sets the identifier of this dataset to a new value.
 ///
-///\exception   H5x::IdComponentException when the attempt to close the HDF5
+///\exception   H5::IdComponentException when the attempt to close the HDF5
 ///             object fails
 // Description:
 //              The underlaying reference counting in the C library ensures
@@ -796,7 +783,7 @@ void DataSet::p_setId(const hid_t new_id)
 
 //--------------------------------------------------------------------------
 // Function:    f_PropList_setId - friend
-// Purpose:     This function is friend to class H5x::PropList so that it
+// Purpose:     This function is friend to class H5::PropList so that it
 //              can set PropList::id in order to work around a problem
 //              described in the JIRA issue HDFFV-7947.
 //              Applications shouldn't need to use it.
@@ -815,7 +802,7 @@ void f_PropList_setId(PropList* plist, hid_t new_id)
 // Function:    DataSet::close
 ///\brief       Closes this dataset.
 ///
-///\exception   H5x::DataSetIException
+///\exception   H5::DataSetIException
 // Programmer   Binh-Minh Ribler - Mar 9, 2005
 //--------------------------------------------------------------------------
 void DataSet::close()

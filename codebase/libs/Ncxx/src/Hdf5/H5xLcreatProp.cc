@@ -29,7 +29,7 @@ LinkCreatPropList* LinkCreatPropList::DEFAULT_ = 0;
 // Function:    LinkCreatPropList::getConstant
 //              Creates a LinkCreatPropList object representing the HDF5 constant
 //              H5P_LINK_CREATE, pointed to by LinkCreatPropList::DEFAULT_
-// exception    H5x::PropListIException
+// exception    H5::PropListIException
 // Description
 //              If LinkCreatPropList::DEFAULT_ already points to an allocated
 //              object, throw a PropListIException.  This scenario should not
@@ -59,7 +59,7 @@ LinkCreatPropList* LinkCreatPropList::getConstant()
 // Function:    LinkCreatPropList::deleteConstants
 // Purpose:     Deletes the constant object that LinkCreatPropList::DEFAULT_
 //              points to.
-// exception    H5x::PropListIException
+// exception    H5::PropListIException
 // December, 2016
 //--------------------------------------------------------------------------
 void LinkCreatPropList::deleteConstants()
@@ -104,7 +104,7 @@ LinkCreatPropList::LinkCreatPropList(const hid_t plist_id) : PropList(plist_id) 
 ///             intermediate groups.
 ///\param       crt_intmd_group - IN: Flag specifying whether to create
 ///                               intermediate groups upon the creation of an object
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // April, 2019
 //--------------------------------------------------------------------------
 void LinkCreatPropList::setCreateIntermediateGroup(bool crt_intmd_group) const
@@ -122,7 +122,7 @@ void LinkCreatPropList::setCreateIntermediateGroup(bool crt_intmd_group) const
 ///\brief       Determines whether property is set to enable creating missing
 ///             intermediate groups.
 ///\return      true if creating intermediate groups is enabled, and false, otherwise
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // April, 2019
 //--------------------------------------------------------------------------
 bool LinkCreatPropList::getCreateIntermediateGroup() const
@@ -142,7 +142,7 @@ bool LinkCreatPropList::getCreateIntermediateGroup() const
 // Function:    LinkCreatPropList::setCharEncoding
 ///\brief       Sets the character encoding of the string.
 ///
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // March, 2018
 //--------------------------------------------------------------------------
 void LinkCreatPropList::setCharEncoding(H5T_cset_t encoding) const
@@ -159,7 +159,7 @@ void LinkCreatPropList::setCharEncoding(H5T_cset_t encoding) const
 // Function:    LinkCreatPropList::getCharEncoding
 ///\brief       Gets the character encoding of the string.
 ///\return      The character encoding
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // March, 2018
 //--------------------------------------------------------------------------
 H5T_cset_t LinkCreatPropList::getCharEncoding() const

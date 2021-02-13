@@ -30,7 +30,7 @@ DSetCreatPropList* DSetCreatPropList::DEFAULT_ = 0;
 // Purpose:     Creates a DSetCreatPropList object representing the HDF5
 //              constant H5P_DATASET_CREATE, pointed to by
 //              DSetCreatPropList::DEFAULT_
-// exception    H5x::PropListIException
+// exception    H5::PropListIException
 // Description
 //              If DSetCreatPropList::DEFAULT_ already points to an allocated
 //              object, throw a PropListIException.  This scenario should
@@ -104,7 +104,7 @@ DSetCreatPropList::DSetCreatPropList(const hid_t plist_id) : ObjCreatPropList(pl
 ///             dataset.
 ///\param       ndims - IN: Number of dimensions of each chunk
 ///\param       dim   - IN: Array containing the size of each chunk
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The \a ndims parameter currently must have the same value as
 ///             the rank of the dataset.  The values of the \a dim array
@@ -128,7 +128,7 @@ void DSetCreatPropList::setChunk(int ndims, const hsize_t* dim) const
 ///             layout dataset.
 ///\param       max_ndims - IN: Size of \a dim array
 ///\param       dim      - OUT: Array to store the chunk dimensions
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int DSetCreatPropList::getChunk(int max_ndims, hsize_t* dim) const
@@ -146,7 +146,7 @@ int DSetCreatPropList::getChunk(int max_ndims, hsize_t* dim) const
 // Function:    DSetCreatPropList::setLayout
 ///\brief       Sets the type of storage used store the raw data for a dataset.
 ///\param       layout - IN: Type of storage layout for raw data
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pset_layout API in
 ///             the HDF5 C Reference Manual.
@@ -174,7 +174,7 @@ void DSetCreatPropList::setLayout(H5D_layout_t layout) const
 ///             \li \c H5D_CHUNKED - raw data is stored separately from the
 ///                             object header in chunks in separate locations
 ///                             in the file.
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
@@ -193,7 +193,7 @@ H5D_layout_t DSetCreatPropList::getLayout() const
 // Function:    DSetCreatPropList::setDeflate
 ///\brief       Sets compression method and compression level
 ///\param       level - IN: Compression level, should [0..9], inclusive
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The function sets the compression method for this property
 ///             list to \c H5D_COMPRESS_DEFLATE and the compression level to
@@ -219,7 +219,7 @@ void DSetCreatPropList::setDeflate(int level) const
 ///                     and H5_SZIP_NN_OPTION_MASK.
 ///\param       pixels_per_block - IN: Number of pixels or data elements in
 ///                     each data block.
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The associate C function sets an SZIP compression filter,
 ///             H5Z_FILTER_SZIP, for a dataset.  For more information about
@@ -240,7 +240,7 @@ void DSetCreatPropList::setSzip(unsigned int options_mask, unsigned int pixels_p
 //--------------------------------------------------------------------------
 // Function:    DSetCreatPropList::setNbit
 ///\brief       Sets up for the use of the Nbit compression filter.
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///
 ///\par Description
 ///             The associate C function sets an Nbit compression filter,
@@ -264,7 +264,7 @@ void DSetCreatPropList::setNbit() const
 ///\brief       Sets a dataset fill value
 ///\param       fvalue_type - IN: Data type for the value passed via \a value
 ///\param       value - IN: Pointer to buffer containing the fill value
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The datatype may differ from that of the dataset, but it must
 ///             be one that the HDF5 library is able to convert \a value to
@@ -291,7 +291,7 @@ void DSetCreatPropList::setFillValue(const DataType& fvalue_type, const void* va
 ///\brief       Retrieves a dataset fill value
 ///\param       fvalue_type - IN: Data type for the value passed via \a value
 ///\param       value - OUT: Pointer to buffer to hold the retrieved fill value
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The fill value is returned through \a value pointer
 ///             and the memory is allocated by the caller.  The fill
@@ -316,7 +316,7 @@ void DSetCreatPropList::getFillValue(const DataType& fvalue_type, void* value) c
 ///             \li \c H5D_FILL_VALUE_UNDEFINED    =0,
 ///             \li \c H5D_FILL_VALUE_DEFAULT      =1,
 ///             \li \c H5D_FILL_VALUE_USER_DEFINED =2
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5D_fill_value_t DSetCreatPropList::isFillValueDefined() const
@@ -339,7 +339,7 @@ H5D_fill_value_t DSetCreatPropList::isFillValueDefined() const
 ///\param       flags     - IN: Specifies general properties of the filter
 ///\param       cd_nelmts - IN: Number of elements in cd_values
 ///\param       cd_values - IN: Auxiliary data for the filter
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The \a flags argument is a bit vector of the field:
 ///             \c H5Z_FLAG_OPTIONAL(0x0001)
@@ -367,7 +367,7 @@ void DSetCreatPropList::setFilter(H5Z_filter_t filter_id, unsigned int flags,
 // Function:    DSetCreatPropList::removeFilter
 ///\brief       Removes one or more filters
 ///\param       filter_id - IN: Filter to remove
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             Deletes a filter from the dataset creation property list;
 ///             deletes all filters if \a filter_id is \c H5Z_FILTER_NONE.
@@ -387,7 +387,7 @@ void DSetCreatPropList::removeFilter(H5Z_filter_t filter_id) const
 // Function:    DSetCreatPropList::getNfilters
 ///\brief       Returns the number of filters in the pipeline
 ///\return      Number of filters
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int DSetCreatPropList::getNfilters() const
@@ -415,7 +415,7 @@ int DSetCreatPropList::getNfilters() const
 ///\param       name          - OUT: Name of the filter
 ///\param       filter_config - OUT: Flags indicating whether filter can encode/decode
 ///\return      Filter id
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             Failure occurs when \a filter_number is out of range.
 //              Note: the first argument was mistakenly typed as int instead
@@ -448,7 +448,7 @@ H5Z_filter_t DSetCreatPropList::getFilter(int filter_number,
 ///\param       namelen   -      IN: Length of \a name
 ///\param       name      -     OUT: Name of the filter
 ///\param       filter_config - OUT: Flags indicating whether filter can encode/decode
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DSetCreatPropList::getFilterById(H5Z_filter_t filter_id,
@@ -470,7 +470,7 @@ void DSetCreatPropList::getFilterById(H5Z_filter_t filter_id,
 ///\param       cd_nelmts -  IN: Number of elements in \a cd_values
 ///                     \n  OUT: Number of values defined by the filter
 ///\param       cd_values - OUT: Array to hold the data; allocated by the user
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The \a flags argument is a bit vector of the field:
 ///             \c H5Z_FLAG_OPTIONAL(0x0001)
@@ -500,7 +500,7 @@ void DSetCreatPropList::modifyFilter(H5Z_filter_t filter_id, unsigned int
 ///             are available currently.
 ///\return      true if all filters available, and false if one or more
 ///             filters not currently available
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 bool DSetCreatPropList::allFiltersAvail() const
@@ -520,7 +520,7 @@ bool DSetCreatPropList::allFiltersAvail() const
 // Function:    DSetCreatPropList::setShuffle
 ///\brief       Sets method of the shuffle filter
 ///
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pset_shuffle API in
 ///             the HDF5 C Reference Manual.
@@ -540,7 +540,7 @@ void DSetCreatPropList::setShuffle() const
 // Function:    DSetCreatPropList::getAllocTime
 ///\brief       Get space allocation time for this property.
 ///\return      Space allocation time.
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The values of space allocation time can be one of the
 ///             followings:
@@ -567,7 +567,7 @@ H5D_alloc_time_t DSetCreatPropList::getAllocTime() const
 // Function:    DSetCreatPropList::getFillTime
 ///\brief       Gets fill value writing time.
 ///\return      Fill value writing time
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             Valid values for fill value writing time include
 ///             \li \c H5D_FILL_TIME_NEVER
@@ -591,7 +591,7 @@ H5D_fill_time_t DSetCreatPropList::getFillTime() const
 // Function:    DSetCreatPropList::setAllocTime
 ///\brief       Sets space allocation time for dataset during creation.
 ///\param       alloc_time -  IN: Allocation time
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             Valid values for space allocation time include:
 ///             \li \c H5D_ALLOC_TIME_DEFAULT
@@ -614,7 +614,7 @@ void DSetCreatPropList::setAllocTime(H5D_alloc_time_t alloc_time) const
 // Function:    DSetCreatPropList::setFillTime
 ///\brief       Sets fill value writing time for dataset.
 ///\return      Fill value writing time
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             Valid values for fill value writing time include
 ///             \li \c H5D_FILL_TIME_NEVER
@@ -635,7 +635,7 @@ void DSetCreatPropList::setFillTime(H5D_fill_time_t fill_time) const
 // Function:    DSetCreatPropList::setFletcher32
 ///\brief       Sets Fletcher32 checksum of EDC for this property list.
 ///
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void DSetCreatPropList::setFletcher32() const
@@ -654,7 +654,7 @@ void DSetCreatPropList::setFletcher32() const
 ///\param       name   - IN: Name of the external file
 ///\param       offset - IN: Location where the data starts in the file
 ///\param       size   - IN: Number of bytes reserved in the file for the data
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             If a dataset is split across multiple files then the files
 ///             should be defined in order. The total size of the dataset is
@@ -678,7 +678,7 @@ void DSetCreatPropList::setExternal(const char* name, off_t offset, hsize_t size
 // Function:    DSetCreatPropList::getExternalCount
 ///\brief       Returns the number of external files for a dataset
 ///\return      Number of external files
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int DSetCreatPropList::getExternalCount() const
@@ -702,7 +702,7 @@ int DSetCreatPropList::getExternalCount() const
 ///\param       name   - OUT: Name of the external file
 ///\param       offset - OUT: Location to return an offset value
 ///\param       size   - OUT: Location to return the size of the external file data
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The parameter \a idx ranges [0..N-1] where N is returned by
 ///             getExternalCount().  At most \a name_size characters are copied
@@ -725,7 +725,6 @@ void DSetCreatPropList::getExternal(unsigned idx, size_t name_size, char* name, 
     }
 }
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    DSetCreatPropList::setVirtual
 ///\brief       Maps elements of a virtual dataset to elements of the source
@@ -738,7 +737,7 @@ void DSetCreatPropList::getExternal(unsigned idx, size_t name_size, char* name, 
 ///                             \a src_file_name (\a char*)
 ///\param       sspace     - IN: Dataspace with a selection applied, possibly
 ///                             an unlimited selection
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pset_virtual API in
 ///             the HDF5 C Reference Manual.
@@ -766,7 +765,7 @@ void DSetCreatPropList::setVirtual(const DataSpace& vspace, const char *src_fnam
 ///                             \a src_file_name (\a H5std_string)
 ///\param       sspace     - IN: Dataspace with a selection applied, possibly
 ///                             an unlimited selection
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pset_virtual API in
 ///             the HDF5 C Reference Manual.
@@ -776,7 +775,6 @@ void DSetCreatPropList::setVirtual(const DataSpace& vspace, const H5std_string s
 {
     setVirtual(vspace, src_fname.c_str(), src_dsname.c_str(), sspace);
 }
-#endif
 
 //--------------------------------------------------------------------------
 // Function:    DSetCreatPropList destructor

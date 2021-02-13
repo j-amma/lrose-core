@@ -28,7 +28,7 @@ StrType::StrType() : AtomType() {}
 // Function:    StrType overloaded constructor
 ///\brief       Creates a string datatype using a predefined type.
 ///\param       pred_type - IN: Predefined datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 StrType::StrType(const PredType& pred_type) : AtomType()
@@ -42,7 +42,7 @@ StrType::StrType(const PredType& pred_type) : AtomType()
 // Purpose      Creates a string datatype with a specified length
 // Param        pred_type - IN: String predefined type to replicate.
 // Param        size     - IN: Length of the new string type
-// Exception    H5x::DataTypeIException
+// Exception    H5::DataTypeIException
 // Description
 //              The 1st argument could have been skipped, but this
 //              constructor will collide with the one that takes an
@@ -74,7 +74,7 @@ StrType::StrType(const PredType& pred_type, const size_t& size) : AtomType()
 ///\param       dummy - IN: To simplify calling the previous constructor
 ///                         and avoid prototype clash with another constructor
 ///\param       size  - IN: Length of the new string type
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             The 1st argument is just a dummy to simplify calling the
 ///             previous constructor, such as:
@@ -96,7 +96,7 @@ StrType::StrType(const int dummy, const size_t& size) : AtomType()
 // Function:    StrType overloaded constructor
 ///\brief       Creates an StrType object using the id of an existing datatype.
 ///\param       existing_id - IN: Id of an existing datatype
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 StrType::StrType(const hid_t existing_id) : AtomType( existing_id ) {}
@@ -112,7 +112,7 @@ StrType::StrType(const StrType& original) : AtomType ( original ) {}
 // Function:    StrType overloaded constructor
 ///\brief       Gets the string datatype of the specified dataset
 ///\param       dataset - IN: Dataset that this string datatype associates with
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 StrType::StrType(const DataSet& dataset) : AtomType ()
@@ -132,7 +132,7 @@ StrType::StrType(const DataSet& dataset) : AtomType ()
 ///             given its name, provided as a C character string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: String type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -151,7 +151,7 @@ StrType::StrType(const H5Location& loc, const char *dtype_name) : AtomType()
 ///             given its name, provided as an \c H5std_string.
 ///\param       loc        - IN: Location of the type
 ///\param       dtype_name - IN: String type name
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Dec 2016
 // Description
 //              In 1.10.1, this constructor was introduced and may replace the
@@ -169,7 +169,7 @@ StrType::StrType(const H5Location& loc, const H5std_string& dtype_name) : AtomTy
 ///\brief       Returns an StrType object via DataType* by decoding the
 ///             binary object description of this type.
 ///
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - Aug 2017
 //--------------------------------------------------------------------------
 DataType* StrType::decode() const
@@ -198,7 +198,7 @@ DataType* StrType::decode() const
 ///     Using encodings other than ASCII and UTF-8 can lead to compatibility
 ///     and usability problems. See the C API entry H5Pset_char_encoding for
 ///     more information.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5T_cset_t StrType::getCset() const
@@ -225,7 +225,7 @@ H5T_cset_t StrType::getCset() const
 ///     Using encodings other than ASCII and UTF-8 can lead to compatibility
 ///     and usability problems. See the C API entry H5Pset_char_encoding for
 ///     more information.
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void StrType::setCset(H5T_cset_t cset) const
@@ -244,7 +244,7 @@ void StrType::setCset(H5T_cset_t cset) const
 ///             \li \c H5T_STR_NULLTERM (0) - Null terminate (as C does)
 ///             \li \c H5T_STR_NULLPAD (0) - Pad with zeros
 ///             \li \c H5T_STR_SPACEPAD (0) - pad with spaces (as FORTRAN does)
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 H5T_str_t StrType::getStrpad() const
@@ -264,7 +264,7 @@ H5T_str_t StrType::getStrpad() const
 // Function:    StrType::setStrpad
 ///\brief       Defines the storage mechanism for this string datatype.
 ///\param       strpad - IN: String padding type
-///\exception   H5x::DataTypeIException
+///\exception   H5::DataTypeIException
 ///\par Description
 ///             For information, please refer to the H5Tset_strpad API in
 ///             the HDF5 C Reference Manual.

@@ -16,10 +16,6 @@
 #include <iostream>
 using namespace std;
 
-#ifndef HDmemset
-    #define HDmemset(X,C,Z)    memset(X,C,Z)
-#endif /* HDmemset */
-
 #include <Ncxx/H5x.hh>
 
 namespace H5x {
@@ -68,7 +64,7 @@ H5Location::H5Location() : IdComponent() {}
 ///\brief       Checks if a link of a given name exists in a location
 ///\param       name - IN: Searched name
 ///\param       lapl - IN: Link access property list
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 // Modification
 //              Renamed from exists() in 1.10.2 -BMR
 //--------------------------------------------------------------------------
@@ -90,7 +86,7 @@ bool H5Location::nameExists(const char* name, const LinkAccPropList& lapl) const
 ///\brief       Checks if a link of a given name exists in a location
 ///\param       name - IN: Searched name
 ///\param       lapl - IN: Link access property list
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 // Modification
 //              Renamed from exists() in 1.10.2 -BMR
 //--------------------------------------------------------------------------
@@ -105,7 +101,7 @@ bool H5Location::nameExists(const H5std_string& name, const LinkAccPropList& lap
 ///\brief       Deprecated in favor of nameExists
 ///\param       name - IN: Searched name
 ///\param       lapl - IN: Link access property list
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 // Programmer   Binh-Minh Ribler - Nov, 2016
 // Modification
 //              Renamed to nameExists() in 1.10.2 -BMR
@@ -121,7 +117,7 @@ bool H5Location::exists(const char* name, const LinkAccPropList& lapl) const
 ///\brief       Deprecated in favor of nameExists
 ///\param       name - IN: Searched name
 ///\param       lapl - IN: Link access property list
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 // Programmer   Binh-Minh Ribler - Dec, 2016
 // Modification
 //              Renamed to nameExists() in 1.10.2 -BMR
@@ -138,7 +134,7 @@ bool H5Location::exists(const H5std_string& name, const LinkAccPropList& lapl) c
 ///             which can be either of these values:
 ///             \li \c H5F_SCOPE_GLOBAL - Flushes the entire virtual file
 ///             \li \c H5F_SCOPE_LOCAL - Flushes only the specified file
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 ///\par Description
 ///             This location is used to identify the file to be flushed.
 // Programmer   Binh-Minh Ribler - 2012
@@ -151,7 +147,7 @@ void H5Location::flush(H5F_scope_t scope) const
     herr_t ret_value = H5Fflush(getId(), scope);
     if (ret_value < 0)
     {
-        throw LocationException(inMemFunc("flu.hh"), "H5Fflush failed");
+        throw LocationException(inMemFunc("flush"), "H5Fflush failed");
     }
 }
 
@@ -160,7 +156,7 @@ void H5Location::flush(H5F_scope_t scope) const
 ///\brief       Gets the name of the file, in which an HDF5 object at this
 ///             location belongs.
 ///\return      File name
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 // Programmer   Binh-Minh Ribler - Jul, 2004
 //--------------------------------------------------------------------------
 H5std_string H5Location::getFileName() const
@@ -178,7 +174,7 @@ H5std_string H5Location::getFileName() const
 ///\brief       Sets or resets the comment for an object specified by its name.
 ///\param       name  - IN: Name of the object
 ///\param       comment - IN: New comment
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 ///\par Description
 ///             If \a comment is an empty string or a null pointer, the comment
 ///             message is removed from the object.
@@ -242,7 +238,7 @@ void H5Location::setComment(const H5std_string& comment) const
 // Function:    H5Location::removeComment
 ///\brief       Removes the comment from an object specified by its name.
 ///\param       name  - IN: Name of the object
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 // Programmer   Binh-Minh Ribler - May 2005 (moved from CommonFG, Sep 2013)
 //      2007: QAK modified to use H5O APIs; however the first parameter is
 //              no longer just file or group, this function should be moved
@@ -275,7 +271,7 @@ void H5Location::removeComment(const H5std_string& name) const
 ///\param       buf_size - IN: Length of the comment to retrieve
 ///\param       comment  - OUT: Retrieved comment
 ///\return      Actual length of the comment
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 ///\par Description
 ///             This function retrieves \a buf_size characters of the comment
 ///             including the null terminator.  Thus, if the actual length
@@ -311,7 +307,7 @@ ssize_t H5Location::getComment(const char* name, size_t buf_size, char* comment)
 ///\param       name     - IN: Name of the object
 ///\param       buf_size - IN: Length of the comment to retrieve, default to 0
 ///\return      Comment string
-///\exception   H5x::LocationException
+///\exception   H5::LocationException
 // Programmer   Binh-Minh Ribler - 2000 (moved from CommonFG, Sep 2013)
 //--------------------------------------------------------------------------
 H5std_string H5Location::getComment(const char* name, size_t buf_size) const
@@ -381,7 +377,7 @@ H5std_string H5Location::getComment(const H5std_string& name, size_t buf_size) c
 //              name - IN: Name of the object to be referenced
 //              dataspace - IN: Dataspace with selection
 //              ref_type - IN: Type of reference; default to \c H5R_DATASET_REGION
-// Exception    H5x::ReferenceException
+// Exception    H5::ReferenceException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 void H5Location::p_reference(void* ref, const char* name, hid_t space_id, H5R_type_t ref_type) const
@@ -405,7 +401,7 @@ void H5Location::p_reference(void* ref, const char* name, hid_t space_id, H5R_ty
 ///             \li \c H5R_OBJECT         - Reference is an object reference.
 ///             \li \c H5R_DATASET_REGION - Reference is a dataset region
 ///                     reference. (default)
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 ///\note        This method is more suitable for a dataset region reference.
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
@@ -431,7 +427,7 @@ void H5Location::reference(void* ref, const char* name, const DataSpace& dataspa
 ///             \li \c H5R_OBJECT         - Reference is an object reference.
 ///             \li \c H5R_DATASET_REGION - Reference is a dataset region
 ///                     reference. (default)
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 ///\note        This method is more suitable for a dataset region reference.
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
@@ -455,7 +451,7 @@ void H5Location::reference(void* ref, const H5std_string& name, const DataSpace&
 ///\param       ref_type - IN: Type of reference to query, valid values are:
 ///             \li \c H5R_OBJECT         - Reference is an object reference (default)
 ///             \li \c H5R_DATASET_REGION - Reference is a dataset region
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 ///\note        This method is more suitable for an object reference.
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
@@ -488,7 +484,6 @@ void H5Location::reference(void* ref, const H5std_string& name, H5R_type_t ref_t
 }
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    H5Location::p_dereference (protected)
 // Purpose      Dereference a ref into an hdf5 object.
@@ -499,7 +494,7 @@ void H5Location::reference(void* ref, const H5std_string& name, H5R_type_t ref_t
 //              ref_type - IN: Reference type
 //              plist - IN: Property list - default to PropList::DEFAULT
 //              from_func - IN: Name of the calling function
-// Exception    H5x::ReferenceException
+// Exception    H5::ReferenceException
 // Programmer   Binh-Minh Ribler - Oct, 2006
 //--------------------------------------------------------------------------
 hid_t H5Location::p_dereference(hid_t loc_id, const void* ref, H5R_type_t ref_type, const PropList& plist, const char* from_func)
@@ -518,10 +513,8 @@ hid_t H5Location::p_dereference(hid_t loc_id, const void* ref, H5R_type_t ref_ty
 
     return(temp_id);
 }
-#endif
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    H5Location::dereference
 ///\brief       Dereferences a reference into an HDF5 object, given an HDF5 object.
@@ -529,7 +522,7 @@ hid_t H5Location::p_dereference(hid_t loc_id, const void* ref, H5R_type_t ref_ty
 ///\param       ref - IN: Reference pointer
 ///\param       ref_type - IN: Reference type
 ///\param       plist - IN: Property list - default to PropList::DEFAULT
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 // Programmer   Binh-Minh Ribler - Oct, 2006
 //--------------------------------------------------------------------------
 void H5Location::dereference(const H5Location& loc, const void* ref, H5R_type_t ref_type, const PropList& plist)
@@ -544,7 +537,7 @@ void H5Location::dereference(const H5Location& loc, const void* ref, H5R_type_t 
 // param        ref - IN: Reference pointer
 // param        ref_type - IN: Reference type
 // param        plist - IN: Property list - default to PropList::DEFAULT
-// exception    H5x::ReferenceException
+// exception    H5::ReferenceException
 // Programmer   Binh-Minh Ribler - Oct, 2006
 // Modification
 //      Mar, 2017
@@ -556,8 +549,6 @@ void H5Location::dereference(const H5Location& loc, const void* ref, H5R_type_t 
    p_setId(p_dereference(attr.getId(), ref, ref_type, plist, "dereference"));
 }
  */ 
-
-#endif
 
 #ifndef H5_NO_DEPRECATED_SYMBOLS
 //--------------------------------------------------------------------------
@@ -574,7 +565,7 @@ void H5Location::dereference(const H5Location& loc, const void* ref, H5R_type_t 
 ///             \li \c H5G_TYPE Object - is a named datatype
 ///             \li \c H5G_LINK  - Object is a symbolic link.
 ///             \li \c H5G_UDLINK  - Object is a user-defined link.
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 // Programmer   Binh-Minh Ribler - May, 2004
 // Modification
 //      Sep 2012: Moved up from H5File, Group, DataSet, and DataType
@@ -603,7 +594,7 @@ H5G_obj_t H5Location::getObjType(void *ref, H5R_type_t ref_type) const
 //                      H5G_TYPE Object \tis a named datatype.
 //                      H5G_LINK \tObject is a symbolic link.
 //                      H5G_UDLINK \tObject is a user-defined link.
-// Exception    H5x::ReferenceException
+// Exception    H5::ReferenceException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 H5G_obj_t H5Location::p_get_obj_type(void *ref, H5R_type_t ref_type) const
@@ -631,7 +622,7 @@ H5G_obj_t H5Location::p_get_obj_type(void *ref, H5R_type_t ref_type) const
 ///             \li \c H5O_TYPE_DATASET - Object is a dataset
 ///             \li \c H5O_TYPE_NAMED_DATATYPE - Object is a named datatype
 ///             \li \c H5O_TYPE_NTYPES  - Number of different object types
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 H5O_type_t H5Location::getRefObjType(void *ref, H5R_type_t ref_type) const
@@ -657,7 +648,7 @@ H5O_type_t H5Location::getRefObjType(void *ref, H5R_type_t ref_type) const
 //                      H5O_TYPE_DATASET        - Object is a dataset
 //                      H5O_TYPE_NAMED_DATATYPE - Object is a named datatype
 //                      H5O_TYPE_NTYPES         - Number of object types
-// Exception    H5x::ReferenceException
+// Exception    H5::ReferenceException
 // Programmer   Binh-Minh Ribler - May, 2004
 //--------------------------------------------------------------------------
 H5O_type_t H5Location::p_get_ref_obj_type(void *ref, H5R_type_t ref_type) const
@@ -683,7 +674,7 @@ H5O_type_t H5Location::p_get_ref_obj_type(void *ref, H5R_type_t ref_type) const
 ///\param       ref_type - IN: Type of reference to get region of - default
 //                             to H5R_DATASET_REGION
 ///\return      DataSpace object
-///\exception   H5x::ReferenceException
+///\exception   H5::ReferenceException
 // Programmer   Binh-Minh Ribler - May, 2004
 // Modification
 //      Mar 29, 2015
@@ -749,7 +740,7 @@ DataSpace H5Location::getRegion(void *ref, H5R_type_t ref_type) const
 ///\param       size_hint - IN: Indicates the number of bytes to reserve for
 ///             the names that will appear in the group
 ///\return      Group instance
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///\par Description
 ///             The optional \a size_hint specifies how much file space to
 ///             reserve for storing the names that will appear in this new
@@ -794,7 +785,7 @@ Group H5Location::createGroup(const H5std_string& name, const LinkCreatPropList&
 ///\param       size_hint - IN: Indicates the number of bytes to reserve for
 ///             the names that will appear in the group
 ///\return      Group instance
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///\par Description
 ///             The optional \a size_hint specifies how much file space to
 ///             reserve for storing the names that will appear in this new
@@ -857,7 +848,7 @@ Group H5Location::createGroup(const H5std_string& name, size_t size_hint) const
 ///             or another group.
 ///\param       name  - IN: Name of the group to open
 ///\return      Group instance
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 Group H5Location::openGroup(const char* name) const
@@ -900,7 +891,7 @@ Group H5Location::openGroup(const H5std_string& name) const
 ///\param       lcpl       - IN: Link creation properly list
 ///\param       dapl       - IN: Dataset access properly list
 ///\return      DataSet instance
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // 2000
 // Modification:
 //      Jul 2018
@@ -952,7 +943,7 @@ DataSet H5Location::createDataSet(const H5std_string& name, const DataType& data
 ///\brief       Opens an existing dataset at this location.
 ///\param       name  - IN: Name of the dataset to open
 ///\return      DataSet instance
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // 2000
 // Modification:
 //      Jul 2018
@@ -997,7 +988,7 @@ DataSet H5Location::openDataSet(const H5std_string& name, const DSetAccPropList&
 ///\param       link_name   - IN: Link name for the target name
 ///\param       lcpl - IN: Link creation plist - default to LinkCreatPropList::DEFAULT
 ///\param       lapl - IN: Link access plist - default to LinkAccPropList::DEFAULT
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 ///\par Description
 ///             Note that both names are interpreted relative to the current
 ///             location.
@@ -1022,7 +1013,7 @@ void H5Location::link(const char *target_name, const char *link_name,
 ///\brief       This is an overloaded member function, provided for convenience.
 ///             It differs from the above function in that it takes an
 ///             \c H5std_string for \a target_name and \a link_name.
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::link(const H5std_string& target_name, const H5std_string&
@@ -1039,7 +1030,7 @@ void H5Location::link(const H5std_string& target_name, const H5std_string&
 ///\param       new_name  - IN: New name for the object
 ///\param       lcpl - IN: Link creation plist - default to LinkCreatPropList::DEFAULT
 ///\param       lapl - IN: Link access plist - default to LinkAccPropList::DEFAULT
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 ///\par Description
 ///             Note that both names are interpreted relative to the
 ///             specified location.
@@ -1065,7 +1056,7 @@ void H5Location::link(const char *curr_name, const Group& new_loc,
 ///\brief       This is an overloaded member function, provided for convenience.
 ///             It differs from the above function in that it takes an
 ///             \c H5std_string for \a curr_name and \a new_name.
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::link(const H5std_string& curr_name, const Group& new_loc,
@@ -1083,7 +1074,7 @@ void H5Location::link(const H5std_string& curr_name, const Group& new_loc,
 ///\param       new_name  - IN: New name for the link
 ///\param       lcpl - IN: Link creation plist - default to LinkCreatPropList::DEFAULT
 ///\param       lapl - IN: Link access plist - default to LinkAccPropList::DEFAULT
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 ///\par Description
 ///             Note that both names are interpreted relative to the
 ///             specified location.
@@ -1108,7 +1099,7 @@ void H5Location::link(const char *curr_name, const hid_t same_loc, const char *n
 ///\brief       This is an overloaded member function, provided for convenience.
 ///             It differs from the above function in that it takes an
 ///             \c H5std_string for \a curr_name and \a new_name.
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::link(const H5std_string& curr_name, const hid_t same_loc,
@@ -1127,7 +1118,7 @@ void H5Location::link(const H5std_string& curr_name, const hid_t same_loc,
 ///\param       curr_name - IN: Name of the existing object if link is a hard
 ///             link; can be anything for the soft link
 ///\param       new_name - IN: New name for the object
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///\par Description
 ///             Note that both names are interpreted relative to the
 ///             specified location.
@@ -1186,7 +1177,7 @@ void H5Location::link(H5L_type_t link_type, const H5std_string& curr_name, const
 ///\param       dst_name - IN: New name
 ///\param       lcpl     - IN: Link creation plist - default LinkCreatPropList::DEFAULT
 ///\param       lapl     - IN: Link access plist - default LinkAccPropList::DEFAULT
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::copyLink(const char *src_name,
@@ -1208,7 +1199,7 @@ void H5Location::copyLink(const char *src_name,
 ///\brief       This is an overloaded member function, provided for convenience.
 ///             It differs from the above function in that it takes an
 ///             \c H5std_string for \a src_name and \a dst_name.
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::copyLink(const H5std_string& src_name,
@@ -1225,7 +1216,7 @@ void H5Location::copyLink(const H5std_string& src_name,
 ///\param       dst_name - IN: New name
 ///\param       lcpl     - IN: Link creation plist - default LinkCreatPropList::DEFAULT
 ///\param       lapl     - IN: Link access plist - default LinkAccPropList::DEFAULT
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::copyLink(const char *src_name,
@@ -1246,7 +1237,7 @@ void H5Location::copyLink(const char *src_name,
 ///\brief       This is an overloaded member function, provided for convenience.
 ///             It differs from the above function in that it takes an
 ///             \c H5std_string for \a src_name and \a dst_name.
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::copyLink(const H5std_string& src_name,
@@ -1264,7 +1255,7 @@ void H5Location::copyLink(const H5std_string& src_name,
 ///\param       dst_name - IN: New name
 ///\param       lcpl     - IN: Link creation plist - default LinkCreatPropList::DEFAULT
 ///\param       lapl     - IN: Link access plist - default LinkAccPropList::DEFAULT
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 ///\note
 ///             Exercise care in moving groups as it is possible to render
 ///             data in a file inaccessible with H5Location::moveLink. Please refer
@@ -1288,7 +1279,7 @@ void H5Location::moveLink(const char* src_name, const Group& dst, const char* ds
 ///\brief       This is an overloaded member function, provided for convenience.
 ///             It differs from the above function in that it takes an
 ///             \c H5std_string for \a src_name and \a dst_name.
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::moveLink(const H5std_string& src_name, const Group& dst, const H5std_string& dst_name, const LinkCreatPropList& lcpl, const LinkAccPropList& lapl) const
@@ -1303,7 +1294,7 @@ void H5Location::moveLink(const H5std_string& src_name, const Group& dst, const 
 ///\param       dst_name - IN: New name
 ///\param       lcpl     - IN: Link creation plist - default LinkCreatPropList::DEFAULT
 ///\param       lapl     - IN: Link access plist - default LinkAccPropList::DEFAULT
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 ///\note
 ///             Exercise care in moving groups as it is possible to render
 ///             data in a file inaccessible with H5Location::moveLink. Please refer
@@ -1326,7 +1317,7 @@ void H5Location::moveLink(const char* src_name, const char* dst_name, const Link
 ///\brief       This is an overloaded member function, provided for convenience.
 ///             It differs from the above function in that it takes an
 ///             \c H5std_string for \a src_name and \a dst_name.
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::moveLink(const H5std_string& src_name, const H5std_string& dst_name, const LinkCreatPropList& lcpl, const LinkAccPropList& lapl) const
@@ -1339,7 +1330,7 @@ void H5Location::moveLink(const H5std_string& src_name, const H5std_string& dst_
 ///\brief       Renames an object at this location. - Deprecated due to inadequate functionality
 ///\param       src - IN: Object's original name
 ///\param       dst - IN: Object's new name
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///\note
 ///             Exercise care in moving groups as it is possible to render
 ///             data in a file inaccessible with H5Location::move. Please refer
@@ -1370,7 +1361,7 @@ void H5Location::move(const H5std_string& src, const H5std_string& dst) const
 // Function:    H5Location::unlink
 ///\brief       Removes the specified link from this group.
 ///\param       name  - IN: Name of the object to be removed
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // March, 2018
 //--------------------------------------------------------------------------
 void H5Location::unlink(const char* name, const LinkAccPropList& lapl) const
@@ -1391,8 +1382,6 @@ void H5Location::unlink(const H5std_string& name, const LinkAccPropList& lapl) c
 {
     unlink(name.c_str(), lapl);
 }
-
-#ifdef HDF5_V10
 
 //--------------------------------------------------------------------------
 // Function:    H5Location::getNativeObjinfo
@@ -1632,7 +1621,6 @@ void H5Location::getObjinfo(const H5std_string& grp_name, H5_index_t idx_type,
 {
     getObjinfo(grp_name.c_str(), idx_type, order, idx, objinfo, fields, lapl);
 }
-#endif // HDF5_V10
 
 #ifndef H5_NO_DEPRECATED_SYMBOLS
 //--------------------------------------------------------------------------
@@ -1641,7 +1629,7 @@ void H5Location::getObjinfo(const H5std_string& grp_name, H5_index_t idx_type,
 ///\param       name  - IN: Name of the object
 ///\param       follow_link - IN: Link flag
 ///\param       statbuf - OUT: Buffer to return information about the object
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///\par Description
 ///             For information, please refer to the H5Gget_objinfo API in
 ///             the HDF5 C Reference Manual.
@@ -1694,14 +1682,13 @@ void H5Location::getObjinfo(const H5std_string& name, H5G_stat_t& statbuf) const
 
 #endif /* H5_NO_DEPRECATED_SYMBOLS */
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    H5Location::getLinkInfo
 ///\brief       Returns the information of the named link.
 ///\param       link_name  - IN: Symbolic link to the object
 ///\param       size - IN: Maximum number of characters of value to be returned
 ///\return      Name of the object
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // 2000
 //--------------------------------------------------------------------------
 H5L_info2_t H5Location::getLinkInfo(const char* link_name, const LinkAccPropList& lapl) const
@@ -1732,7 +1719,7 @@ H5L_info2_t H5Location::getLinkInfo(const H5std_string& link_name, const LinkAcc
 ///\param       name  - IN: Symbolic link to the object
 ///\param       size - IN: Maximum number of characters of value to be returned
 ///\return      Name of the object
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // 2000
 //--------------------------------------------------------------------------
 H5std_string H5Location::getLinkval(const char* name, size_t size) const
@@ -1784,15 +1771,13 @@ H5std_string H5Location::getLinkval(const H5std_string& name, size_t size) const
     return(getLinkval( name.c_str(), size));
 }
 
-#endif // HDF5_V10
-
 //--------------------------------------------------------------------------
 // Function:    H5Location::mount
 ///\brief       Mounts the file \a child onto this group.
 ///\param       name  - IN: Name of the group
 ///\param       child - IN: File to mount
 ///\param       plist - IN: Property list to use
-///\exception   H5x::FileIException or H5x::GroupIException
+///\exception   H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2014 (original 2000)
 //--------------------------------------------------------------------------
 void H5Location::mount(const char* name, const H5File& child, const PropList& plist) const
@@ -1817,7 +1802,7 @@ void H5Location::mount(const char* name, const H5File& child, const PropList& pl
 // Param        name  - IN: Name of the group
 // Param        child - IN: File to mount
 // Param        plist - IN: Property list to use
-// Exception    H5x::FileIException or H5x::GroupIException
+// Exception    H5::FileIException or H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //              Modified to call its replacement. -BMR, 2014/04/16
@@ -1860,7 +1845,7 @@ void H5Location::mount(const H5std_string& name, const H5File& child, const Prop
 // Function:    H5Location::unmount
 ///\brief       Unmounts the specified file.
 ///\param       name  - IN: Name of the file to unmount
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 void H5Location::unmount(const char* name) const
@@ -1896,7 +1881,7 @@ void H5Location::unmount(const H5std_string& name) const
 ///\return      The return value of the first operator that returns non-zero,
 ///             or zero if all members were processed with no operator
 ///             returning non-zero.
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - 2000
 //--------------------------------------------------------------------------
 int H5Location::iterateElems(const char* name, int *idx, H5G_iterate_t op , void* op_data)
@@ -1924,7 +1909,7 @@ int H5Location::iterateElems(const H5std_string& name, int *idx, H5G_iterate_t o
 
 //--------------------------------------------------------------------------
 // Function:    H5Location::getNumObjs
-///\brief       Deprecated - moved to H5x::Group in 1.10.2.
+///\brief       Deprecated - moved to H5::Group in 1.10.2.
 ///\return      Deprecated
 ///\exception   Deprecated
 // Programmer   Binh-Minh Ribler - January, 2003
@@ -1945,7 +1930,7 @@ hsize_t H5Location::getNumObjs() const
 ///             object's index.
 ///\param       idx  -     IN: Transient index of the object
 ///\return      Object name
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///\par Description
 ///             The value of idx can be any nonnegative number less than the
 ///             total number of objects in the group, which is returned by
@@ -1987,7 +1972,7 @@ H5std_string H5Location::getObjnameByIdx(hsize_t idx) const
 ///\param       name - IN/OUT: Retrieved name of the object
 ///\param       size -     IN: Length to retrieve
 ///\return      Actual size of the object name or 0, if object has no name
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///\par Description
 ///             The value of idx can be any nonnegative number less than the
 ///             total number of objects in the group, which is returned by
@@ -2031,7 +2016,6 @@ ssize_t H5Location::getObjnameByIdx(hsize_t idx, H5std_string& name, size_t size
     return (name_len);
 }
 
-#ifdef HDF5_V10
 //--------------------------------------------------------------------------
 // Function:    H5Location::childObjType
 ///\brief       Returns the type of an object in this file/group, given the
@@ -2044,7 +2028,7 @@ ssize_t H5Location::getObjnameByIdx(hsize_t idx, H5std_string& name, size_t size
 ///             \li \c H5O_TYPE_NAMED_DATATYPE
 ///             For information, please refer to the H5Oget_info_by_name API in
 ///             the HDF5 C Reference Manual.
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///             Exception will be thrown when:
 ///             - an error returned by the C API
 ///             - object type is not one of the valid values above
@@ -2085,7 +2069,7 @@ H5O_type_t H5Location::childObjType(const char* objname) const
 ///\brief       Returns the type of an object in this group, given the
 ///             object's name.
 ///\param       objname - IN: Name of the object (H5std_string&)
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - April, 2014
 //--------------------------------------------------------------------------
 H5O_type_t H5Location::childObjType(const H5std_string& objname) const
@@ -2110,7 +2094,7 @@ H5O_type_t H5Location::childObjType(const H5std_string& objname) const
 ///             \li \c H5O_TYPE_NAMED_DATATYPE
 ///             For information, please refer to the H5Oget_info_by_idx API in
 ///             the HDF5 C Reference Manual.
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///             Exception will be thrown when:
 ///             - an error returned by the C API
 ///             - object type is not one of the valid values above
@@ -2161,7 +2145,7 @@ H5O_type_t H5Location::childObjType(hsize_t index, H5_index_t index_type, H5_ite
 ///\return      Object version, which can have the following values:
 ///             \li \c H5O_VERSION_1
 ///             \li \c H5O_VERSION_2
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 ///             Exception will be thrown when:
 ///             - an error returned by the C API
 ///             - version number is not one of the valid values above
@@ -2195,7 +2179,7 @@ unsigned H5Location::childObjVersion(const char* objname) const
 ///\brief       Returns the type of an object in this group, given the
 ///             object's name.
 ///\param       objname - IN: Name of the object (H5std_string&)
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - April, 2014
 //--------------------------------------------------------------------------
 unsigned H5Location::childObjVersion(const H5std_string& objname) const
@@ -2205,9 +2189,6 @@ unsigned H5Location::childObjVersion(const H5std_string& objname) const
     return(version);
 }
 
-#endif // HDF5_V10
-
-
 #ifndef H5_NO_DEPRECATED_SYMBOLS
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 //--------------------------------------------------------------------------
@@ -2216,7 +2197,7 @@ unsigned H5Location::childObjVersion(const H5std_string& objname) const
 ///             object's index.
 ///\param       idx - IN: Transient index of the object
 ///\return      Object type
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - January, 2003
 //--------------------------------------------------------------------------
 H5G_obj_t H5Location::getObjTypeByIdx(hsize_t idx) const
@@ -2236,7 +2217,7 @@ H5G_obj_t H5Location::getObjTypeByIdx(hsize_t idx) const
 ///\param       idx       - IN: Transient index of the object
 ///\param       type_name - OUT: Object type in text
 ///\return      Object type
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - May, 2010
 // Modification
 //              Modified to use the other function. -BMR, 2016/03/07
@@ -2254,7 +2235,7 @@ H5G_obj_t H5Location::getObjTypeByIdx(hsize_t idx, char* type_name) const
 ///\param       idx       - IN: Transient index of the object
 ///\param       type_name - OUT: Object type in text
 ///\return      Object type
-///\exception   H5x::FileIException/H5x::GroupIException/H5x::LocationException
+///\exception   H5::FileIException/H5::GroupIException/H5::LocationException
 // Programmer   Binh-Minh Ribler - January, 2003
 //--------------------------------------------------------------------------
 H5G_obj_t H5Location::getObjTypeByIdx(hsize_t idx, H5std_string& type_name) const
@@ -2285,7 +2266,7 @@ H5G_obj_t H5Location::getObjTypeByIdx(hsize_t idx, H5std_string& type_name) cons
 ///\brief       Invokes subclass' throwException
 ///\param       func_name - Name of the function where failure occurs
 ///\param       msg       - Message describing the failure
-///\exception   H5x::GroupIException
+///\exception   H5::GroupIException
 // Programmer   Binh-Minh Ribler - 2000
 // Modification
 //      August 2017 - BMR
@@ -2316,7 +2297,7 @@ void H5Location::throwException(const H5std_string& func_name, const H5std_strin
 
 //--------------------------------------------------------------------------
 // Function:    f_DataSpace_setId - friend
-// Purpose      This function is friend to class H5x::DataSpace so that it can
+// Purpose      This function is friend to class H5::DataSpace so that it can
 //              can set DataSpace::id in order to work around a problem
 //              described in the JIRA issue HDFFV-7947.
 //              Applications shouldn't need to use it.

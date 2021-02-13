@@ -30,7 +30,7 @@ DSetAccPropList* DSetAccPropList::DEFAULT_ = 0;
 // Purpose:     Creates a DSetAccPropList object representing the HDF5
 //              constant H5P_DATASET_ACCESS, pointed to by
 //              DSetAccPropList::DEFAULT_
-// exception    H5x::PropListIException
+// exception    H5::PropListIException
 // Description
 //              If DSetAccPropList::DEFAULT_ already points to an allocated
 //              object, throw a PropListIException.  This scenario should
@@ -104,7 +104,7 @@ DSetAccPropList::DSetAccPropList(const hid_t plist_id) : LinkAccPropList(plist_i
 ///\param       rdcc_nslots - IN: Number of chunk slots in the raw data chunk cache
 ///\param       rdcc_nbytes - IN: Total size of the raw data chunk cache
 ///\param       rdcc_w0     - IN: The chunk preemption policy for this dataset
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             The raw data chunk cache parameters includes the number of
 ///             objects in the meta data cache and the maximum number of
@@ -131,7 +131,7 @@ void DSetAccPropList::setChunkCache(size_t rdcc_nslots, size_t rdcc_nbytes, doub
 ///\param       rdcc_nslots - OUT: Number of chunk slots in the raw data chunk cache
 ///\param       rdcc_nbytes - OUT: Total size of the raw data chunk cache
 ///\param       rdcc_w0     - OUT: The chunk preemption policy for this dataset
-///\exception   H5x::PropListIException
+///\exception   H5::PropListIException
 ///\par Description
 ///             For information, please refer to the H5Pget_chunk_cache API in
 ///             the HDF5 C Reference Manual.
