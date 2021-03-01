@@ -60,7 +60,6 @@ ConvStratFinder::ConvStratFinder()
 
   _minValidHtKm = 0.0;
   _maxValidHtKm = 30.0;
-  _minValidDbz = 10.0;
   _dbzForDefiniteConvection = 53;
   _textureRadiusKm = 5.0;
   _minValidFractionForTexture = 0.33; 
@@ -82,8 +81,13 @@ ConvStratFinder::ConvStratFinder()
   _gridSet = false;
 
   _specifyLevelsByHtValues = true;
-  _fzLevelHtKm = 4.0;
-  _divLevelHtKm = 8.0;
+  _shallowHtKm = 4.0;
+  _deepHtKm = 8.0;
+
+  _textureLimitLow = 0.0;
+  _textureLimitHigh = 30.0;
+
+  _convInterestThreshold = 0.5;
 
 }
 
@@ -128,27 +132,27 @@ void ConvStratFinder::setGrid(size_t nx, size_t ny,
 ////////////////////////////////////////////////////////////////////
 // Set the freezing level and divergence level as km MSL values
 
-void ConvStratFinder::setLevelHtValues(double fzLevelHtKm,
-                                       double divLevelHtKm)
+void ConvStratFinder::setConstantHtThresholds(double shallowHtKm,
+                                              double deepHtKm)
 
 {
   _specifyLevelsByHtValues = true;
-  _fzLevelHtKm = fzLevelHtKm;
-  _divLevelHtKm = divLevelHtKm;
+  _shallowHtKm = shallowHtKm;
+  _deepHtKm = deepHtKm;
 }
 
 ////////////////////////////////////////////////////////////////////
 // Set the freezing level and divergence level as grids
 // These must be on the same grid as the radar DBZ data
 
-void ConvStratFinder::setLevelHtGrids(const fl32 *fzHtKm,
-                                      const fl32 *divHtKm,
-                                      size_t nptsPlane)
+void ConvStratFinder::setGridHtThresholds(const fl32 *shallowHtGrid,
+                                          const fl32 *deepHtGrid,
+                                          size_t nptsPlane)
 {
   assert(_gridSet);
   assert(nptsPlane == _nxy);
-  memcpy(_fzHtKm.dat(), fzHtKm, _nxy * sizeof(fl32));
-  memcpy(_divHtKm.dat(), divHtKm, _nxy * sizeof(fl32));
+  memcpy(_shallowHtGrid.dat(), shallowHtGrid, _nxy * sizeof(fl32));
+  memcpy(_deepHtGrid.dat(), deepHtGrid, _nxy * sizeof(fl32));
 }
 
 //////////////////////////////////////////////////
@@ -191,7 +195,7 @@ int ConvStratFinder::computePartition(const fl32 *dbz,
   
   fl32 *volDbz = _dbz3D.dat();
   for (size_t ii = 0; ii < _nxyz; ii++) {
-    if (dbz[ii] == dbzMissingVal || dbz[ii] < _minValidDbz) {
+    if (dbz[ii] == dbzMissingVal) {
       volDbz[ii] = _missingFl32;
     } else {
       volDbz[ii] = dbz[ii];
@@ -218,6 +222,10 @@ int ConvStratFinder::computePartition(const fl32 *dbz,
   
   _computeTexture();
 
+  // compute convectivity interest
+  
+  _computeInterest();
+
   // set the 3D version of the partition
 
   _setPartition3D();
@@ -243,8 +251,8 @@ void ConvStratFinder::_allocArrays()
 {
 
   _dbz3D.alloc(_nxyz);
-  _fzHtKm.alloc(_nxy);
-  _divHtKm.alloc(_nxy);
+  _shallowHtGrid.alloc(_nxy);
+  _deepHtGrid.alloc(_nxy);
 
   _partition3D.alloc(_nxyz);
   _partition.alloc(_nxy);
@@ -256,6 +264,7 @@ void ConvStratFinder::_allocArrays()
   _stratDbz.alloc(_nxyz);
 
   _texture3D.alloc(_nxyz);
+  _interest3D.alloc(_nxyz);
 
   _meanTexture.alloc(_nxy);
   _meanTextureLow.alloc(_nxy);
@@ -284,8 +293,8 @@ void ConvStratFinder::_initToMissing()
 {
 
   _initToMissing(_dbz3D, _missingFl32);
-  _initToMissing(_fzHtKm, _missingFl32);
-  _initToMissing(_divHtKm, _missingFl32);
+  _initToMissing(_shallowHtGrid, _missingFl32);
+  _initToMissing(_deepHtGrid, _missingFl32);
 
   _initToMissing(_partition3D, _missingUi08);
   _initToMissing(_partition, _missingUi08);
@@ -297,6 +306,7 @@ void ConvStratFinder::_initToMissing()
   _initToMissing(_stratDbz, _missingFl32);
 
   _initToMissing(_texture3D, _missingFl32);
+  _initToMissing(_interest3D, _missingFl32);
 
   _initToMissing(_meanTexture, _missingFl32);
   _initToMissing(_meanTextureLow, _missingFl32);
@@ -343,8 +353,8 @@ void ConvStratFinder::freeArrays()
 {
 
   _dbz3D.free();
-  _fzHtKm.free();
-  _divHtKm.free();
+  _shallowHtGrid.free();
+  _deepHtGrid.free();
 
   _partition3D.free();
   _partition.free();
@@ -356,6 +366,7 @@ void ConvStratFinder::freeArrays()
   _stratDbz.free();
 
   _texture3D.free();
+  _interest3D.free();
 
   _meanTexture.free();
   _meanTextureLow.free();
@@ -436,8 +447,7 @@ void ConvStratFinder::_computeColMax()
       double count = 0;
       for (size_t ii = 0; ii < _textureKernelOffsets.size(); ii++) {
         size_t jj = jcenter + _textureKernelOffsets[ii].offset;
-        double val = colMaxDbz[jj];
-        if (val >= _minValidDbz) {
+        if (colMaxDbz[jj] != _missingFl32) {
           count++;
         }
       } // ii
@@ -505,6 +515,53 @@ void ConvStratFinder::_computeTexture()
   }
   threads.clear();
 
+}
+
+/////////////////////////////////////////////////////////
+// compute the convectivity interest
+
+void ConvStratFinder::_computeInterest()
+  
+{
+
+  // array pointers
+
+  fl32 *texture3D = _texture3D.dat();
+  fl32 *interest3D = _interest3D.dat();
+  fl32 *active2D = _fractionActive.dat();
+  
+  // loop through the vol
+  
+  size_t index3D = 0;
+  double textureRange = _textureLimitHigh - _textureLimitLow;
+  double interestSlope = 1.0 / textureRange;
+  
+  for (size_t iz = 0; iz < _zKm.size(); iz++) {
+    
+    // loop through a plane
+    
+    size_t index2D = 0;
+    
+    for (size_t iy = 0; iy < _ny; iy++) {
+      for (size_t ix = 0; ix < _nx; ix++, index2D++, index3D++) {
+        
+        fl32 interest = _missingFl32;
+        if (active2D[index2D] >= _minValidFractionForTexture) {
+          double texture = texture3D[index3D];
+          if (texture < _textureLimitLow) {
+            interest = 0.0;
+          } else if (texture > _textureLimitHigh) {
+            interest = 1.0;
+          } else {
+            interest = (texture - _textureLimitLow) * interestSlope;
+          }
+        }
+        interest3D[index3D] = interest;
+
+      } // ix
+    } // iy
+  } // iz
+  
 }
 
 /////////////////////////////////////////////////////////
@@ -606,12 +663,12 @@ void ConvStratFinder::_computeProps(size_t index,
   
 {
 
-  double fzHt = _fzLevelHtKm;
-  double divHt = _divLevelHtKm;
+  double shallowHt = _shallowHtKm;
+  double deepHt = _deepHtKm;
   
   if (!_specifyLevelsByHtValues) {
-    fzHt = _fzHtKm.dat()[index];
-    divHt = _divHtKm.dat()[index];
+    shallowHt = _shallowHtGrid.dat()[index];
+    deepHt = _deepHtGrid.dat()[index];
   }
   
   // compute mean texture for full column, plus the
@@ -634,10 +691,10 @@ void ConvStratFinder::_computeProps(size_t index,
     }
     nFull++;
     sumFull += texture;
-    if (ht <= fzHt) {
+    if (ht <= shallowHt) {
       nLow++;
       sumLow += texture;
-    } else if (ht <= divHt) {
+    } else if (ht <= deepHt) {
       nMid++;
       sumMid += texture;
     } else {
@@ -934,7 +991,6 @@ void ConvStratFinder::_printSettings(ostream &out)
 
   out << "  _minValidHtKm: " << _minValidHtKm << endl;
   out << "  _maxValidHtKm: " << _maxValidHtKm << endl;
-  out << "  _minValidDbz: " << _minValidDbz << endl;
   out << "  _dbzForDefiniteConvection: " << _dbzForDefiniteConvection << endl;
   out << "  _textureRadiusKm: " << _textureRadiusKm << endl;
   out << "  _minValidFractionForTexture: " << _minValidFractionForTexture << endl;
@@ -1151,6 +1207,10 @@ void ConvStratFinder::ComputeTexture::run()
         double sumSq = 0.0;
         for (size_t ii = 0; ii < dbzVals.size(); ii++) {
           double val = dbzVals[ii];
+          // constrain to positive values
+          // if (val < 1.0) {
+          //   val = 1.0;
+          // }
           double dbzSq = val * val;
           sum += dbzSq;
           sumSq += dbzSq * dbzSq;

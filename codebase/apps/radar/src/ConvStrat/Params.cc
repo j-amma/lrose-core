@@ -728,51 +728,51 @@
     tt->single_val.i = 21600;
     tt++;
     
-    // Parameter 'freezing_level_ht'
+    // Parameter 'shallow_threshold_ht'
     // ctype is 'double'
     
     memset(tt, 0, sizeof(TDRPtable));
     tt->ptype = DOUBLE_TYPE;
-    tt->param_name = tdrpStrDup("freezing_level_ht");
-    tt->descr = tdrpStrDup("Freezing level height (km).");
-    tt->help = tdrpStrDup("Used if vert_levels_type = VERT_LEVELS_BY_HT.");
-    tt->val_offset = (char *) &freezing_level_ht - &_start_;
+    tt->param_name = tdrpStrDup("shallow_threshold_ht");
+    tt->descr = tdrpStrDup("Shallow cloud height threshold (km).");
+    tt->help = tdrpStrDup("Shallow cloud tops are below this height. Used if vert_levels_type = VERT_LEVELS_BY_HT.");
+    tt->val_offset = (char *) &shallow_threshold_ht - &_start_;
     tt->single_val.d = 4.5;
     tt++;
     
-    // Parameter 'freezing_level_temp'
+    // Parameter 'shallow_threshold_temp'
     // ctype is 'double'
     
     memset(tt, 0, sizeof(TDRPtable));
     tt->ptype = DOUBLE_TYPE;
-    tt->param_name = tdrpStrDup("freezing_level_temp");
-    tt->descr = tdrpStrDup("Freezing level temperature (degC).");
-    tt->help = tdrpStrDup("Used if vert_levels_type = VERT_LEVELS_BY_TEMP.");
-    tt->val_offset = (char *) &freezing_level_temp - &_start_;
+    tt->param_name = tdrpStrDup("shallow_threshold_temp");
+    tt->descr = tdrpStrDup("Shallow cloud temperature threshold (degC).");
+    tt->help = tdrpStrDup("Shallow cloud tops are below this temperature. Used if vert_levels_type = VERT_LEVELS_BY_TEMP.");
+    tt->val_offset = (char *) &shallow_threshold_temp - &_start_;
     tt->single_val.d = 0;
     tt++;
     
-    // Parameter 'divergence_level_ht'
+    // Parameter 'deep_threshold_ht'
     // ctype is 'double'
     
     memset(tt, 0, sizeof(TDRPtable));
     tt->ptype = DOUBLE_TYPE;
-    tt->param_name = tdrpStrDup("divergence_level_ht");
-    tt->descr = tdrpStrDup("Divergence level height (km).");
-    tt->help = tdrpStrDup("Convective divergence occurs above this height, forming anvils. Used if vert_levels_type = VERT_LEVELS_BY_HT.");
-    tt->val_offset = (char *) &divergence_level_ht - &_start_;
+    tt->param_name = tdrpStrDup("deep_threshold_ht");
+    tt->descr = tdrpStrDup("Deep cloud height threshold (km).");
+    tt->help = tdrpStrDup("Deep clouds extend above this height. Used if vert_levels_type = VERT_LEVELS_BY_HT.");
+    tt->val_offset = (char *) &deep_threshold_ht - &_start_;
     tt->single_val.d = 8;
     tt++;
     
-    // Parameter 'divergence_level_temp'
+    // Parameter 'deep_threshold_temp'
     // ctype is 'double'
     
     memset(tt, 0, sizeof(TDRPtable));
     tt->ptype = DOUBLE_TYPE;
-    tt->param_name = tdrpStrDup("divergence_level_temp");
-    tt->descr = tdrpStrDup("Divergence level temperature (degC).");
-    tt->help = tdrpStrDup("Convective divergence occurs above this height, forming anvils. Used if vert_levels_type = VERT_LEVELS_BY_TEMP.");
-    tt->val_offset = (char *) &divergence_level_temp - &_start_;
+    tt->param_name = tdrpStrDup("deep_threshold_temp");
+    tt->descr = tdrpStrDup("Deep cloud temperature threshold (degC).");
+    tt->help = tdrpStrDup("Deep clouds extend above this height. Used if vert_levels_type = VERT_LEVELS_BY_TEMP.");
+    tt->val_offset = (char *) &deep_threshold_temp - &_start_;
     tt->single_val.d = -12;
     tt++;
     
@@ -807,18 +807,6 @@
     tt->help = tdrpStrDup("Only data at or below this altitude is used.");
     tt->val_offset = (char *) &max_valid_height - &_start_;
     tt->single_val.d = 25;
-    tt++;
-    
-    // Parameter 'min_valid_dbz'
-    // ctype is 'double'
-    
-    memset(tt, 0, sizeof(TDRPtable));
-    tt->ptype = DOUBLE_TYPE;
-    tt->param_name = tdrpStrDup("min_valid_dbz");
-    tt->descr = tdrpStrDup("Minimum reflectivity threshold for this analysis (dBZ).");
-    tt->help = tdrpStrDup("Reflectivity below this threshold is set to missing.");
-    tt->val_offset = (char *) &min_valid_dbz - &_start_;
-    tt->single_val.d = 10;
     tt++;
     
     // Parameter 'dbz_threshold_for_definite_convection'

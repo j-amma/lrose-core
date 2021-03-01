@@ -122,7 +122,6 @@ ConvStrat::ConvStrat(int argc, char **argv)
   }
   _finder.setMinValidHtKm(_params.min_valid_height);
   _finder.setMaxValidHtKm(_params.max_valid_height);
-  _finder.setMinValidDbz(_params.min_valid_dbz);
   _finder.setDbzForDefiniteConvection
     (_params.dbz_threshold_for_definite_convection);
   _finder.setDbzForEchoTops(_params.dbz_for_echo_tops);
@@ -209,8 +208,8 @@ int ConvStrat::Run()
 
     // optionally read in temperature profile
 
-    _finder.setLevelHtValues(_params.freezing_level_ht,
-                             _params.divergence_level_ht);
+    _finder.setConstantHtThresholds(_params.shallow_threshold_ht,
+                                    _params.deep_threshold_ht);
     
     // optionally read in temperature profile from a model
     // and set the freezing and divergence level ht grids
@@ -222,9 +221,9 @@ int ConvStrat::Run()
              << _params.temp_profile_url << endl;
         cerr << "  Not using temp profile" << endl;
       }
-      _finder.setLevelHtGrids((fl32 *) _fzHtField.getVol(),
-                              (fl32 *) _divHtField.getVol(),
-                              fhdr.nx * fhdr.ny);
+      _finder.setGridHtThresholds((fl32 *) _shallowHtField.getVol(),
+                                  (fl32 *) _deepHtField.getVol(),
+                                  fhdr.nx * fhdr.ny);
                               
     }
 
@@ -525,7 +524,7 @@ void ConvStrat::_addFields()
     _outMdvx.addField(stratDbz);
   }
   
-  if (_params.write_debug_fields) {
+  if (_params.write_partition_field) {
     
     // texture for full volume
     
@@ -536,6 +535,19 @@ void ConvStrat::_addFields()
                                  "ReflectivityTexture3D",
                                  "dBZ"));
 
+    // convectivity interest for full volume
+    
+    _outMdvx.addField(_makeField(fhdr3d, vhdr3d,
+                                 _finder.getInterest3D(),
+                                 Mdvx::ENCODING_INT16,
+                                 "Convectivity3D",
+                                 "LikelihoodOfConvection3D",
+                                 ""));
+
+  }
+
+  if (_params.write_debug_fields) {
+    
     // echo the input field
     
     _outMdvx.addField(_makeField(fhdr3d, vhdr3d,
@@ -547,8 +559,8 @@ void ConvStrat::_addFields()
 
     // freezing level, divergence level ht, temp field
 
-    _outMdvx.addField(new MdvxField(_fzHtField));
-    _outMdvx.addField(new MdvxField(_divHtField));
+    _outMdvx.addField(new MdvxField(_shallowHtField));
+    _outMdvx.addField(new MdvxField(_deepHtField));
     _outMdvx.addField(new MdvxField(*_tempField));
 
   }
@@ -587,11 +599,11 @@ int ConvStrat::_readTempProfile(time_t dbzTime,
 
   _tempMdvx.clearRead();
   _tempMdvx.setReadTime(Mdvx::READ_CLOSEST,
-                       _params.temp_profile_url,
-                       _params.temp_profile_search_margin,
-                       dbzTime);
+                        _params.temp_profile_url,
+                        _params.temp_profile_search_margin,
+                        dbzTime);
   _tempMdvx.addReadField(_params.temp_profile_field_name);
-
+  
   if (_tempMdvx.readVolume()) {
     cerr << "ERROR - ConvStrat::_readTempProfile" << endl;
     cerr << "  Cannot read temperature profile" << endl;
@@ -611,24 +623,24 @@ int ConvStrat::_readTempProfile(time_t dbzTime,
   
   // fill the temperature level arrays
   
-  _computeHts(_params.freezing_level_temp, _fzHtField,
-              "FzHt", "height_of_freezing_level", "km");
-  _computeHts(_params.divergence_level_temp, _divHtField,
-              "DivHt", "height_of_divergence_level", "km");
+  _computeHts(_params.shallow_threshold_temp, _shallowHtField,
+              "ShallowHt", "shallow_threshold_ht", "km");
+  _computeHts(_params.deep_threshold_temp, _deepHtField,
+              "DeepHt", "deep_threshold_ht", "km");
 
   // remap from model to radar grid coords
   // use of the lookup table makes this more efficient
   
   MdvxProj proj(dbzField->getFieldHeader());
   MdvxRemapLut lut;
-  if (_fzHtField.remap(lut, proj)) {
+  if (_shallowHtField.remap(lut, proj)) {
     cerr << "ERROR - ConvStrat::_readTempProfile" << endl;
     cerr << "  Cannot convert model temp grid to radar grid" << endl;
     cerr << "  URL: " << _params.temp_profile_url << endl;
     cerr << "  Time: " << DateTime::strm(_tempMdvx.getValidTime()) << endl;
     return -1;
   }
-  if (_divHtField.remap(lut, proj)) {
+  if (_deepHtField.remap(lut, proj)) {
     cerr << "ERROR - ConvStrat::_readTempProfile" << endl;
     cerr << "  Cannot convert model temp grid to radar grid" << endl;
     cerr << "  URL: " << _params.temp_profile_url << endl;

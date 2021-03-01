@@ -406,19 +406,17 @@ public:
 
   int temp_profile_search_margin;
 
-  double freezing_level_ht;
+  double shallow_threshold_ht;
 
-  double freezing_level_temp;
+  double shallow_threshold_temp;
 
-  double divergence_level_ht;
+  double deep_threshold_ht;
 
-  double divergence_level_temp;
+  double deep_threshold_temp;
 
   double min_valid_height;
 
   double max_valid_height;
-
-  double min_valid_dbz;
 
   double dbz_threshold_for_definite_convection;
 
@@ -463,7 +461,7 @@ private:
 
   void _init();
 
-  mutable TDRPtable _table[43];
+  mutable TDRPtable _table[42];
 
   const char *_className;
 
