@@ -571,6 +571,11 @@ def writeCMakeListsTop(dir):
     fo.write("if (NOT IS_DIRECTORY HDF5_C_INCLUDE_DIR)\n")
     fo.write("  set (HDF5_C_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include)\n")
     fo.write("endif()\n")
+
+    # needed to work with spack installations
+    fo.write('set(HDF5_INSTALL_PREFIX ${PACKAGE_PREFIX_DIR})\n')
+    fo.write('set(HDF5_C_INCLUDE_DIR ${HDF5_INCLUDE_DIR})\n')
+
     fo.write('message("X11_X11_INCLUDE_PATH: ${X11_X11_INCLUDE_PATH}")\n')
     fo.write('message("X11_LIB_DIR: ${X11_LIB_DIR}")\n')
     fo.write('message("HDF5_INSTALL_PREFIX: ${HDF5_INSTALL_PREFIX}")\n')
